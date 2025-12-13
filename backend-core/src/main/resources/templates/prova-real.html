@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Ambiente de Prova - Darcy</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,900;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://unpkg.com/@excalidraw/excalidraw@0.17.3/index.css">
+
+  <script>
+    var global = window;
+    var process = { env: { NODE_ENV: 'production' } };
+    var exports = {}; // <--- ISSO CONSERTA O ERRO "EXPORTS NOT DEFINED"
+  </script>
+
+  <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: { 'serif': ['Merriweather', 'serif'], 'mono': ['JetBrains Mono', 'monospace'] },
+                colors: { 'paper': '#fdfbf7', 'darcy-black': '#111', 'darcy-green': '#22c55e' }
+            }
+        }
+    }
+  </script>
+  <style>
+    /* Estilos de Interface */
+    .radio-hidden:checked + div { background-color: black; color: white; border-color: black; transform: translate(2px, 2px); box-shadow: none; }
+    .btn-brutal { border: 2px solid black; box-shadow: 4px 4px 0px 0px black; transition: all 0.1s; }
+    .btn-brutal:hover { transform: translate(-1px, -1px); box-shadow: 6px 6px 0px 0px black; }
+    .btn-brutal:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px 0px black; }
+    .htmx-indicator { display: none; }
+    .htmx-request .htmx-indicator { display: inline-flex; }
+  </style>
+</head>
+<body class="h-screen flex flex-col bg-[#e5e5e5] text-black overflow-hidden font-serif selection:bg-yellow-200">
+
+<header class="h-16 bg-darcy-black text-white flex justify-between items-center px-6 border-b-4 border-black shrink-0 z-50 shadow-lg relative">
+  <div class="flex items-center gap-4">
+    <div class="w-10 h-10 bg-white text-black font-black flex items-center justify-center text-xl border-2 border-transparent">D.</div>
+    <div>
+      <h1 class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 font-mono">Ambiente de Imersão</h1>
+      <p class="text-sm font-bold text-white uppercase" th:text="${simulado.titulo}">SIMULADO OFICIAL</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-6">
+    <div class="htmx-indicator items-center gap-2 text-yellow-400 font-mono text-xs font-bold animate-pulse">
+      <i data-lucide="refresh-cw" class="w-3 h-3 animate-spin"></i> SALVANDO...
+    </div>
+    <form th:action="@{/simulado/{id}/finalizar(id=${simulado.id})}" method="post" onsubmit="return confirm('Tem certeza? A lógica CESPE será aplicada.');">
+      <button type="submit" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 text-xs font-black uppercase border-2 border-white hover:border-black transition shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:shadow-[4px_4px_0px_0px_black]">
+        Entregar Prova
+      </button>
+    </form>
+  </div>
+</header>
+
+<main class="flex-1 flex overflow-hidden relative bg-[#e5e5e5]">
+  <div id="container-prova" class="flex-1 flex w-full transition-all duration-300 ease-in-out border-r-4 border-black">
+    <div id="conteudo-questao" class="flex w-full h-full" th:fragment="conteudoQuestao">
+      <section id="area-texto" class="w-7/12 bg-paper border-r-4 border-black relative overflow-y-auto scroll-smooth group">
+        <div class="p-12 pb-32 max-w-4xl mx-auto font-serif leading-8 text-base text-justify text-gray-900 relative z-0" id="conteudo-real">
+          <div class="mb-8 border-b-2 border-black pb-2 flex justify-between items-end">
+            <span class="bg-black text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest">Material de Apoio</span>
+          </div>
+          <div th:if="${r.questao.bloco != null and r.questao.bloco.textoBase != null}" class="mb-8">
+            <p th:utext="${r.questao.bloco.textoBase}" class="whitespace-pre-line"></p>
+          </div>
+          <div th:if="${r.questao.bloco != null and r.questao.bloco.caminhoImagem != null}" class="mb-8 border-2 border-black bg-white p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
+            <img th:src="@{'/images/' + ${r.questao.bloco.caminhoImagem}}" class="w-full h-auto block grayscale hover:grayscale-0 transition duration-500">
+          </div>
+          <div th:each="img : ${r.questao.imagens}" class="mb-8 border-2 border-black bg-white p-2">
+            <img th:src="@{'/images/' + ${img.caminhoArquivo}}" class="w-full h-auto block">
+          </div>
+          <div class="mt-12 p-6 bg-yellow-50 border-l-4 border-yellow-400">
+            <p class="font-bold font-mono text-xs uppercase mb-2 text-yellow-700">Comando da Questão</p>
+            <p th:utext="${r.questao.enunciado}" class="font-serif italic"></p>
+          </div>
+        </div>
+      </section>
+      <section class="w-5/12 bg-white flex flex-col z-30 shadow-[-10px_0px_20px_rgba(0,0,0,0.1)]">
+        <div class="flex-1 p-8 overflow-y-auto bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]">
+          <div class="max-w-xl mx-auto mt-10">
+            <div class="flex items-center justify-between mb-8">
+              <div class="flex flex-col">
+                <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest">ITEM</span>
+                <span class="text-6xl font-black italic tracking-tighter" th:text="${r.questao.numero}">01</span>
+              </div>
+              <div class="border-2 border-black px-3 py-1 text-xs font-bold uppercase bg-white shadow-[2px_2px_0px_0px_black]">
+                Tipo <span th:text="${r.questao.tipo}">C</span>
+              </div>
+            </div>
+            <p class="font-serif text-xl leading-relaxed mb-12 text-black">
+              <span th:utext="${r.questao.enunciado}"></span>
+            </p>
+            <div class="bg-white p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative transition hover:translate-x-1">
+              <div th:if="${#strings.toString(r.questao.tipo) == 'C'}" class="flex gap-4">
+                <label class="flex-1 cursor-pointer group">
+                  <input type="radio" name="resposta" value="C" th:checked="${r.respostaAluno == 'C'}" class="radio-hidden hidden" th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}" hx-swap="none" hx-indicator=".htmx-indicator">
+                  <div class="btn-brutal h-16 flex items-center justify-center bg-white text-sm font-black uppercase group-hover:bg-green-100">Certo</div>
+                </label>
+                <label class="flex-1 cursor-pointer group">
+                  <input type="radio" name="resposta" value="E" th:checked="${r.respostaAluno == 'E'}" class="radio-hidden hidden" th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}" hx-swap="none" hx-indicator=".htmx-indicator">
+                  <div class="btn-brutal h-16 flex items-center justify-center bg-white text-sm font-black uppercase group-hover:bg-red-100">Errado</div>
+                </label>
+              </div>
+              <div th:if="${#strings.toString(r.questao.tipo) == 'A'}" class="flex flex-col gap-3">
+                <label class="cursor-pointer group" th:each="letra : ${#strings.arraySplit('A,B,C,D', ',')}">
+                  <input type="radio" name="resposta" th:value="${letra}" th:checked="${r.respostaAluno == letra}" class="radio-hidden hidden" th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}" hx-swap="none" hx-indicator=".htmx-indicator">
+                  <div class="btn-brutal p-4 flex items-center gap-4 bg-white hover:bg-gray-50 text-sm">
+                    <span class="w-8 h-8 flex items-center justify-center bg-black text-white font-bold rounded-full text-xs" th:text="${letra}">A</span>
+                    <span th:text="${r.questao.getAltTexto(letra)}" class="font-serif">Texto</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-20 bg-[#111] border-t-4 border-black flex items-center px-4 gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-600">
+          <span class="text-white text-[10px] font-bold mr-4">QUESTÕES:</span>
+          <button th:each="resItem, stat : ${resolucoes}" th:attr="hx-get=@{/simulado/{sid}/questao/{idx}(sid=${simulado.id}, idx=${stat.index})}" hx-target="#conteudo-questao" hx-swap="outerHTML" class="w-10 h-10 flex flex-col items-center justify-center border-2 transition shrink-0 relative group" th:classappend="${stat.index == indiceAtual} ? 'bg-white border-white text-black translate-y-[-4px] shadow-[0px_4px_0px_white]' : 'bg-transparent border-gray-700 text-gray-500 hover:border-white hover:text-white'">
+            <span class="text-xs font-black" th:text="${resItem.questao.numero}">1</span>
+            <div th:if="${resItem.respostaAluno != null}" class="w-1.5 h-1.5 bg-green-500 rounded-full mt-0.5"></div>
+          </button>
+        </div>
+      </section>
+      <script>lucide.createIcons();</script>
+    </div>
+  </div>
+
+  <div id="container-caderno" class="fixed right-0 top-16 bottom-0 bg-white border-l-4 border-black z-40 transition-all duration-300 translate-x-full w-1/2 shadow-2xl">
+    <div id="root-excalidraw" class="w-full h-full"></div>
+  </div>
+
+  <button onclick="toggleCaderno()" id="btn-caderno" class="fixed bottom-6 right-6 w-14 h-14 bg-black text-white rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_white] hover:shadow-[6px_6px_0px_0px_white] hover:-translate-y-1 transition z-50 border-2 border-white group">
+    <i data-lucide="book-open" class="w-6 h-6 group-hover:scale-110 transition"></i>
+  </button>
+</main>
+
+<script type="module" src="/notebook/darcy-notebook.js"></script>
+
+<script>
+  let cadernoAberto = false;
+  lucide.createIcons();
+
+  function toggleCaderno() {
+      const containerProva = document.getElementById('container-prova');
+      const containerCaderno = document.getElementById('container-caderno');
+      const btn = document.getElementById('btn-caderno');
+
+      cadernoAberto = !cadernoAberto;
+
+      if (cadernoAberto) {
+          containerCaderno.classList.remove('translate-x-full');
+          containerProva.style.width = '50%';
+          btn.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+          btn.classList.add('bg-red-600', 'border-red-800');
+          btn.classList.remove('bg-black');
+      } else {
+          containerCaderno.classList.add('translate-x-full');
+          containerProva.style.width = '100%';
+          btn.innerHTML = '<i data-lucide="book-open" class="w-6 h-6"></i>';
+          btn.classList.remove('bg-red-600', 'border-red-800');
+          btn.classList.add('bg-black');
+      }
+      lucide.createIcons();
+      window.dispatchEvent(new Event('resize'));
+  }
+</script>
+</body>
+</html>

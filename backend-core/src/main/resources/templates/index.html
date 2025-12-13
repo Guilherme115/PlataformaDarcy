@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Plataforma Darcy - Início</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #e5e5e5; background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px; }
+        .btn-brutal { border: 3px solid black; box-shadow: 4px 4px 0px 0px black; transition: all 0.1s; }
+        .btn-brutal:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0px 0px black; }
+        .btn-brutal:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px 0px black; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-black font-serif p-8 justify-center items-center">
+
+<main class="max-w-4xl w-full bg-white border-4 border-black p-12 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] relative">
+
+    <div class="absolute -top-6 -right-6 bg-yellow-400 border-4 border-black w-24 h-24 rounded-full flex items-center justify-center animate-bounce">
+        <span class="font-black text-xs text-center leading-none">VERSÃO<br>BETA<br>2.0</span>
+    </div>
+
+    <div class="border-b-4 border-black pb-8 mb-8 text-center">
+        <div class="inline-block bg-black text-white px-4 py-1 text-sm font-bold mb-4 uppercase tracking-widest">Universidade de Brasília</div>
+        <h1 class="text-7xl font-black italic tracking-tighter mb-2">PROJETO DARCY</h1>
+        <p class="font-mono text-sm max-w-xl mx-auto text-gray-600">
+            Hub Central de Inteligência. Selecione seu perfil de acesso abaixo.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <a href="/aluno/home" class="btn-brutal bg-[#a7f3d0] p-8 flex flex-col items-center text-center group cursor-pointer hover:bg-[#6ee7b7]">
+            <div class="w-16 h-16 border-2 border-black rounded-full flex items-center justify-center mb-4 bg-white group-hover:scale-110 transition">
+                <i data-lucide="book-open" class="w-8 h-8"></i>
+            </div>
+            <h2 class="text-2xl font-black uppercase mb-2">Área do Aluno</h2>
+            <p class="font-mono text-xs leading-tight mb-4">Acessar Painel, Simulados e Histórico.</p>
+            <span class="mt-auto bg-black text-white px-4 py-2 text-xs font-bold uppercase">Entrar no Painel →</span>
+        </a>
+
+        <a href="/cms" class="btn-brutal bg-[#fca5a5] p-8 flex flex-col items-center text-center group cursor-pointer hover:bg-[#f87171]">
+            <div class="w-16 h-16 border-2 border-black rounded-full flex items-center justify-center mb-4 bg-white group-hover:scale-110 transition">
+                <i data-lucide="database" class="w-8 h-8"></i>
+            </div>
+            <h2 class="text-2xl font-black uppercase mb-2">Gestão (CMS)</h2>
+            <p class="font-mono text-xs leading-tight mb-4">Cadastrar Questões, Importar PDFs e Editar Gabaritos.</p>
+            <span class="mt-auto bg-black text-white px-4 py-2 text-xs font-bold uppercase">Acessar Banco de Dados →</span>
+        </a>
+
+    </div>
+
+    <div class="mt-12 pt-6 border-t-2 border-dashed border-gray-400 flex justify-between items-center font-mono text-xs text-gray-500">
+        <span>Status do Sistema: <span class="text-green-600 font-bold">● ONLINE</span></span>
+
+        <div sec:authorize="isAuthenticated()">
+            <span class="font-bold mr-2">Olá, <span sec:authentication="name">Usuário</span></span>
+            |
+            <a href="/logout" class="ml-2 hover:text-red-600 font-bold underline">Sair (Logout)</a>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <a href="/login" class="hover:text-black font-bold underline">Fazer Login</a>
+        </div>
+    </div>
+
+</main>
+
+<script> lucide.createIcons(); </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+# --- SISTEMA OPERACIONAL E IDEs ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# --- BACKEND (JAVA/MAVEN) ---
+backend-core/target/
+backend-core/**/*.class
+backend-core/logs/
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.properties
+
+# --- INTELLIGENCE ENGINE (PYTHON) ---
+intelligence-engine/__pycache__/
+intelligence-engine/venv/
+intelligence-engine/.venv/
+intelligence-engine/env/
+*.pyc
+*.pyo
+*.pyd
+
+# --- DADOS SENSÍVEIS E ARQUIVOS PESADOS ---
+# Ignorar os PDFs de entrada (para não infringir direitos autorais ou lotar o Git)
+intelligence-engine/input/*.pdf
+
+# Ignorar as milhares de imagens recortadas (geradas durante a execução)
+intelligence-engine/output_images/*
+# Mas mantenha a pasta vazia (opcional, se quiser garantir a estrutura)
+!intelligence-engine/output_images/.gitkeep
+
+# --- DOCKER E BANCO DE DADOS ---
+.env
+postgres_data/
+mysql_data/

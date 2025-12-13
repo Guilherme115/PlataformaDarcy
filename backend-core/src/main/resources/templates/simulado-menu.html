@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Central de Simulados - Darcy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #e5e5e5; background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px; }
+    .card-menu { transition: all 0.2s; border: 3px solid black; box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
+    .card-menu:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0px 0px rgba(0,0,0,1); }
+    .card-menu:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); }
+    .badge-mode { position: absolute; top: 1rem; right: 1rem; border: 2px solid black; padding: 2px 8px; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; background: white; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen text-black font-serif p-8">
+
+<header class="max-w-7xl mx-auto w-full mb-10 border-b-4 border-black pb-6 flex justify-between items-start">
+  <div>
+    <div class="bg-black text-white px-2 py-1 text-xs font-bold inline-block mb-2">PLATAFORMA DARCY</div>
+    <h1 class="text-6xl font-black italic tracking-tighter leading-none mb-2">
+      TREINO DIFÍCIL,<br>JOGO FÁCIL.
+    </h1>
+    <p class="font-mono text-xs max-w-2xl mt-4 leading-relaxed">
+      Selecione abaixo a modalidade de avaliação. Lembre-se: o sistema utiliza o método CESPE (Uma errada anula uma certa) em todas as modalidades, exceto quando configurado manualmente no modo personalizado.
+    </p>
+  </div>
+  <a href="/" class="text-xs font-mono font-bold uppercase hover:underline flex items-center gap-2">
+    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Menu
+  </a>
+</header>
+
+<main class="max-w-7xl mx-auto w-full">
+
+  <div class="grid grid-cols-2 gap-6 mb-12">
+
+    <a href="/simulado/personalizado" class="card-menu bg-[#fdfbf7] p-8 relative flex flex-col justify-between h-64 group">
+      <span class="badge-mode">Modo Cirúrgico</span>
+      <div>
+        <div class="w-12 h-12 bg-black text-white flex items-center justify-center mb-4">
+          <i data-lucide="sliders" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-2xl font-black uppercase mb-2">Criar Lista Personalizada</h2>
+        <p class="font-mono text-[10px] text-gray-600 mb-4">Monte uma bateria específica focada em suas deficiências.</p>
+        <ul class="font-mono text-[9px] list-disc list-inside text-gray-500 space-y-1">
+          <li>Filtrar por Matéria (ex: Química Orgânica)</li>
+          <li>Filtrar por Obra (ex: Pai contra Mãe)</li>
+          <li>Definir quantidade (10, 20, 50 itens)</li>
+        </ul>
+      </div>
+      <div class="w-full border-2 border-black p-2 text-center text-xs font-bold uppercase mt-4 group-hover:bg-yellow-300 transition">Configurar Lista →</div>
+    </a>
+
+    <a href="/simulado/arquivo" class="card-menu bg-white p-8 relative flex flex-col justify-between h-64 group">
+      <span class="badge-mode">Modo Histórico</span>
+      <div>
+        <div class="w-12 h-12 border-2 border-black flex items-center justify-center mb-4">
+          <i data-lucide="archive" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-2xl font-black uppercase mb-2">Acervo Oficial UnB</h2>
+        <p class="font-mono text-[10px] text-gray-600 mb-4">Realize as provas originais na íntegra, exatamente como foram aplicadas.</p>
+        <ul class="font-mono text-[9px] list-disc list-inside text-gray-500 space-y-1">
+          <li>PAS 1, 2 e 3 (2010 - 2024)</li>
+          <li>Vestibular Tradicional</li>
+          <li>Temporizador Oficial de 5 horas</li>
+        </ul>
+      </div>
+      <div class="w-full border-2 border-black p-2 text-center text-xs font-bold uppercase mt-4 group-hover:bg-gray-100 transition">Abrir Arquivo →</div>
+    </a>
+
+    <a href="#" class="card-menu bg-[#ff3333] text-white p-8 relative flex flex-col justify-between h-64 group border-black">
+      <span class="badge-mode text-black">I.A. Darcy</span>
+      <div>
+        <div class="w-12 h-12 border-2 border-white flex items-center justify-center mb-4">
+          <i data-lucide="shuffle" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-2xl font-black uppercase mb-2">Simulado Recorrente</h2>
+        <p class="font-mono text-[10px] text-white/80 mb-4">Gera uma prova inédita misturando questões antigas com base na probabilidade estatística de queda.</p>
+        <ul class="font-mono text-[9px] list-disc list-inside text-white/70 space-y-1">
+          <li>Algoritmo de Recorrência</li>
+          <li>Simulação de Distribuição Real</li>
+          <li>Diagnóstico de Pontos Fracos</li>
+        </ul>
+      </div>
+      <div class="w-full border-2 border-white p-2 text-center text-xs font-bold uppercase mt-4 group-hover:bg-black group-hover:border-black transition">Gerar Simulado ⚡</div>
+    </a>
+
+    <a href="#" class="card-menu bg-[#ff3333] text-white p-8 relative flex flex-col justify-between h-64 group border-black">
+      <span class="badge-mode text-black">Clãs & Alunos</span>
+      <div>
+        <div class="w-12 h-12 border-2 border-white flex items-center justify-center mb-4">
+          <i data-lucide="users" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-2xl font-black uppercase mb-2">Desafios da Comunidade</h2>
+        <p class="font-mono text-[10px] text-white/80 mb-4">Enfrente listas curadas pelos melhores Clãs e alunos do ranking.</p>
+        <ul class="font-mono text-[9px] list-disc list-inside text-white/70 space-y-1">
+          <li>Listas "Mata-Bicho" (Alta dificuldade)</li>
+          <li>Desafios temáticos Semanais</li>
+          <li>Rankear no Quadro de Honra</li>
+        </ul>
+      </div>
+      <div class="w-full border-2 border-white p-2 text-center text-xs font-bold uppercase mt-4 group-hover:bg-black group-hover:border-black transition">Explorar Listas 🔍</div>
+    </a>
+
+  </div>
+
+  <div class="border-t-4 border-black pt-6">
+    <h3 class="font-black uppercase text-xs mb-4 flex items-center gap-2">
+      <i data-lucide="history" class="w-4 h-4"></i> Retomar Atividade
+    </h3>
+
+    <div class="bg-white border-2 border-black" th:if="${!simuladosEmAberto.isEmpty()}">
+      <div class="grid grid-cols-12 bg-black text-white p-2 text-[9px] font-bold uppercase">
+        <div class="col-span-6">Identificação da Prova</div>
+        <div class="col-span-2">Tipo</div>
+        <div class="col-span-3">Progresso</div>
+        <div class="col-span-1 text-center">Ação</div>
+      </div>
+
+      <div th:each="s : ${simuladosEmAberto}" class="grid grid-cols-12 p-3 border-b border-gray-200 items-center text-xs font-mono hover:bg-yellow-50">
+        <div class="col-span-6 font-bold" th:text="${s.titulo}">Lista Personalizada: Revolução Industrial</div>
+        <div class="col-span-2 text-gray-500">Treino</div>
+        <div class="col-span-3">
+          <div class="w-full bg-gray-200 h-2 border border-black relative">
+            <div class="bg-yellow-400 h-full absolute top-0 left-0" style="width: 45%"></div>
+          </div>
+        </div>
+        <div class="col-span-1 text-center">
+          <a th:href="@{'/simulado/' + ${s.id}}" class="border border-black px-2 py-1 text-[9px] font-bold uppercase hover:bg-black hover:text-white transition">Continuar</a>
+        </div>
+      </div>
+    </div>
+
+    <div th:if="${simuladosEmAberto.isEmpty()}" class="p-4 text-center text-gray-500 font-mono text-xs border-2 border-gray-300 border-dashed">
+      Nenhuma atividade pendente. Comece um treino acima!
+    </div>
+  </div>
+
+</main>
+
+<script> lucide.createIcons(); </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Plataforma Darcy - Acesso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Merriweather:ital,wght@0,300;0,900;1,300&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .font-serif-quote { font-family: 'Merriweather', serif; }
+        .input-underline {
+            border: none;
+            border-bottom: 3px solid black;
+            background: transparent;
+            padding: 10px 0;
+            outline: none;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .input-underline:focus {
+            border-bottom-color: #fbbf24; /* Amarelo */
+        }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+
+<div class="w-1/2 bg-black text-white flex flex-col justify-end p-20 relative">
+    <div class="absolute top-10 left-10 w-20 h-1 bg-white"></div>
+
+    <div class="mb-10">
+        <h1 class="font-serif-quote text-5xl leading-tight mb-6">
+            “Só há duas opções nesta vida: se <span class="bg-white text-black px-1 italic">resignar</span> ou se <span class="border border-white px-1 italic">indignar</span>.
+        </h1>
+        <p class="font-serif-quote text-3xl italic opacity-80 mb-8">
+            | E eu não vou me resignar nunca.”
+        </p>
+        <div class="flex items-center gap-4">
+            <div class="h-[2px] w-10 bg-white"></div>
+            <span class="uppercase tracking-widest text-sm font-bold">Darcy Ribeiro</span>
+        </div>
+    </div>
+</div>
+
+<div class="w-1/2 bg-white flex flex-col justify-center px-24 relative">
+
+    <div class="absolute top-10 right-10 border-2 border-black w-12 h-12 flex items-center justify-center font-bold text-xl">D.</div>
+
+    <div class="max-w-md w-full mx-auto">
+        <h2 class="text-4xl font-serif-quote font-black mb-2 text-black">Plataforma Darcy</h2>
+        <p class="text-xs font-bold tracking-[0.2em] uppercase text-gray-500 mb-12">Rede Social do Vestibulando UnB</p>
+
+        <div th:if="${param.error}" class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 text-xs font-bold" role="alert">
+            <p>ACESSO NEGADO. VERIFIQUE SUAS CREDENCIAIS.</p>
+        </div>
+
+        <form th:action="@{/login}" method="post" class="space-y-8">
+
+            <div class="group">
+                <label class="block text-[10px] font-black uppercase tracking-widest mb-1">■ Matrícula / E-mail</label>
+                <input type="text" name="username" placeholder="DIGITE SEU ACESSO" class="input-underline placeholder-gray-300 transition-colors">
+            </div>
+
+            <div class="group">
+                <label class="block text-[10px] font-black uppercase tracking-widest mb-1">■ Senha de Segurança</label>
+                <input type="password" name="password" placeholder="••••••••" class="input-underline placeholder-gray-300 transition-colors">
+            </div>
+
+            <button type="submit" class="w-full bg-black text-white py-4 text-xs font-black uppercase tracking-widest hover:bg-gray-800 transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] hover:translate-y-1 active:translate-y-2 active:shadow-none flex justify-between px-6 items-center">
+                <span>Iniciar Aplicação</span>
+                <span>→</span>
+            </button>
+
+        </form>
+
+        <div class="mt-8 text-center border-t border-gray-200 pt-6">
+            <a href="#" class="text-[10px] uppercase font-bold text-gray-400 hover:text-black transition">Primeiro acesso? Crie sua conta</a>
+        </div>
+
+        <div class="mt-12 text-[9px] text-gray-400 leading-relaxed font-mono">
+            <p class="mb-2"><span class="bg-black text-white px-1">AVISO DISCIPLINAR:</span> O compartilhamento de credenciais ou conduta inadequada resultará no BANIMENTO PERMANENTE do IP, sem recurso.</p>
+            <div class="flex justify-between border-t border-gray-200 pt-2 mt-2">
+                <span>STATUS: ONLINE</span>
+                <a href="#" class="underline">Apoie o Projeto (Doação)</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

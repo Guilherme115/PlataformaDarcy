@@ -1,0 +1,31 @@
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pas_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # 👇 ADICIONE ESTA LINHA AQUI 👇
+      - ./init_db:/docker-entrypoint-initdb.d
+      # 👆 ISSO FAZ O DOCKER RODAR SEU SQL SOZINHO 👆
+
+  app:
+    # ... (o resto continua igual)
+    build: .
+    container_name: python_extractor
+    depends_on:
+      - db
+    volumes:
+      - ./input:/app/input
+      - ./output_images:/app/output
+      - ./src:/app/src
+    environment:
+      - DB_HOST=db
+
+volumes:
+  mysql_data:

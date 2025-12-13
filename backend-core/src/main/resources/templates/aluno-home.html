@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Painel do Aluno - Darcy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #e5e5e5; background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px; }
+        .card-home { border: 3px solid black; box-shadow: 6px 6px 0px 0px black; transition: all 0.2s; background: white; }
+        .card-home:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0px 0px black; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-black font-serif p-8">
+
+<header class="max-w-7xl mx-auto w-full mb-10 border-b-4 border-black pb-6 flex justify-between items-center">
+    <div>
+        <div class="bg-black text-white px-2 py-1 text-xs font-bold inline-block mb-2">ÁREA DO ALUNO</div>
+        <h1 class="text-4xl font-black italic tracking-tighter">
+            BEM-VINDO, <span class="uppercase text-green-700" sec:authentication="name">ESTUDANTE</span>.
+        </h1>
+    </div>
+    <a href="/logout" class="text-xs font-mono font-bold uppercase hover:text-red-600 border-2 border-transparent hover:border-black px-3 py-1 transition">Sair</a>
+</header>
+
+<main class="max-w-7xl mx-auto w-full">
+
+    <div class="grid grid-cols-3 gap-8">
+
+        <a href="/simulado" class="card-home p-8 flex flex-col justify-between h-80 group cursor-pointer bg-[#a7f3d0]">
+            <div class="flex justify-between items-start">
+                <div class="w-14 h-14 bg-black text-white flex items-center justify-center rounded-full">
+                    <i data-lucide="pen-tool" class="w-6 h-6"></i>
+                </div>
+                <span class="font-mono text-[10px] font-bold uppercase border border-black px-2 py-1 bg-white">Principal</span>
+            </div>
+
+            <div>
+                <h2 class="text-4xl font-black italic mb-2 group-hover:underline decoration-4">SIMULADOS & PROVAS</h2>
+                <p class="font-mono text-xs leading-relaxed">
+                    Acesse o acervo oficial, crie listas personalizadas ou gere simulados com IA.
+                </p>
+            </div>
+
+            <div class="w-full bg-black text-white py-3 text-center text-xs font-bold uppercase mt-4 flex justify-between px-4 items-center">
+                <span>Acessar Central</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+        </a>
+
+        <div class="card-home p-8 flex flex-col justify-between h-80 opacity-60 bg-gray-100 relative">
+            <div class="absolute inset-0 flex items-center justify-center z-10 font-black text-2xl uppercase -rotate-12 pointer-events-none text-red-600 border-4 border-red-600 w-48 h-16 mx-auto my-auto">Em Breve</div>
+
+            <div class="w-14 h-14 border-2 border-black flex items-center justify-center rounded-full">
+                <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-black italic mb-2 text-gray-500">MEU DESEMPENHO</h2>
+                <p class="font-mono text-xs text-gray-500">
+                    Análise detalhada de erros, acertos e evolução por matéria (TRI).
+                </p>
+            </div>
+        </div>
+
+        <div class="card-home p-8 flex flex-col justify-between h-80 opacity-60 bg-gray-100 relative">
+            <div class="absolute inset-0 flex items-center justify-center z-10 font-black text-2xl uppercase -rotate-12 pointer-events-none text-red-600 border-4 border-red-600 w-48 h-16 mx-auto my-auto">Em Breve</div>
+
+            <div class="w-14 h-14 border-2 border-black flex items-center justify-center rounded-full">
+                <i data-lucide="file-text" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-black italic mb-2 text-gray-500">REDAÇÃO</h2>
+                <p class="font-mono text-xs text-gray-500">
+                    Envie fotos da sua redação para correção via Inteligência Artificial.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+<script>lucide.createIcons();</script>
+</body>
+</html>

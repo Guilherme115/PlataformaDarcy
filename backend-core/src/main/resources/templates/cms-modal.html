@@ -1,0 +1,50 @@
+<div th:fragment="modal-galeria" class="fixed inset-0 z-[999] flex items-center justify-center modal-overlay"
+     onclick="closeModal(event)" xmlns:th="http://www.w3.org/1999/xhtml">
+  <div class="bg-white border-4 border-black w-4/5 h-4/5 flex flex-col shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-in fade-in zoom-in duration-200" onclick="event.stopPropagation()">
+
+    <div class="flex justify-between items-center p-4 border-b-4 border-black bg-yellow-300">
+      <div>
+        <h2 class="text-xl font-black uppercase tracking-tighter">Galeria: <span th:text="${pasta}"></span></h2>
+        <p class="text-xs font-bold font-mono">Selecione para vincular à Questão <span th:text="${questaoId}"></span></p>
+      </div>
+      <button onclick="document.getElementById('modal-container').innerHTML = ''" class="bg-red-600 text-white font-black px-4 py-2 border-2 border-black hover:bg-red-700 shadow-[2px_2px_0px_0px_#000] active:translate-y-1 active:shadow-none">
+        FECHAR
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4 bg-gray-200">
+
+      <div class="grid grid-cols-4 gap-4" th:if="${!imagensGaleria.isEmpty()}">
+        <div th:each="caminho : ${imagensGaleria}"
+             class="group relative bg-white border-2 border-black cursor-pointer hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#000] transition-all duration-100"
+             th:attr="onclick='vincularImagem(\'' + ${caminho} + '\', ' + ${questaoId} + ', \'' + ${tagAlvo} + '\')'">
+
+          <div class="h-40 bg-gray-100 flex items-center justify-center border-b-2 border-black overflow-hidden p-2 relative">
+            <img th:src="@{'/media/' + ${caminho}}"
+                 class="max-h-full max-w-full object-contain z-10 block"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='https://placehold.co/400x400?text=Erro+Imagem';">
+          </div>
+
+          <div class="p-2 bg-white h-10 flex items-center justify-center">
+            <p class="text-[10px] font-mono truncate text-gray-600 group-hover:text-black group-hover:font-bold" th:text="${#strings.substringAfter(caminho, '/')}">nome.png</p>
+          </div>
+
+          <div class="absolute inset-0 bg-yellow-300/90 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity z-20">
+            <span class="text-black font-black uppercase text-xs tracking-widest border-2 border-black px-2 py-1 bg-white shadow-[2px_2px_0px_0px_#000]">Vincular</span>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${imagensGaleria.isEmpty()}" class="flex flex-col items-center justify-center h-full opacity-50 space-y-4">
+        <i data-lucide="image-off" class="w-16 h-16"></i>
+        <div class="text-center">
+          <p class="font-bold text-xl uppercase">Nenhuma imagem encontrada</p>
+          <p class="text-sm font-mono mt-1">Pasta física: .../output_images/<span th:text="${pasta}"></span></p>
+          <p class="text-xs text-red-600 mt-2 font-bold">DICA: Verifique o console do Java para ver o erro exato.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

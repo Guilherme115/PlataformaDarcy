@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Configurar - Darcy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #e5e5e5; background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px; }
+    .option-card:has(input:checked) { background-color: #fef08a; border-color: black; box-shadow: 4px 4px 0px 0px black; transform: translate(-2px, -2px); }
+    .custom-checkbox:checked + div { background-color: black; border-color: black; }
+    .custom-checkbox:checked + div:after { content: '✔'; color: white; display: block; text-align: center; font-size: 10px; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen text-black font-serif p-8">
+
+<header class="max-w-6xl mx-auto w-full mb-8">
+  <h1 class="text-4xl font-black italic mb-2"><span class="border-b-4 border-black">PARÂMETROS DA</span> <span class="bg-black text-white px-2">BATERIA.</span></h1>
+  <p class="font-mono text-xs text-gray-600 max-w-2xl">Configure os filtros abaixo para gerar uma lista de exercícios focada. O sistema buscará apenas questões que atendam a todos os critérios simultaneamente.</p>
+</header>
+
+<form action="/simulado/gerar" method="post" class="max-w-6xl mx-auto w-full grid grid-cols-12 gap-8">
+
+  <div class="col-span-8 space-y-8">
+
+    <div class="border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+      <h3 class="font-bold uppercase text-xs border-b-2 border-gray-200 pb-2 mb-4 flex items-center gap-2">
+        <i data-lucide="layers" class="w-4 h-4"></i> 1. Subprograma (Etapa)
+      </h3>
+      <div class="grid grid-cols-2 gap-4">
+        <label class="option-card border-2 border-gray-300 p-4 cursor-pointer transition text-center bg-gray-50 h-24 flex flex-col justify-center items-center">
+          <input type="radio" name="etapa" value="1" class="hidden" checked>
+          <span class="text-2xl font-black italic block">PAS 1</span>
+          <span class="text-[8px] font-mono font-bold text-gray-500 uppercase mt-1">Matriz da 1ª Etapa</span>
+        </label>
+        <label class="option-card border-2 border-gray-300 p-4 cursor-pointer transition text-center bg-gray-50 h-24 flex flex-col justify-center items-center">
+          <input type="radio" name="etapa" value="2" class="hidden">
+          <span class="text-2xl font-black italic block">PAS 2</span>
+          <span class="text-[8px] font-mono font-bold text-gray-500 uppercase mt-1">Matriz da 2ª Etapa</span>
+        </label>
+        <label class="option-card border-2 border-gray-300 p-4 cursor-pointer transition text-center bg-gray-50 h-24 flex flex-col justify-center items-center">
+          <input type="radio" name="etapa" value="3" class="hidden">
+          <span class="text-2xl font-black italic block">PAS 3</span>
+          <span class="text-[8px] font-mono font-bold text-gray-500 uppercase mt-1">Matriz da 3ª Etapa</span>
+        </label>
+        <label class="option-card border-2 border-gray-300 p-4 cursor-pointer transition text-center bg-gray-50 h-24 flex flex-col justify-center items-center opacity-50">
+          <input type="radio" name="etapa" value="4" class="hidden" disabled>
+          <span class="text-2xl font-black italic block">VEST</span>
+          <span class="text-[8px] font-mono font-bold text-gray-500 uppercase mt-1">Vestibular Tradicional</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+      <h3 class="font-bold uppercase text-xs border-b-2 border-gray-200 pb-2 mb-4 flex items-center gap-2">
+        <i data-lucide="book-open" class="w-4 h-4"></i> 2. Área de Conhecimento
+      </h3>
+
+      <div class="mb-4">
+        <label class="text-[9px] font-mono font-bold uppercase block mb-1 text-gray-500">Disciplina Principal</label>
+        <select id="sel-materia" name="materia" onchange="carregarTopicosCheckbox()" class="w-full border-2 border-black p-2 font-serif text-lg outline-none focus:bg-yellow-50 transition">
+          <option value="">Selecione...</option>
+        </select>
+      </div>
+
+      <div class="bg-gray-50 border-2 border-gray-300 p-4 h-48 overflow-y-auto" id="container-topicos">
+        <p class="text-center text-xs text-gray-400 font-mono mt-16">Selecione uma disciplina acima para ver os tópicos.</p>
+      </div>
+      <p class="text-[9px] font-mono text-gray-400 mt-2 text-right">* Múltipla seleção permitida</p>
+    </div>
+
+  </div>
+
+  <div class="col-span-4 space-y-6">
+
+    <div class="border-2 border-black bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+      <h3 class="font-bold uppercase text-xs border-b-2 border-gray-200 pb-2 mb-6 flex items-center gap-2">
+        <i data-lucide="sliders" class="w-4 h-4"></i> 3. Parâmetros de Execução
+      </h3>
+
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-[10px] font-bold uppercase font-mono">Volume de Itens</span>
+          <span class="bg-black text-white px-2 py-1 font-bold text-sm" id="qtd-display">20</span>
+        </div>
+        <input type="range" name="quantidade" min="5" max="120" step="5" value="20"
+               oninput="document.getElementById('qtd-display').innerText = this.value; atualizarResumo();"
+               class="w-full h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-black">
+        <div class="flex justify-between text-[8px] font-bold uppercase mt-1 text-gray-400 font-mono">
+          <span>5 (Rápido)</span>
+          <span>120 (Simulado)</span>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <label class="text-[10px] font-bold uppercase block mb-2 font-mono">Tipos de Item Aceitos</label>
+        <div class="flex border border-black">
+          <label class="flex-1 text-center py-2 text-[10px] font-bold uppercase cursor-pointer hover:bg-gray-100 border-r border-black has-[:checked]:bg-yellow-300 transition">
+            <input type="radio" name="tipo" value="A" class="hidden" checked onchange="atualizarResumo()"> Tipo A (C/E)
+          </label>
+          <label class="flex-1 text-center py-2 text-[10px] font-bold uppercase cursor-pointer hover:bg-gray-100 border-r border-black has-[:checked]:bg-yellow-300 transition">
+            <input type="radio" name="tipo" value="C" class="hidden" onchange="atualizarResumo()"> Tipo C
+          </label>
+          <label class="flex-1 text-center py-2 text-[10px] font-bold uppercase cursor-pointer hover:bg-gray-100 has-[:checked]:bg-yellow-300 transition">
+            <input type="radio" name="tipo" value="TODOS" class="hidden" onchange="atualizarResumo()"> Todos
+          </label>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <input type="checkbox" name="excluirAcertadas" value="true" class="hidden custom-checkbox" checked>
+          <div class="w-4 h-4 border-2 border-gray-400 group-hover:border-black transition flex items-center justify-center"></div>
+          <span class="text-xs font-bold uppercase">Excluir questões que já acertei</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer group opacity-50">
+          <input type="checkbox" name="gabaritoComentado" class="hidden custom-checkbox" disabled>
+          <div class="w-4 h-4 border-2 border-gray-300 flex items-center justify-center"></div>
+          <span class="text-xs font-bold uppercase text-gray-400">Apenas com Gabarito Comentado</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <input type="checkbox" name="modoCronometro" value="true" class="hidden custom-checkbox">
+          <div class="w-4 h-4 border-2 border-gray-400 group-hover:border-black transition flex items-center justify-center"></div>
+          <span class="text-xs font-bold uppercase">Modo Cronômetro (Tensão Real)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="bg-black text-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)] border-2 border-gray-800">
+      <h3 class="text-xs font-bold uppercase tracking-widest mb-6 border-b border-gray-700 pb-2 text-gray-400">Resumo da Requisição</h3>
+
+      <div class="space-y-3 mb-8 text-[11px] font-mono">
+        <div class="flex justify-between">
+          <span class="text-gray-500">Etapa:</span>
+          <span class="font-bold text-yellow-400" id="res-etapa">PAS 1</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Filtro:</span>
+          <span class="font-bold text-right truncate w-32" id="res-filtro">Geral</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Modo:</span>
+          <span class="font-bold" id="res-modo">Inéditas (Tipo A)</span>
+        </div>
+      </div>
+
+      <div class="bg-[#1a1a1a] p-4 text-center border border-gray-700 mb-4">
+        <p class="text-[9px] uppercase text-gray-500 font-bold mb-1">Banco Disponível</p>
+        <p class="text-2xl font-serif font-black text-white">452 Itens</p> </div>
+
+      <button type="submit" class="w-full bg-white text-black py-4 font-black uppercase tracking-widest hover:bg-yellow-400 transition shadow-[4px_4px_0px_0px_#333] active:translate-y-1 active:shadow-none flex items-center justify-center gap-2">
+        <i data-lucide="printer" class="w-4 h-4"></i> Gerar Caderno de Prova
+      </button>
+    </div>
+
+  </div>
+
+</form>
+
+<script th:inline="javascript">
+  lucide.createIcons();
+  const taxonomy = JSON.parse([[${taxonomyJson}]]);
+  const selMateria = document.getElementById('sel-materia');
+  const containerTopicos = document.getElementById('container-topicos');
+
+  // Init Materias
+  for (let mat in taxonomy) {
+      let opt = document.createElement('option');
+      opt.value = mat; opt.innerText = mat.toUpperCase();
+      selMateria.appendChild(opt);
+  }
+
+  function carregarTopicosCheckbox() {
+      const materia = selMateria.value;
+      containerTopicos.innerHTML = '';
+      document.getElementById('res-filtro').innerText = materia || 'Geral';
+
+      if (materia && taxonomy[materia]) {
+          for (let sub in taxonomy[materia]) {
+              // Título da Subárea
+              let title = document.createElement('h4');
+              title.className = "text-[10px] font-black uppercase text-gray-400 mt-2 mb-1";
+              title.innerText = sub;
+              containerTopicos.appendChild(title);
+
+              // Checkboxes
+              taxonomy[materia][sub].forEach(topico => {
+                  let label = document.createElement('label');
+                  label.className = "flex items-center gap-2 cursor-pointer hover:bg-gray-100 p-1 mb-1";
+                  label.innerHTML = `
+                      <input type="checkbox" name="topicos" value="${topico}" class="hidden custom-checkbox">
+                      <div class="w-4 h-4 border-2 border-black flex items-center justify-center bg-white"></div>
+                      <span class="text-xs font-serif leading-none">${topico}</span>
+                  `;
+                  containerTopicos.appendChild(label);
+              });
+          }
+      } else {
+          containerTopicos.innerHTML = '<p class="text-center text-xs text-gray-400 font-mono mt-16">Selecione uma disciplina acima.</p>';
+      }
+  }
+
+  function atualizarResumo() {
+      // Atualiza visualmente o card de resumo
+      // (Poderia ser expandido para contar checkboxes reais)
+  }
+</script>
+
+</body>
+</html>
