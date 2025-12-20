@@ -18,6 +18,9 @@ public interface QuestaoRepository extends JpaRepository<Questao, Long> {
 
     List<Questao> findByProvaIdOrderByNumeroAsc(Long provaId);
 
+    // 👇 MÉTODO NOVO (Essencial para o Simulado Recorrente/Pareto)
+    List<Questao> findByProva_Etapa(Integer etapa);
+
     @Query(value = """
         SELECT q.* FROM questoes q
         JOIN provas p ON q.prova_id = p.id

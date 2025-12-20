@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+  <title>Central de Expurgo - Darcy</title>
+
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,300;0,900;1,900&display=swap" rel="stylesheet">
+
+  <style>
+    /* BASE & BACKGROUND */
+    body {
+        background-color: #e5e5e5;
+        background-image: radial-gradient(#a3a3a3 1px, transparent 1px);
+        background-size: 20px 20px;
+        font-family: 'Merriweather', serif;
+        color: black;
+    }
+
+    /* UTILITÁRIOS BRUTALISTAS */
+    .brutal-border { border: 3px solid black; }
+    .brutal-shadow { box-shadow: 6px 6px 0px 0px black; }
+    .brutal-shadow-sm { box-shadow: 3px 3px 0px 0px black; }
+    .brutal-btn {
+        transition: all 0.1s;
+        cursor: pointer;
+    }
+    .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px 0px black; }
+
+    /* CHECKBOX CUSTOMIZADO */
+    .check-brutal {
+        appearance: none;
+        width: 20px; height: 20px;
+        border: 2px solid black;
+        background: white;
+        cursor: pointer;
+        position: relative;
+    }
+    .check-brutal:checked { background: black; }
+    .check-brutal:checked::after {
+        content: '✓'; color: white;
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 14px; font-weight: bold;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; border-left: 2px solid black; }
+    ::-webkit-scrollbar-thumb { background: black; }
+    ::-webkit-scrollbar-thumb:hover { background: #333; }
+
+    /* ANIMAÇÕES */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-enter { animation: fadeIn 0.3s ease-out forwards; }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+<div th:replace="~{fragments/loader :: global-loader}"></div>
+
+<div id="modal-container"></div>
+
+<header class="bg-[#f3f4f6] border-b-[3px] border-black p-4 flex justify-between items-center shrink-0 z-20">
+  <div class="flex items-center gap-4">
+    <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-2xl font-mono border-2 border-transparent">D.</div>
+    <div>
+      <h1 class="text-3xl font-black uppercase tracking-tighter leading-none">Plataforma Darcy</h1>
+      <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500">Central de Expurgo • Arquivo Morto</p>
+    </div>
+  </div>
+
+  <a href="/simulado" class="bg-black text-white px-6 py-3 font-mono font-bold text-xs uppercase hover:bg-gray-800 transition flex items-center gap-2">
+    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Dashboard
+  </a>
+</header>
+
+<div class="flex flex-1 overflow-hidden p-6 gap-6">
+
+  <aside class="w-72 bg-white brutal-border brutal-shadow flex flex-col h-full">
+    <div class="p-4 border-b-[3px] border-black bg-white">
+      <h2 class="font-bold font-mono text-sm uppercase flex items-center gap-2">
+        <i data-lucide="filter" class="w-4 h-4"></i> Filtros de Triagem
+      </h2>
+    </div>
+
+    <form action="/expurgo/criar-bateria" method="post" class="flex-1 overflow-y-auto p-4 flex flex-col gap-6 font-mono text-xs">
+
+      <div>
+        <label class="block font-bold text-gray-400 uppercase mb-3 text-[10px] tracking-widest">Causa Mortis</label>
+        <div class="space-y-3">
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" name="causa" value="LACUNA_CONTEUDO" class="check-brutal">
+            <span class="group-hover:underline">Conteúdo (Teoria)</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" name="causa" value="INTERPRETACAO" class="check-brutal">
+            <span class="group-hover:underline">Interpretação</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" name="causa" value="DESATENCAO" class="check-brutal">
+            <span class="group-hover:underline">Desatenção</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" name="causa" value="CHUTE" class="check-brutal">
+            <span class="text-red-600 font-bold group-hover:underline">Chute (Sem base)</span>
+          </label>
+        </div>
+      </div>
+
+      <hr class="border-black">
+
+      <div>
+        <label class="block font-bold text-gray-400 uppercase mb-3 text-[10px] tracking-widest">Disciplina</label>
+        <select name="materia" id="sel-materia" class="w-full border-2 border-black p-2 bg-gray-50 focus:outline-none focus:bg-yellow-50 font-bold uppercase mb-2">
+          <option value="">Todas</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-bold text-gray-400 uppercase mb-3 text-[10px] tracking-widest">Etapa</label>
+        <div class="grid grid-cols-3 gap-2">
+          <label class="cursor-pointer">
+            <input type="radio" name="etapa" value="1" class="peer sr-only">
+            <div class="border-2 border-black py-2 text-center peer-checked:bg-black peer-checked:text-white hover:bg-gray-100 font-bold">1</div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="etapa" value="2" class="peer sr-only">
+            <div class="border-2 border-black py-2 text-center peer-checked:bg-black peer-checked:text-white hover:bg-gray-100 font-bold">2</div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="etapa" value="3" class="peer sr-only">
+            <div class="border-2 border-black py-2 text-center peer-checked:bg-black peer-checked:text-white hover:bg-gray-100 font-bold">3</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-auto pt-4 border-t-[3px] border-black">
+        <label class="block font-bold text-gray-400 uppercase mb-2 text-[10px] tracking-widest">Modo</label>
+        <div class="relative">
+          <select name="usarIA" class="w-full border-2 border-black p-3 appearance-none font-bold bg-white">
+            <option value="false">REVISÃO MANUAL</option>
+            <option value="true">MODO IA (EMERGÊNCIA)</option>
+          </select>
+          <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 pointer-events-none"></i>
+        </div>
+      </div>
+    </form>
+  </aside>
+
+  <main class="flex-1 flex flex-col gap-4 overflow-hidden">
+
+    <div class="bg-white brutal-border brutal-shadow p-3 flex justify-between items-center shrink-0">
+      <div class="flex items-center gap-4 pl-2">
+        <label class="flex items-center gap-2 cursor-pointer font-mono text-xs font-bold uppercase select-none">
+          <input type="checkbox" id="check-all" class="check-brutal" onclick="toggleAll(this)">
+          <span>Selecionar Todos</span>
+        </label>
+        <div class="h-6 w-[2px] bg-gray-300"></div>
+        <span class="font-mono text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                        Mostrando <span th:text="${totalPendentes}">0</span> de <span th:text="${totalPendentes}">0</span> Erros
+                    </span>
+      </div>
+
+      <div class="flex gap-3">
+        <button class="bg-white text-black border-2 border-black px-4 py-2 font-mono text-xs font-bold uppercase hover:bg-red-50 hover:text-red-600 transition flex items-center gap-2 brutal-btn">
+          <i data-lucide="trash-2" class="w-3 h-3"></i> Remover do Banco
+        </button>
+        <button onclick="document.querySelector('aside form').submit()" class="bg-[#facc15] text-black border-2 border-black px-5 py-2 font-mono text-xs font-bold uppercase hover:bg-yellow-400 transition brutal-btn flex items-center gap-2">
+          <i data-lucide="play-circle" class="w-4 h-4"></i> Gerar Prova (Selecionados)
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto bg-white brutal-border brutal-shadow relative">
+
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-[#e5e5e5] border-b-[3px] border-black sticky top-0 z-10">
+        <tr>
+          <th class="p-4 w-12 border-r-2 border-black"></th> <th class="p-3 font-mono text-xs font-bold uppercase border-r-2 border-black w-24 text-center">Data</th>
+          <th class="p-3 font-mono text-xs font-bold uppercase border-r-2 border-black w-32">Origem</th>
+          <th class="p-3 font-mono text-xs font-bold uppercase border-r-2 border-black">Questão / Trecho</th>
+          <th class="p-3 font-mono text-xs font-bold uppercase border-r-2 border-black w-32 text-center">Causa</th>
+          <th class="p-3 font-mono text-xs font-bold uppercase w-16 text-center">Ação</th>
+        </tr>
+        </thead>
+        <tbody class="font-serif">
+
+        <tr th:each="erro : ${inbox}" class="border-b-2 border-gray-200 hover:bg-yellow-50 transition group animate-enter">
+
+          <td class="p-4 border-r-2 border-gray-200 group-hover:border-black text-center bg-gray-50 group-hover:bg-yellow-100 transition">
+            <input type="checkbox" class="check-brutal row-checkbox">
+          </td>
+
+          <td class="p-3 border-r-2 border-gray-200 group-hover:border-black font-mono text-xs text-gray-500 text-center">
+            <span th:if="${erro.dataUltimoErro != null}" th:text="${#temporals.format(erro.dataUltimoErro, 'dd/MMM')}">12/Out</span>
+            <span th:if="${erro.dataUltimoErro == null}">Hoje</span>
+          </td>
+
+          <td class="p-3 border-r-2 border-gray-200 group-hover:border-black font-mono text-xs font-bold uppercase">
+            <div class="flex flex-col">
+              <span th:if="${erro.questaoOriginal.prova != null}" th:text="'PAS ' + ${erro.questaoOriginal.prova.etapa}">PAS 1</span>
+              <span th:if="${erro.questaoOriginal.prova == null}" class="text-gray-400">BANCO</span>
+              <span class="text-[9px] text-gray-500" th:text="${erro.questaoOriginal.prova != null ? erro.questaoOriginal.prova.ano : '---'}">2023</span>
+            </div>
+          </td>
+
+          <td class="p-3 border-r-2 border-gray-200 group-hover:border-black align-top">
+            <div class="mb-1 flex gap-2">
+                                    <span th:each="tag : ${#strings.arraySplit(erro.questaoOriginal.tags, ',')}"
+                                          th:if="${tagStat.index < 1}"
+                                          class="font-mono text-[10px] font-bold uppercase tracking-wide text-gray-500"
+                                          th:text="${tag}">FÍSICA</span>
+            </div>
+            <p class="text-sm italic text-gray-800 line-clamp-1 group-hover:text-black leading-relaxed"
+               th:text="${erro.questaoOriginal.enunciado}">
+              "O enunciado da questão aparece aqui..."
+            </p>
+          </td>
+
+          <td class="p-3 border-r-2 border-gray-200 group-hover:border-black text-center align-middle">
+                                <span th:if="${erro.causa != null}"
+                                      class="inline-block px-2 py-1 font-mono text-[9px] font-bold uppercase text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                      th:classappend="${erro.causa.name() == 'CHUTE' ? 'bg-pink-500' : (erro.causa.name() == 'DESATENCAO' ? 'bg-yellow-400 text-black' : 'bg-black')}"
+                                      th:text="${erro.causa}">
+                                    CONTEÚDO
+                                </span>
+            <span th:if="${erro.causa == null}" class="text-[10px] font-mono text-gray-300 font-bold uppercase">---</span>
+          </td>
+
+          <td class="p-3 text-center align-middle">
+            <button th:hx-get="@{/expurgo/detalhar/{id}(id=${erro.id})}"
+                    hx-target="#modal-container"
+                    class="w-8 h-8 rounded-full border-2 border-black flex items-center justify-center hover:bg-black hover:text-white transition cursor-pointer"
+                    title="Ver Detalhes">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </td>
+        </tr>
+
+        <tr th:if="${inbox.empty}">
+          <td colspan="6" class="p-20 text-center">
+            <div class="flex flex-col items-center opacity-40">
+              <i data-lucide="check-circle" class="w-16 h-16 mb-4"></i>
+              <h3 class="font-black text-2xl uppercase">Banco Limpo</h3>
+              <p class="font-mono text-sm">Nenhum erro encontrado.</p>
+            </div>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<div th:fragment="modal-revisao" th:if="${erro != null}" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop backdrop-blur-sm animate-enter">
+  <div class="bg-white w-full max-w-3xl border-4 border-black brutal-shadow flex flex-col max-h-[90vh]">
+    <div class="bg-black text-white p-4 flex justify-between items-center shrink-0">
+      <h3 class="font-black uppercase text-xl tracking-widest font-mono text-yellow-400 flex items-center gap-3">
+        <span class="border-2 border-yellow-400 w-8 h-8 flex items-center justify-center bg-black text-yellow-400">!</span>
+        Análise de Erro
+      </h3>
+      <button onclick="document.getElementById('modal-container').innerHTML = ''" class="hover:text-red-500 transition"><i data-lucide="x" class="w-8 h-8"></i></button>
+    </div>
+
+    <div class="p-10 overflow-y-auto font-serif">
+      <div class="flex gap-2 mb-6">
+                     <span th:each="tag : ${#strings.arraySplit(erro.questaoOriginal.tags, ',')}"
+                           class="bg-gray-200 border border-black px-2 py-1 font-mono text-[10px] font-bold uppercase"
+                           th:text="${tag}">HISTÓRIA</span>
+      </div>
+
+      <p class="text-xl leading-loose mb-10 text-justify border-l-4 border-yellow-400 pl-6" th:text="${erro.questaoOriginal.enunciado}"></p>
+
+      <div class="grid grid-cols-2 gap-8 mb-10 font-mono">
+        <div class="border-4 border-black p-6 text-center bg-red-50 relative brutal-shadow-sm">
+          <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-3 py-1 font-bold uppercase border-2 border-white shadow-md">Sua Resposta</div>
+          <span class="block text-6xl font-black text-red-600 mt-2">X</span>
+        </div>
+        <div class="border-4 border-black p-6 text-center bg-green-50 relative brutal-shadow-sm">
+          <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-3 py-1 font-bold uppercase border-2 border-white shadow-md">Gabarito</div>
+          <span class="block text-6xl font-black text-green-600 mt-2" th:text="${erro.questaoOriginal.gabarito}">C</span>
+        </div>
+      </div>
+
+      <div class="bg-gray-100 border-2 border-dashed border-gray-400 p-6 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-gray-500 uppercase mb-1 font-mono">Precisa de ajuda?</p>
+          <p class="font-bold text-sm">Peça uma explicação detalhada.</p>
+        </div>
+        <a href="/tutor" target="_blank" class="bg-yellow-400 text-black px-6 py-3 border-2 border-black font-bold uppercase hover:bg-black hover:text-white transition brutal-shadow-sm font-mono text-xs flex items-center gap-2">
+          <i data-lucide="bot" class="w-4 h-4"></i> Perguntar ao Darcy
+        </a>
+      </div>
+    </div>
+
+    <div class="p-4 border-t-4 border-black bg-gray-50 flex gap-4 shrink-0">
+      <button onclick="document.getElementById('modal-container').innerHTML = ''" class="flex-1 py-4 text-xs font-bold uppercase border-2 border-gray-300 hover:border-black transition font-mono tracking-widest">
+        Manter na Fila (Ignorar)
+      </button>
+      <button th:hx-post="@{/expurgo/confirmar/{id}(id=${erro.id})}"
+              hx-target="'#card-' + ${erro.id}"
+              hx-swap="outerHTML"
+              onclick="document.getElementById('modal-container').innerHTML = ''"
+              class="flex-1 bg-black text-white py-4 text-xs font-bold uppercase border-2 border-black hover:bg-green-600 transition brutal-shadow font-mono tracking-widest flex items-center justify-center gap-2">
+        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Marcar como Dominada (Remover)
+      </button>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  lucide.createIcons();
+  document.body.addEventListener('htmx:afterSwap', () => lucide.createIcons());
+
+  // Lógica dos Filtros (Mantida e Adaptada)
+  const taxonomyData = JSON.parse(/*[[${taxonomyJson}]]*/ '{}');
+  const selMateria = document.getElementById('sel-materia');
+
+  function initForm() {
+      if (!selMateria) return;
+      Object.keys(taxonomyData).forEach(key => {
+          let opt = document.createElement('option');
+          opt.value = key.toUpperCase();
+          opt.text = key;
+          selMateria.appendChild(opt);
+      });
+  }
+
+  // Select All Logic
+  function toggleAll(source) {
+      checkboxes = document.querySelectorAll('.row-checkbox');
+      for(var i=0, n=checkboxes.length;i<n;i++) {
+          checkboxes[i].checked = source.checked;
+      }
+  }
+
+  initForm();
+</script>
+</body>
+</html>

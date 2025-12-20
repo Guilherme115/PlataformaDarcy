@@ -1,0 +1,142 @@
+[
+  {
+    "id": "bio_bioquimica_metabolismo",
+    "disciplina": "BIOLOGIA",
+    "topico": "Bioquímica e Metabolismo Energético",
+    "prompt_tecnico": "Elabore uma questão que relacione a estrutura da água e sais minerais com a fisiologia celular. Em seguida, aborde a diferença fundamental entre respiração celular aeróbica e fermentação, focando no saldo energético (ATP).",
+    "tags": ["BIOLOGIA", "BIOQUIMICA", "METABOLISMO", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "bio_ecologia_cerrado",
+    "disciplina": "BIOLOGIA",
+    "topico": "Ecologia e Biomas",
+    "prompt_tecnico": "Crie um cenário focado no Bioma Cerrado. Explore conceitos de cadeias alimentares, níveis tróficos e ciclos biogeoquímicos (Nitrogênio ou Carbono). Relacione com adaptações das plantas ao fogo e solo ácido.",
+    "tags": ["BIOLOGIA", "ECOLOGIA", "CERRADO", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "qui_tabela_ligacoes",
+    "disciplina": "QUIMICA",
+    "topico": "Tabela Periódica e Ligações Químicas",
+    "prompt_tecnico": "Desenvolva um problema que exija a identificação de famílias e períodos na Tabela Periódica. Peça para prever o tipo de ligação (iônica, covalente, metálica) e a geometria molecular baseada na eletronegatividade dos elementos.",
+    "tags": ["QUIMICA", "ATOMISTICA", "LIGACOES", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "qui_estequiometria",
+    "disciplina": "QUIMICA",
+    "topico": "Estequiometria e Leis Ponderais",
+    "prompt_tecnico": "Crie um cálculo estequiométrico contextualizado (ex: combustão ou reações industriais). O problema deve envolver reagente limitante ou cálculo de rendimento, aplicando as Leis de Lavoisier e Proust.",
+    "tags": ["QUIMICA", "MATEMATICA", "CALCULO", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "fis_dinamica_newton",
+    "disciplina": "FISICA",
+    "topico": "Dinâmica (Leis de Newton)",
+    "prompt_tecnico": "Proponha uma situação prática (elevador, plano inclinado ou sistema de blocos) que exija o diagrama de corpo livre. Cobre a aplicação da 2ª Lei de Newton (F=m.a) e conceitos de atrito estático/cinético.",
+    "tags": ["FISICA", "MECANICA", "FORCAS", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "fis_gravitacao_hidrostatica",
+    "disciplina": "FISICA",
+    "topico": "Gravitação e Hidrostática",
+    "prompt_tecnico": "Alterne entre: 1) Leis de Kepler e Lei da Gravitação Universal (órbitas planetárias) OU 2) Princípio de Arquimedes (empuxo) e Teorema de Stevin (pressão em líquidos). Foque na interpretação física das fórmulas.",
+    "tags": ["FISICA", "FLUIDOS", "ASTRONOMIA", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "mat_funcao_quadratica",
+    "disciplina": "MATEMATICA",
+    "topico": "Função do 2º Grau e Cinemática",
+    "prompt_tecnico": "Contextualize uma parábola (trajetória de projétil ou lucro máximo). Exija o cálculo das raízes (Bhaskara), coordenadas do vértice (máximo/mínimo) e interpretação do gráfico. Conecte com MRUV se possível.",
+    "tags": ["MATEMATICA", "FUNCOES", "ALGEBRA"]
+  },
+  {
+    "id": "mat_geo_plana_trigo",
+    "disciplina": "MATEMATICA",
+    "topico": "Geometria Plana",
+    "prompt_tecnico": "Crie um problema envolvendo cálculo de áreas (triângulos, círculos, polígonos). Pode incluir semelhança de triângulos ou relações métricas no triângulo retângulo (Pitágoras e trigonometria básica).",
+    "tags": ["MATEMATICA", "GEOMETRIA", "AREAS"]
+  },
+  {
+    "id": "mat_exp_log_pa_pg",
+    "disciplina": "MATEMATICA",
+    "topico": "Exp/Log e Progressões",
+    "prompt_tecnico": "Elabore uma questão sobre crescimento populacional ou decaimento radioativo (Função Exponencial/Logaritmo). Alternativamente, aborde padrões numéricos usando PA ou PG (soma de termos e termo geral).",
+    "tags": ["MATEMATICA", "ANALISE_COMBINATORIA", "LOGARITMOS"]
+  },
+  {
+    "id": "his_antiguidade_classica",
+    "disciplina": "HISTORIA",
+    "topico": "Antiguidade Clássica (Grécia e Roma)",
+    "prompt_tecnico": "Compare a Democracia Ateniense com a República Romana. Foque nos conceitos de cidadania (quem podia votar), escravidão antiga e as heranças culturais/políticas para o mundo ocidental.",
+    "tags": ["HISTORIA", "POLITICA", "SOCIEDADE"]
+  },
+  {
+    "id": "his_brasil_colonial",
+    "disciplina": "HISTORIA",
+    "topico": "Brasil Colônia e Escravidão",
+    "prompt_tecnico": "Analise os ciclos econômicos (Pau-Brasil, Cana-de-Açúcar, Ouro). Discuta a estrutura social patriarcal, a escravidão indígena e africana, e as invasões estrangeiras (Holandeses/Franceses).",
+    "tags": ["HISTORIA", "BRASIL", "ECONOMIA"]
+  },
+  {
+    "id": "his_moderna_iluminismo",
+    "disciplina": "HISTORIA",
+    "topico": "Idade Moderna e Iluminismo",
+    "prompt_tecnico": "Aborde a transição do Feudalismo para o Capitalismo, o Absolutismo Monárquico versus o pensamento Iluminista (divisão dos poderes, liberdade econômica). Relacione com as Revoluções Burguesas.",
+    "tags": ["HISTORIA", "EUROPA", "IDEOLOGIA"]
+  },
+  {
+    "id": "geo_cartografia",
+    "disciplina": "GEOGRAFIA",
+    "topico": "Cartografia e Fusos Horários",
+    "prompt_tecnico": "Crie uma questão técnica sobre leitura de mapas: cálculo de escala, interpretação de curvas de nível (topografia) ou projeções cartográficas (Mercator vs Peters). Pode incluir cálculo de fuso horário.",
+    "tags": ["GEOGRAFIA", "MAPAS", "MATEMATICA"]
+  },
+  {
+    "id": "geo_urbanizacao_demografia",
+    "disciplina": "GEOGRAFIA",
+    "topico": "População e Urbanização",
+    "prompt_tecnico": "Analise pirâmides etárias (transição demográfica). Discuta o processo de urbanização brasileira, focando em problemas como segregação socioespacial, favelização e macrocefalia urbana.",
+    "tags": ["GEOGRAFIA", "SOCIOLOGIA", "CIDADE"]
+  },
+  {
+    "id": "geo_agraria_ambiental",
+    "disciplina": "GEOGRAFIA",
+    "topico": "Geografia Agrária e Ambiental",
+    "prompt_tecnico": "Discuta a estrutura fundiária brasileira (latifúndio vs agricultura familiar) e o avanço da fronteira agrícola. Conecte com impactos ambientais (desmatamento, erosão, agrotóxicos).",
+    "tags": ["GEOGRAFIA", "CAMPO", "MEIO_AMBIENTE"]
+  },
+  {
+    "id": "fil_pre_socraticos_classicos",
+    "disciplina": "FILOSOFIA",
+    "topico": "Filosofia Antiga",
+    "prompt_tecnico": "Diferencie o pensamento mítico do filosófico (logos). Aborde a busca pela 'Arché' nos Pré-Socráticos. Em seguida, explore a ética e política no trio clássico: Sócrates (maiêutica), Platão (mundo das ideias) e Aristóteles (ética do meio-termo).",
+    "tags": ["FILOSOFIA", "ETICA", "LOGICA"]
+  },
+  {
+    "id": "port_funcoes_figuras",
+    "disciplina": "PORTUGUES",
+    "topico": "Funções e Figuras de Linguagem",
+    "prompt_tecnico": "Apresente um texto (publicitário ou poema). Peça a identificação da Função da Linguagem predominante (Emotiva, Conativa, Metalinguística, etc.) e análise das figuras de linguagem (Metáfora, Metonímia, Ironia, Hipérbole).",
+    "tags": ["PORTUGUES", "ANALISE_TEXTUAL", "COMUNICACAO"]
+  },
+  {
+    "id": "lit_escolas_literarias",
+    "disciplina": "LITERATURA",
+    "topico": "Quinhentismo, Barroco e Arcadismo",
+    "prompt_tecnico": "Solicite um comparativo entre textos. Ex: A visão teocêntrica e contraditória do Barroco (Gregório de Matos) versus o racionalismo e bucolismo do Arcadismo (Cláudio Manoel da Costa). Inclua a Carta de Caminha como literatura documental.",
+    "tags": ["LITERATURA", "HISTORIA", "ARTE"]
+  },
+  {
+    "id": "soc_conceitos_basicos",
+    "disciplina": "SOCIOLOGIA",
+    "topico": "Indivíduo, Sociedade e Cultura",
+    "prompt_tecnico": "Aborde os conceitos fundamentais da Sociologia: Socialização (primária e secundária), Instituições Sociais (Família, Escola, Estado) e o conceito antropológico de Cultura (identidade, alteridade e etnocentrismo).",
+    "tags": ["SOCIOLOGIA", "CULTURA", "SOCIEDADE"]
+  },
+  {
+    "id": "soc_metodos_classicos",
+    "disciplina": "SOCIOLOGIA",
+    "topico": "Os Clássicos da Sociologia",
+    "prompt_tecnico": "Foque nos métodos de análise sociológica. Durkheim (Fato Social e Coerção), Marx (Luta de Classes e Materialismo) ou Weber (Ação Social). Relacione com problemas contemporâneos.",
+    "tags": ["SOCIOLOGIA", "TEORIA_SOCIOLOGICA", "CLASSICOS"]
+  }
+]

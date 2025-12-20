@@ -1,36 +1,61 @@
 package com.example.PlataformaDarcy.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "simulados")
-@Data
 public class Simulado {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    private LocalDateTime dataInicio = LocalDateTime.now();
+    private LocalDateTime dataInicio;
+    private LocalDateTime dataFim;
 
-    private LocalDateTime dataFim; // Se estiver NULL, o simulado está "Em Aberto"
+    private String titulo; // Ex: "PAS 1 - 2013", "PROTOCOLO DE EXPURGO"
 
     private Double notaFinal;
 
-    @Column(columnDefinition = "TEXT")
-    private String titulo;
+    @Enumerated(EnumType.STRING)
+    private ModoExecucao modo; // APRENDIZADO ou LIVRE (Cronômetro)
 
-    @OneToMany(mappedBy = "simulado", cascade = CascadeType.ALL)
-    private List<Resolucao> resolucoes;
+    // --- NOVO CAMPO PARA O MÓDULO DE EXPURGO ---
+    // Serve para identificar se é "NORMAL", "PROTOCOLO_IA", "CENTRAL_MANUAL", etc.
+    private String tipo;
 
-    public boolean isFinalizado() {
-        return dataFim != null;
+    public enum ModoExecucao {
+        LIVRE,         // Simula prova real (sem feedback imediato)
+        APRENDIZADO    // Feedback imediato a cada questão
     }
+
+    // --- GETTERS E SETTERS ---
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+
+    public LocalDateTime getDataInicio() { return dataInicio; }
+    public void setDataInicio(LocalDateTime dataInicio) { this.dataInicio = dataInicio; }
+
+    public LocalDateTime getDataFim() { return dataFim; }
+    public void setDataFim(LocalDateTime dataFim) { this.dataFim = dataFim; }
+
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+
+    public Double getNotaFinal() { return notaFinal; }
+    public void setNotaFinal(Double notaFinal) { this.notaFinal = notaFinal; }
+
+    public ModoExecucao getModo() { return modo; }
+    public void setModo(ModoExecucao modo) { this.modo = modo; }
+
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 }

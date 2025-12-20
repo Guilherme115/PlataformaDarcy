@@ -16,9 +16,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        // AQUI ESTÁ A MUDANÇA: Adicionei "/img/**" na lista
                         .requestMatchers(
                                 "/", "/login", "/register", "/forgot-password", "/reset-password",
-                                "/css/**", "/js/**", "/media/**", "/images/**"
+                                "/css/**", "/js/**", "/media/**", "/images/**", "/img/**"
                         ).permitAll()
 
                         .requestMatchers("/cms/**").hasRole("ADMIN")

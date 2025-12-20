@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Acervo Wiki - Darcy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Merriweather:ital,wght@0,900;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f3f4f6; background-image: radial-gradient(#d1d5db 1px, transparent 1px); background-size: 20px 20px; }
+        .brutal-border { border: 3px solid black; box-shadow: 6px 6px 0px 0px black; }
+        .brutal-btn { @apply bg-black text-white px-4 py-2 font-bold uppercase hover:bg-yellow-400 hover:text-black border-2 border-black transition shadow-[4px_4px_0px_0px_#000]; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-black font-serif p-4 md:p-8">
+
+<header class="max-w-7xl mx-auto w-full mb-12 border-b-4 border-black pb-6 flex justify-between items-end">
+    <div>
+        <div class="bg-yellow-400 text-black px-2 py-1 text-[10px] font-mono font-bold inline-block mb-2 uppercase border border-black">Comunidade</div>
+        <h1 class="text-5xl font-black italic tracking-tighter leading-none">ACERVO<br>WIKI.</h1>
+    </div>
+    <div class="flex gap-4">
+        <a href="/" class="text-xs font-mono font-bold uppercase hover:underline">Voltar</a>
+        <a href="/wiki/novo" class="brutal-btn flex items-center gap-2">
+            <i data-lucide="pen-tool" class="w-4 h-4"></i> Contribuir
+        </a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto w-full">
+
+    <div class="bg-white brutal-border p-6 mb-12 flex flex-col md:flex-row gap-4 items-center">
+        <div class="flex-1 w-full">
+            <label class="font-mono text-xs font-bold uppercase block mb-1">O que você quer aprender hoje?</label>
+            <input type="text" placeholder="Ex: Trovadorismo, Mitose, Leis de Newton..."
+                   class="w-full border-2 border-black p-3 font-serif text-lg outline-none focus:bg-yellow-50">
+        </div>
+        <button class="bg-black text-white h-14 px-8 font-black uppercase hover:bg-red-600 transition border-2 border-black">
+            Buscar
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+
+        <div class="bg-white border-2 border-black p-6 relative group hover:-translate-y-1 transition duration-200">
+            <div class="absolute top-0 left-0 bg-black text-white px-3 py-1 font-mono font-bold text-xs">PAS 1</div>
+            <h2 class="mt-6 text-2xl font-black uppercase mb-4">Base & Fundamentos</h2>
+
+            <div class="flex flex-wrap gap-2 mb-6">
+                <a href="/wiki/explorar?etapa=1&disciplina=HISTORIA" class="bg-gray-100 hover:bg-yellow-200 px-2 py-1 text-[10px] font-bold uppercase border border-black transition">História</a>
+                <a href="/wiki/explorar?etapa=1&disciplina=BIOLOGIA" class="bg-gray-100 hover:bg-green-200 px-2 py-1 text-[10px] font-bold uppercase border border-black transition">Biologia</a>
+                <a href="/wiki/explorar?etapa=1&disciplina=LITERATURA" class="bg-gray-100 hover:bg-pink-200 px-2 py-1 text-[10px] font-bold uppercase border border-black transition">Literatura</a>
+            </div>
+
+            <div class="border-t-2 border-dashed border-gray-300 pt-4">
+                <span class="text-[10px] font-mono text-gray-500 uppercase mb-2 block">Em alta na comunidade:</span>
+                <ul class="space-y-2">
+                    <li th:each="post : ${destaquesPas1}" class="flex items-start gap-2 text-sm hover:text-red-600 cursor-pointer">
+                        <i data-lucide="star" class="w-4 h-4 text-yellow-500 fill-yellow-500 shrink-0 mt-0.5"></i>
+                        <a th:href="@{/wiki/{id}(id=${post.id})}" th:text="${post.titulo}" class="line-clamp-1 font-bold">Obras de Arte</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-white border-2 border-black p-6 relative group hover:-translate-y-1 transition duration-200">
+            <div class="absolute top-0 left-0 bg-black text-white px-3 py-1 font-mono font-bold text-xs">PAS 2</div>
+            <h2 class="mt-6 text-2xl font-black uppercase mb-4">Século XIX & Expansão</h2>
+            <div class="flex flex-wrap gap-2 mb-6">
+                <a href="/wiki/explorar?etapa=2" class="bg-black text-white px-3 py-1 text-xs font-bold uppercase w-full text-center hover:bg-red-600 transition">Ver Matérias</a>
+            </div>
+        </div>
+
+        <div class="bg-white border-2 border-black p-6 relative group hover:-translate-y-1 transition duration-200">
+            <div class="absolute top-0 left-0 bg-black text-white px-3 py-1 font-mono font-bold text-xs">PAS 3</div>
+            <h2 class="mt-6 text-2xl font-black uppercase mb-4">Contemporâneo</h2>
+            <div class="flex flex-wrap gap-2 mb-6">
+                <a href="/wiki/explorar?etapa=3" class="bg-black text-white px-3 py-1 text-xs font-bold uppercase w-full text-center hover:bg-red-600 transition">Ver Matérias</a>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+<script>lucide.createIcons();</script>
+</body>
+</html>

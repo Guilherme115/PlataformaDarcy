@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE - Plataforma Darcy">Plataforma Darcy</title>
+
+    <meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,300;0,900;1,300;1,900&display=swap" rel="stylesheet">
+
+    <style>
+        body { background-color: #e5e5e5; background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px; font-family: 'Merriweather', serif; }
+        .brutal-border { border: 3px solid black; }
+        .brutal-shadow { box-shadow: 6px 6px 0px 0px black; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-left: 2px solid black; }
+        ::-webkit-scrollbar-thumb { background: black; }
+        ::-webkit-scrollbar-thumb:hover { background: #333; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-black overflow-x-hidden">
+
+<div th:replace="~{fragments/loader :: global-loader}"></div>
+
+<div layout:fragment="content" class="flex-1 flex flex-col w-full h-full"></div>
+
+<script>
+    lucide.createIcons();
+    document.body.addEventListener('htmx:afterSwap', () => lucide.createIcons());
+
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]');
+        const csrfToken = document.querySelector('meta[name="_csrf"]');
+
+        if (csrfHeader && csrfToken) {
+            event.detail.headers[csrfHeader.getAttribute('content')] = csrfToken.getAttribute('content');
+        }
+    });
+</script>
+</body>
+</html>

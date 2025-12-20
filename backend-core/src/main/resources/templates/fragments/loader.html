@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="global-loader">
+
+    <div id="darcy-loader" class="fixed inset-0 z-[9999] hidden bg-[#e5e5e5] flex-col items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-10 max-w-lg w-full text-center relative animate-pulse-slow flex flex-col items-center">
+            <div class="mb-8">
+                <div class="w-20 h-20 bg-black text-white flex items-center justify-center font-black text-4xl font-mono border-4 border-transparent animate-bounce">D.</div>
+            </div>
+            <div class="w-full h-6 border-4 border-black p-1 mb-8 bg-white">
+                <div class="h-full bg-yellow-400 w-0 animate-loading-bar"></div>
+            </div>
+            <div class="min-h-[80px] flex flex-col justify-center">
+                <p id="loader-quote" class="font-serif text-xl italic font-black text-black mb-3 leading-tight">"..."</p>
+                <span id="loader-author" class="block font-mono text-xs font-bold uppercase tracking-[0.2em] text-gray-500">— Darcy Ribeiro</span>
+            </div>
+            <div class="absolute -bottom-4 bg-black text-white px-4 py-2 font-mono text-xs font-bold uppercase border-2 border-white tracking-widest shadow-lg">
+                PROCESSANDO...
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 1. ANIMAÇÃO DE ENTRADA DA PÁGINA (Slide Up + Fade In) */
+        /* Isso faz a página nova "subir" suavemente ao carregar */
+        body {
+            animation: pageEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px); /* Começa um pouco mais embaixo */
+                filter: blur(4px); /* Começa levemente desfocada */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* 2. CLASSE PARA SAÍDA DA PÁGINA (Fade Out) */
+        /* Será aplicada via JS quando o usuário clicar para sair */
+        body.page-leaving {
+            animation: pageExit 0.4s ease-in forwards;
+            pointer-events: none; /* Impede cliques duplos */
+        }
+
+        @keyframes pageExit {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.98); } /* Diminui um pouco e some */
+        }
+
+        /* Animações do Loader (Mantidas) */
+        @keyframes loadingBar { 0% { width: 0%; } 40% { width: 70%; } 100% { width: 100%; } }
+        .animate-loading-bar { animation: loadingBar 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes pulseSlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        .animate-pulse-slow { animation: pulseSlow 3s infinite ease-in-out; }
+
+        /* Utilitário para mostrar o loader suavemente */
+        .loader-visible { opacity: 1 !important; pointer-events: auto !important; }
+    </style>
+
+    <script>
+        const quotes = [
+            { text: "A crise da educação no Brasil não é uma crise; é um projeto.", author: "Darcy Ribeiro" },
+            { text: "Só há duas opções nesta vida: se resignar ou se indignar. E eu não vou me resignar nunca.", author: "Darcy Ribeiro" },
+            { text: "O Brasil, último país a acabar com a escravidão, tem um perverso orgulho de sua ignorância.", author: "Darcy Ribeiro" },
+            { text: "Ensinar não é transferir conhecimento, mas criar as possibilidades para a sua própria produção.", author: "Paulo Freire" },
+            { text: "A persistência é o caminho do êxito.", author: "Charles Chaplin" }
+        ];
+
+        const loaderElement = document.getElementById('darcy-loader');
+        const quoteElement = document.getElementById('loader-quote');
+        const authorElement = document.getElementById('loader-author');
+
+        function showLoader() {
+            // Sorteia frase
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            if(quoteElement) quoteElement.innerText = `"${randomQuote.text}"`;
+            if(authorElement) authorElement.innerText = `— ${randomQuote.author}`;
+
+            // EFEITO DE SAÍDA DA PÁGINA ATUAL
+            document.body.classList.add('page-leaving');
+
+            // MOSTRA O LOADER COM UM LEVE DELAY PARA A SAÍDA ACONTECER
+            if(loaderElement) {
+                loaderElement.classList.remove('hidden');
+                // Pequeno timeout para permitir a transição de opacidade CSS
+                setTimeout(() => {
+                    loaderElement.classList.add('loader-visible');
+                }, 50);
+            }
+        }
+
+        function hideLoader() {
+            if(loaderElement) {
+                loaderElement.classList.remove('loader-visible');
+                setTimeout(() => {
+                    loaderElement.classList.add('hidden');
+                }, 300); // Espera o fade out do loader acabar
+            }
+            // Remove classe de saída caso o usuário tenha voltado ou cancelado
+            document.body.classList.remove('page-leaving');
+        }
+
+        // --- GATILHOS ---
+
+        // HTMX
+        document.body.addEventListener('htmx:configRequest', function(evt) {
+            if(!evt.detail.elt.classList.contains('no-loader')) showLoader();
+        });
+        document.body.addEventListener('htmx:afterOnLoad', function() { setTimeout(hideLoader, 500); });
+        document.body.addEventListener('htmx:requestError', hideLoader);
+
+        // NAVEGAÇÃO COMUM (Links e Forms)
+        // Usamos 'click' em links para disparar a animação de saída imediatamente
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a');
+            // Se for link interno e não tiver target blank ou download
+            if (link && link.href && !link.target && !link.hasAttribute('download') && link.hostname === window.location.hostname) {
+                // Se não for apenas uma âncora (#)
+                if (link.pathname !== window.location.pathname || link.search !== window.location.search) {
+                    showLoader();
+                }
+            }
+        });
+
+        // Forms normais
+        document.addEventListener('submit', function(e) {
+            if (!e.target.hasAttribute('hx-post') && !e.target.hasAttribute('hx-get')) {
+                showLoader();
+            }
+        });
+
+        // Correção para o botão "Voltar" do navegador (BF Cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                hideLoader();
+                document.body.classList.remove('page-leaving');
+            }
+        });
+    </script>
+</div>
+
+</body>
+</html>

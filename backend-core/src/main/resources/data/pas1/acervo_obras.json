@@ -1,0 +1,338 @@
+[
+  {
+    "id": "mus_bach_fugue",
+    "titulo": "Little Fugue in G minor (J. S. Bach)",
+    "tipo": "MUSICAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Bach_Little_Fugue_in_G_minor.jpg",
+    "texto_contexto": "A estrutura da fuga matemática de Bach permite o estudo de padrões de repetição e sequências. Na Física, relaciona-se com a Acústica (frequência/ondas), embora o foco do PAS 1 seja Mecânica, a lógica matemática é fundamental.",
+    "tags": ["MATEMATICA", "HISTORIA", "FISICA"]
+  },
+  {
+    "id": "mus_adam_halle",
+    "titulo": "Le jeu de Robin et Marion – Scene 2",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Peça medieval que reflete a sociedade feudal. Linguísticamente, marca a transição para línguas neolatinas e gêneros dramáticos incipientes.",
+    "tags": ["HISTORIA", "LITERATURA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_emicida_pixinguinha",
+    "titulo": "São Pixinguinha (Emicida)",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Aborda a urbanização excludente e a demografia das periferias brasileiras. Rico em gírias e coloquialismos (variação linguística) e crítica social.",
+    "tags": ["GEOGRAFIA", "PORTUGUES", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_nepomuceno_batuque",
+    "titulo": "Série Brasileira: Batuque",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Representa a identidade nacional. Pode ser analisada sob a ótica da formação da população brasileira e a mistura de elementos culturais.",
+    "tags": ["HISTORIA", "GEOGRAFIA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_clarice_nhanderu",
+    "titulo": "Nhanderú – Overture For Orchestra",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Evoca a natureza e os povos originários. Conecta-se diretamente com a preservação ambiental e a cosmovisão indígena pré-colonial.",
+    "tags": ["GEOGRAFIA", "HISTORIA", "BIOLOGIA"]
+  },
+  {
+    "id": "mus_rameau_platee",
+    "titulo": "Platée (Rameau)",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Sátira do Absolutismo francês e da vida na corte. A obra reflete os excessos e a artificialidade da Idade Moderna europeia.",
+    "tags": ["HISTORIA", "LITERATURA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_pixinguinha_rosa",
+    "titulo": "Rosa (Pixinguinha)",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "A letra utiliza uma linguagem rebuscada, parnasiana, rica em figuras de linguagem e metáforas, ideal para análise de interpretação e estilo.",
+    "tags": ["PORTUGUES", "LITERATURA"]
+  },
+  {
+    "id": "mus_clementina_muriquinho",
+    "titulo": "Muriquinho Piquinino",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Canto de trabalho (Vissungo) da mineração. Fundamental para estudar o ciclo do ouro, escravidão e a geografia de Minas Gerais no período colonial.",
+    "tags": ["HISTORIA", "GEOGRAFIA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_natiruts_palmares",
+    "titulo": "Palmares 1999",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Traça paralelo entre o Quilombo dos Palmares (Brasil Colonial) e a favelização moderna (Geografia Urbana/Desigualdade).",
+    "tags": ["HISTORIA", "GEOGRAFIA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_nick_cruz_sol",
+    "titulo": "Sol no Peito",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Discussão sobre identidade de gênero e biologia (hormônios, fenola, genética) versus construção social do corpo.",
+    "tags": ["BIOLOGIA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_mirian_eu_sou",
+    "titulo": "Eu sou assim (Mirian Marques)",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Pode ser relacionada à genética e fenótipos (Biologia) e à inclusão social. Questiona padrões de normalidade.",
+    "tags": ["BIOLOGIA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "mus_baroes_recairei",
+    "titulo": "Recairei (Barões da Pisadinha)",
+    "tipo": "MUSICAL",
+    "url_midia": "",
+    "texto_contexto": "Fenômeno da cultura de massa. Em Física, sintetizadores geram ondas sonoras (frequência/período), relacionando-se a conceitos introdutórios de movimento periódico.",
+    "tags": ["FISICA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "vis_panteao",
+    "titulo": "Panteão de Agripa",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Pantheon_interior.jpg/640px-Pantheon_interior.jpg",
+    "texto_contexto": "Exemplo máximo de Estática e Geometria. O domo é uma semiesfera perfeita. O concreto romano envolve reações químicas de endurecimento (misturas).",
+    "tags": ["MATEMATICA", "FISICA", "HISTORIA", "VISUAL"]
+  },
+  {
+    "id": "vis_notre_dame",
+    "titulo": "Catedral de Notre-Dame de Reims",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Reims_Cathedral_West_Front.jpg/640px-Reims_Cathedral_West_Front.jpg",
+    "texto_contexto": "A estrutura gótica depende da distribuição de forças (vetores/estática) através dos arcobotantes para manter a verticalidade.",
+    "tags": ["FISICA", "HISTORIA", "MATEMATICA", "VISUAL"]
+  },
+  {
+    "id": "vis_santa_ceia",
+    "titulo": "A Santa Ceia (Leonardo da Vinci)",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/%C3%9Altima_Cena_-_Da_Vinci_5.jpg/1280px-%C3%9Altima_Cena_-_Da_Vinci_5.jpg",
+    "texto_contexto": "Uso rigoroso da Geometria (ponto de fuga, perspectiva). A técnica do afresco envolve reações químicas na preparação da parede e pigmentos.",
+    "tags": ["MATEMATICA", "QUIMICA", "HISTORIA", "VISUAL"]
+  },
+  {
+    "id": "vis_discobolo",
+    "titulo": "Discóbolo de Míron",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Discobolo_lancellotti_3.JPG/640px-Discobolo_lancellotti_3.JPG",
+    "texto_contexto": "Estudo de anatomia (Biologia) e Física. Representa o instante 'zero' antes do movimento de lançamento (Cinemática/Dinâmica) e o equilíbrio de forças (Estática).",
+    "tags": ["FISICA", "BIOLOGIA", "HISTORIA", "VISUAL"]
+  },
+  {
+    "id": "vis_urnas_marajoaras",
+    "titulo": "Urnas funerárias marajoaras",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Urna_funer%C3%A1ria_marajoara.jpg/640px-Urna_funer%C3%A1ria_marajoara.jpg",
+    "texto_contexto": "Cerâmica envolve química (argila, queima, transformações físicas e químicas). Os desenhos geométricos complexos exigem simetria e cálculos.",
+    "tags": ["QUIMICA", "MATEMATICA", "HISTORIA", "VISUAL"]
+  },
+  {
+    "id": "vis_jborges_sereias",
+    "titulo": "Sereias (J. Borges)",
+    "tipo": "VISUAL",
+    "url_midia": "",
+    "texto_contexto": "Xilogravura e Cordel. Conecta-se aos gêneros textuais populares e à variação linguística regional do Nordeste.",
+    "tags": ["PORTUGUES", "LITERATURA", "GEOGRAFIA", "VISUAL"]
+  },
+  {
+    "id": "vis_nefertiti",
+    "titulo": "Busto de Nefertiti",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Nofretete_Neues_Museum.jpg/640px-Nofretete_Neues_Museum.jpg",
+    "texto_contexto": "Arte egípcia antiga (Período de Amarna). Estudo de proporções faciais (Geometria/Biologia) e materiais (calcário/estuque - Química).",
+    "tags": ["HISTORIA", "QUIMICA", "VISUAL"]
+  },
+  {
+    "id": "vis_templo_mayor",
+    "titulo": "Sítio Histórico do Templo Mayor",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Templo_Mayor_de_M%C3%A9xico.jpg/640px-Templo_Mayor_de_M%C3%A9xico.jpg",
+    "texto_contexto": "Urbanismo asteca (Tenochtitlan). Envolve engenharia (Estática), astronomia e agricultura (Chinampas - Geografia Agrária).",
+    "tags": ["GEOGRAFIA", "HISTORIA", "MATEMATICA", "VISUAL"]
+  },
+  {
+    "id": "vis_petra",
+    "titulo": "Petra (Jordânia)",
+    "tipo": "VISUAL",
+    "url_midia": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Treasury_petra_crop.jpeg/640px-Treasury_petra_crop.jpeg",
+    "texto_contexto": "Cidade esculpida no arenito. Estudo de erosão, tipos de rocha (Geografia) e engenharia hidráulica antiga (Hidrostática básica).",
+    "tags": ["GEOGRAFIA", "HISTORIA", "FISICA", "VISUAL"]
+  },
+  {
+    "id": "aud_woya",
+    "titulo": "Woya Hayi Mawe – Para onde vais?",
+    "tipo": "AUDIOVISUAL",
+    "url_midia": "",
+    "texto_contexto": "Documentário sobre Moçambique e Brasil. Trata de fluxos migratórios e herança cultural (Demografia).",
+    "tags": ["GEOGRAFIA", "HISTORIA"]
+  },
+  {
+    "id": "aud_mariana_terraplanismo",
+    "titulo": "Terraplanismo e Pós-Verdade",
+    "tipo": "AUDIOVISUAL",
+    "url_midia": "",
+    "texto_contexto": "Debate o método científico. Na Física, aborda a Gravitação Universal (esfericidade da Terra, gravidade) contrapondo pseudociência.",
+    "tags": ["FISICA", "FILOSOFIA", "SOCIOLOGIA"]
+  },
+  {
+    "id": "aud_owera_falas_txai",
+    "titulo": "OWERA / Falas da Terra / Txai Suruí",
+    "tipo": "AUDIOVISUAL",
+    "url_midia": "",
+    "texto_contexto": "Conjunto de obras sobre a questão indígena. Essencial para Geografia Agrária (demarcação), Ecologia (preservação) e Química Ambiental (poluição).",
+    "tags": ["GEOGRAFIA", "BIOLOGIA", "QUIMICA"]
+  },
+  {
+    "id": "aud_povo_tupi",
+    "titulo": "O Povo Brasileiro: A matriz Tupi",
+    "tipo": "AUDIOVISUAL",
+    "url_midia": "",
+    "texto_contexto": "Analisa a miscigenação (Genética/Biologia) e a antropofagia ritual (Cultura). Base da formação demográfica brasileira.",
+    "tags": ["SOCIOLOGIA", "BIOLOGIA", "HISTORIA"]
+  },
+  {
+    "id": "aud_chimamanda",
+    "titulo": "O perigo de uma História Única",
+    "tipo": "AUDIOVISUAL",
+    "url_midia": "",
+    "texto_contexto": "Discurso sobre estereótipos e poder narrativo. Relaciona-se com Interpretação de Texto, Coerência e a Geografia Regional (visão sobre África).",
+    "tags": ["PORTUGUES", "GEOGRAFIA", "LITERATURA"]
+  },
+  {
+    "id": "aud_muquem",
+    "titulo": "Rumo ao Muquém",
+    "tipo": "AUDIOVISUAL",
+    "url_midia": "",
+    "texto_contexto": "Romaria em Goiás. Geografia da religião, patrimônio imaterial e ocupação do Centro-Oeste (Regionalização).",
+    "tags": ["GEOGRAFIA", "HISTORIA"]
+  },
+  {
+    "id": "txt_james_webb",
+    "titulo": "Desvendando o Endereço Físico do James Webb",
+    "tipo": "TEXTO",
+    "url_midia": "",
+    "texto_contexto": "Texto técnico. Aborda Gravitação (Pontos de Lagrange) e Química (elementos dos espelhos, como Berílio/Ouro na Tabela Periódica).",
+    "tags": ["FISICA", "QUIMICA", "MATEMATICA", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "txt_epicteto",
+    "titulo": "O manual de Epicteto",
+    "tipo": "TEXTO",
+    "url_midia": "",
+    "texto_contexto": "Texto clássico do Estoicismo. Fundamental para o estudo da Filosofia Helenística (ética, ataraxia).",
+    "tags": ["FILOSOFIA", "HISTORIA"]
+  },
+  {
+    "id": "txt_alianca_mar",
+    "titulo": "Aliança no Fundo do Mar",
+    "tipo": "TEXTO",
+    "url_midia": "",
+    "texto_contexto": "Texto científico sobre simbiose e mutualismo. Encaixa-se perfeitamente em Ecologia (Relações Ecológicas) e Química (processos biológicos).",
+    "tags": ["BIOLOGIA", "QUIMICA", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "txt_cf88",
+    "titulo": "CF 88 - Artigo 5º",
+    "tipo": "TEXTO",
+    "url_midia": "",
+    "texto_contexto": "Base jurídica do país. Texto normativo (Gêneros Textuais) que reflete os direitos humanos e a cidadania pós-ditadura.",
+    "tags": ["SOCIOLOGIA", "PORTUGUES", "HISTORIA"]
+  },
+  {
+    "id": "txt_cerrado",
+    "titulo": "O Cerrado está morrendo",
+    "tipo": "TEXTO",
+    "url_midia": "",
+    "texto_contexto": "Texto dissertativo sobre o bioma. Aborda Geografia Ambiental, Química (pesticidas/solo) e Ecologia (perda de biodiversidade).",
+    "tags": ["GEOGRAFIA", "BIOLOGIA", "QUIMICA", "NATUREZA_GERAL"]
+  },
+  {
+    "id": "txt_origem_fala",
+    "titulo": "Quando e por que os humanos começaram a falar?",
+    "tipo": "TEXTO",
+    "url_midia": "",
+    "texto_contexto": "Texto de divulgação científica. Relaciona a evolução biológica (aparelho fonador) com a função social da linguagem (Elementos da Comunicação).",
+    "tags": ["BIOLOGIA", "PORTUGUES", "HISTORIA"]
+  },
+  {
+    "id": "lit_trovadorismo",
+    "titulo": "Cantigas de Trovadorismo (Seleção)",
+    "tipo": "LITERATURA",
+    "url_midia": "",
+    "texto_contexto": "Primeira época medieval. Estudo de Gêneros Literários (lírico/satírico) e a relação vassalo-suserano (História/Idade Média).",
+    "tags": ["LITERATURA", "HISTORIA", "LINGUAS"]
+  },
+  {
+    "id": "lit_classicismo",
+    "titulo": "Sonetos de Camões e Petrarca",
+    "tipo": "LITERATURA",
+    "url_midia": "",
+    "texto_contexto": "Renascimento/Classicismo. Rigor formal (soneto), antropocentrismo e racionalismo. Ideal para identificar Funções da Linguagem (Poética).",
+    "tags": ["LITERATURA", "HISTORIA", "FILOSOFIA"]
+  },
+  {
+    "id": "lit_quinhentismo",
+    "titulo": "Carta de Pero Vaz de Caminha",
+    "tipo": "LITERATURA",
+    "url_midia": "",
+    "texto_contexto": "Certidão de nascimento do Brasil. Literatura de Informação. Descrição da terra (Geografia) e choque cultural (História/Sociologia).",
+    "tags": ["LITERATURA", "HISTORIA", "GEOGRAFIA"]
+  },
+  {
+    "id": "lit_barroco",
+    "titulo": "Gregório de Matos e Padre Vieira",
+    "tipo": "LITERATURA",
+    "url_midia": "",
+    "texto_contexto": "Barroco no Brasil. Linguagem complexa (hipérbatos, metáforas), conflito entre fé e razão, e crítica à sociedade colonial (Sermões/Sátiras).",
+    "tags": ["LITERATURA", "HISTORIA", "PORTUGUES"]
+  },
+  {
+    "id": "lit_arcadismo",
+    "titulo": "Cláudio Manoel da Costa",
+    "tipo": "LITERATURA",
+    "url_midia": "",
+    "texto_contexto": "Arcadismo em Vila Rica. Contraste entre o ideal bucólico (Fugere Urbem) e a realidade da mineração e Inconfidência (História).",
+    "tags": ["LITERATURA", "HISTORIA", "GEOGRAFIA"]
+  },
+  {
+    "id": "lit_modernismo",
+    "titulo": "Drummond e Clarice Lispector",
+    "tipo": "LITERATURA",
+    "url_midia": "",
+    "texto_contexto": "Textos contemporâneos usados para contraste com escolas antigas e exercícios de Interpretação e Coesão textual profunda.",
+    "tags": ["LITERATURA", "PORTUGUES"]
+  },
+  {
+    "id": "tea_pena_lei",
+    "titulo": "A Pena e a Lei (Ariano Suassuna)",
+    "tipo": "TEATRO",
+    "url_midia": "",
+    "texto_contexto": "Teatro de Mamulengo. Aborda injustiça social no Nordeste, religiosidade popular e tipos sociais. Rico em regionalismo.",
+    "tags": ["LITERATURA", "SOCIOLOGIA", "GEOGRAFIA"]
+  },
+  {
+    "id": "tea_antigona",
+    "titulo": "Antígona (Sófocles)",
+    "tipo": "TEATRO",
+    "url_midia": "",
+    "texto_contexto": "Tragédia Grega. Fundamental para Filosofia (Direito Natural vs Positivo) e o contexto da Democracia Ateniense e tiranía.",
+    "tags": ["LITERATURA", "FILOSOFIA", "HISTORIA"]
+  },
+  {
+    "id": "esp_don_quixote",
+    "titulo": "Don Quixote de la Mancha (Trecho)",
+    "tipo": "LITERATURA",
+    "url_midia": "",
+    "texto_contexto": "Clássico da literatura espanhola. Ideal para itens de interpretação de texto em língua estrangeira (Espanhol) e vocabulário contextual.",
+    "tags": ["LINGUAS", "ESPANHOL", "LITERATURA"]
+  }
+]
