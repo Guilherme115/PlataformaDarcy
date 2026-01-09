@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='min-h-screen text-black'">
+
+<head>
+    <title>Meu Perfil - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            body {
+                background-color: #e5e5e5;
+                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+            }
+
+            .stat-card {
+                background: white;
+                border: 4px solid black;
+                padding: 1.5rem;
+                transition: all 0.2s;
+            }
+
+            .stat-card:hover {
+                transform: translate(-3px, -3px);
+                box-shadow: 6px 6px 0px black;
+            }
+
+            .badge-card {
+                border: 3px solid black;
+                padding: 1rem;
+                text-align: center;
+                transition: all 0.2s;
+            }
+
+            .badge-card.conquistado {
+                background: #facc15;
+            }
+
+            .badge-card.bloqueado {
+                background: #e5e5e5;
+                opacity: 0.5;
+            }
+
+            .profile-header {
+                background: white;
+                border: 4px solid black;
+                box-shadow: 8px 8px 0px black;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="max-w-6xl mx-auto px-6 py-10">
+
+            <!-- HEADER DO PERFIL -->
+            <header class="profile-header p-8 mb-10">
+                <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                    <!-- AVATAR -->
+                    <div
+                        class="w-32 h-32 bg-darcy-yellow text-black border-4 border-black flex items-center justify-center font-black text-5xl italic shrink-0 shadow-[6px_6px_0px_black]">
+                        <span th:text="${usuario.nome?.charAt(0) ?: 'U'}">U</span>
+                    </div>
+
+                    <!-- INFO PRINCIPAL -->
+                    <div class="flex-1 text-center md:text-left">
+                        <h1 class="text-4xl font-black uppercase tracking-tight" th:text="${usuario.nome ?: 'Usuário'}">
+                            Nome do Usuário</h1>
+                        <div class="flex flex-wrap gap-3 justify-center md:justify-start mt-3">
+                            <span class="bg-black text-white px-3 py-1 text-xs font-bold uppercase"
+                                th:text="'@' + ${usuario.matricula}">@1234</span>
+                            <span
+                                class="bg-gray-200 text-black px-3 py-1 text-xs font-bold uppercase border border-black"
+                                th:text="${usuario.regiao ?: 'Brasília'}">Brasília</span>
+                            <span th:if="${plano == 'CALANGO'}"
+                                class="bg-gray-100 text-gray-700 px-3 py-1 text-xs font-bold uppercase border-2 border-gray-400">🦎
+                                Plano Calango</span>
+                            <span th:if="${plano == 'ELITE'}"
+                                class="bg-darcy-yellow text-black px-3 py-1 text-xs font-bold uppercase border-2 border-black">⚡
+                                Plano Elite</span>
+                            <span th:if="${plano == 'ADMIN'}"
+                                class="bg-red-600 text-white px-3 py-1 text-xs font-bold uppercase border-2 border-black">🛡️
+                                Admin</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-mono mt-3">
+                            <span th:text="${usuario.email}">email@exemplo.com</span> •
+                            <span th:text="${diasAtivo} + ' dias na plataforma'">30 dias</span>
+                        </p>
+                    </div>
+
+                    <!-- AÇÕES -->
+                    <div class="flex gap-3">
+                        <a href="/perfil/editar"
+                            class="bg-white text-black px-4 py-2 font-bold uppercase text-xs border-3 border-black hover:bg-darcy-yellow transition flex items-center gap-2">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i> Editar
+                        </a>
+                        <a href="/aluno/home"
+                            class="bg-black text-white px-4 py-2 font-bold uppercase text-xs border-3 border-black hover:bg-darcy-red transition">
+                            <i data-lucide="home" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- GRID DE ESTATÍSTICAS -->
+            <section class="mb-10">
+                <h2 class="text-xl font-black uppercase mb-6 border-b-4 border-black pb-2">📊 Minhas Estatísticas</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="stat-card text-center">
+                        <div class="text-4xl font-black font-headline italic text-darcy-red"
+                            th:text="${totalSimulados}">0</div>
+                        <div class="text-xs font-mono uppercase text-gray-500 mt-1">Simulados Feitos</div>
+                    </div>
+                    <div class="stat-card text-center">
+                        <div class="text-4xl font-black font-headline italic" th:text="${mediaNotas} + '%'">0%</div>
+                        <div class="text-xs font-mono uppercase text-gray-500 mt-1">Média de Notas</div>
+                    </div>
+                    <div class="stat-card text-center">
+                        <div class="text-4xl font-black font-headline italic text-orange-500"
+                            th:text="${totalErrosRegistrados}">0</div>
+                        <div class="text-xs font-mono uppercase text-gray-500 mt-1">Erros Registrados</div>
+                    </div>
+                    <div class="stat-card text-center">
+                        <div class="text-4xl font-black font-headline italic text-green-600"
+                            th:text="${errosDominados}">0</div>
+                        <div class="text-xs font-mono uppercase text-gray-500 mt-1">Erros Dominados</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DUAS COLUNAS: DESEMPENHO E WIKI -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
+
+                <!-- DESEMPENHO -->
+                <section class="bg-white border-4 border-black p-6">
+                    <h3
+                        class="font-black uppercase text-lg mb-4 flex items-center gap-2 border-b-2 border-gray-200 pb-2">
+                        <i data-lucide="target" class="w-5 h-5 text-darcy-red"></i> Desempenho
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 border-2 border-gray-200">
+                            <span class="font-bold">Melhor Nota</span>
+                            <span class="font-black text-xl text-darcy-yellow" th:text="${melhorNota} + '%'">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 border-2 border-gray-200">
+                            <span class="font-bold">Erros Pendentes</span>
+                            <span class="font-black text-xl text-orange-500" th:text="${errosPendentes}">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 border-2 border-gray-200">
+                            <span class="font-bold">Temperatura Média</span>
+                            <span class="font-black text-xl" th:text="${temperaturaMedia} + '°'">0°</span>
+                        </div>
+                    </div>
+                    <a href="/perfil/simulados"
+                        class="block mt-4 text-center bg-black text-white py-2 font-bold uppercase text-xs hover:bg-darcy-yellow hover:text-black transition">
+                        Ver Histórico Completo →
+                    </a>
+                </section>
+
+                <!-- WIKI -->
+                <section class="bg-white border-4 border-black p-6">
+                    <h3
+                        class="font-black uppercase text-lg mb-4 flex items-center gap-2 border-b-2 border-gray-200 pb-2">
+                        <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i> Atividade Wiki
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 border-2 border-gray-200">
+                            <span class="font-bold">Posts Publicados</span>
+                            <span class="font-black text-xl" th:text="${totalPosts}">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 border-2 border-gray-200">
+                            <span class="font-bold">Curtidas Recebidas</span>
+                            <span class="font-black text-xl text-red-500" th:text="${totalCurtidas}">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 border-2 border-gray-200">
+                            <span class="font-bold">Visualizações</span>
+                            <span class="font-black text-xl text-gray-600" th:text="${totalVisualizacoes}">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 border-2 border-gray-200">
+                            <span class="font-bold">Favoritos Salvos</span>
+                            <span class="font-black text-xl text-darcy-yellow" th:text="${totalFavoritos}">0</span>
+                        </div>
+                    </div>
+                    <a href="/wiki/meus-posts"
+                        class="block mt-4 text-center bg-black text-white py-2 font-bold uppercase text-xs hover:bg-darcy-yellow hover:text-black transition">
+                        Meus Posts →
+                    </a>
+                </section>
+            </div>
+
+            <!-- BADGES -->
+            <section class="mb-10">
+                <h2 class="text-xl font-black uppercase mb-6 border-b-4 border-black pb-2 flex items-center gap-2">
+                    <i data-lucide="award" class="w-6 h-6 text-darcy-yellow"></i> Conquistas
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div th:each="badge : ${badges}" class="badge-card"
+                        th:classappend="${badge.conquistado} ? 'conquistado' : 'bloqueado'">
+                        <i th:data-lucide="${badge.icone}" class="w-8 h-8 mx-auto mb-2"></i>
+                        <div class="font-black text-sm uppercase" th:text="${badge.nome}">Badge</div>
+                        <div class="text-[10px] font-mono text-gray-600 mt-1" th:text="${badge.descricao}">Descrição
+                        </div>
+                    </div>
+                </div>
+                <a href="/perfil/conquistas"
+                    class="inline-block mt-4 text-xs font-mono text-gray-500 hover:text-black">Ver todas conquistas
+                    →</a>
+            </section>
+
+            <!-- SIMULADOS RECENTES -->
+            <section th:if="${!#lists.isEmpty(simuladosRecentes)}">
+                <h2 class="text-xl font-black uppercase mb-6 border-b-4 border-black pb-2">📝 Simulados Recentes</h2>
+                <div class="bg-white border-4 border-black overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 text-left text-[10px] font-mono uppercase border-b-2 border-black">
+                            <tr>
+                                <th class="p-3">Título</th>
+                                <th class="p-3">Data</th>
+                                <th class="p-3 text-right">Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="sim : ${simuladosRecentes}"
+                                class="border-b border-gray-100 hover:bg-yellow-50 transition">
+                                <td class="p-3 font-bold" th:text="${sim.titulo ?: 'Simulado'}">Simulado</td>
+                                <td class="p-3 text-sm font-mono text-gray-500"
+                                    th:text="${#temporals.format(sim.dataInicio, 'dd/MM/yyyy')}">01/01</td>
+                                <td class="p-3 text-right">
+                                    <span class="font-black text-lg"
+                                        th:classappend="${sim.notaFinal != null && sim.notaFinal >= 70} ? 'text-green-600' : 'text-orange-500'"
+                                        th:text="${sim.notaFinal != null ? sim.notaFinal + '%' : '-'}">0%</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='min-h-screen text-black'">
+
+<head>
+    <title>Editar Perfil - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            body {
+                background-color: #e5e5e5;
+                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="max-w-2xl mx-auto px-6 py-10">
+
+            <!-- HEADER -->
+            <div class="flex justify-between items-center mb-8 border-b-4 border-black pb-4">
+                <div>
+                    <a href="/perfil"
+                        class="text-gray-500 hover:text-black text-sm font-mono mb-2 inline-flex items-center gap-1">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+                    </a>
+                    <h1 class="text-3xl font-black uppercase italic">Editar Perfil</h1>
+                </div>
+            </div>
+
+            <!-- FORMULÁRIO -->
+            <form th:action="@{/perfil/atualizar}" method="post"
+                class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_black]">
+
+                <!-- AVATAR PREVIEW -->
+                <div class="text-center mb-8">
+                    <div
+                        class="w-24 h-24 bg-darcy-yellow text-black border-4 border-black flex items-center justify-center font-black text-4xl italic mx-auto shadow-[4px_4px_0px_black]">
+                        <span th:text="${usuario.nome?.charAt(0) ?: 'U'}">U</span>
+                    </div>
+                    <p class="text-xs font-mono text-gray-500 mt-2">Avatar baseado na inicial do nome</p>
+                </div>
+
+                <!-- NOME -->
+                <div class="mb-6">
+                    <label class="block text-sm font-black uppercase mb-2">Nome Completo</label>
+                    <input type="text" name="nome" th:value="${usuario.nome}" required
+                        class="w-full border-4 border-black p-3 font-bold text-lg outline-none focus:border-darcy-yellow transition"
+                        placeholder="Seu nome">
+                </div>
+
+                <!-- EMAIL (Readonly) -->
+                <div class="mb-6">
+                    <label class="block text-sm font-black uppercase mb-2">Email</label>
+                    <input type="email" th:value="${usuario.email}" readonly disabled
+                        class="w-full border-4 border-gray-300 p-3 font-mono text-gray-500 bg-gray-100">
+                    <p class="text-[10px] font-mono text-gray-400 mt-1">Email não pode ser alterado</p>
+                </div>
+
+                <!-- MATRÍCULA (Readonly) -->
+                <div class="mb-6">
+                    <label class="block text-sm font-black uppercase mb-2">Matrícula</label>
+                    <input type="text" th:value="${usuario.matricula}" readonly disabled
+                        class="w-full border-4 border-gray-300 p-3 font-mono text-gray-500 bg-gray-100">
+                </div>
+
+                <!-- REGIÃO -->
+                <div class="mb-8">
+                    <label class="block text-sm font-black uppercase mb-2">Região</label>
+                    <select name="regiao"
+                        class="w-full border-4 border-black p-3 font-bold text-lg bg-white outline-none">
+                        <option value="">Selecione sua região...</option>
+                        <option value="Asa Sul" th:selected="${usuario.regiao == 'Asa Sul'}">Asa Sul</option>
+                        <option value="Asa Norte" th:selected="${usuario.regiao == 'Asa Norte'}">Asa Norte</option>
+                        <option value="Taguatinga" th:selected="${usuario.regiao == 'Taguatinga'}">Taguatinga</option>
+                        <option value="Ceilândia" th:selected="${usuario.regiao == 'Ceilândia'}">Ceilândia</option>
+                        <option value="Sobradinho" th:selected="${usuario.regiao == 'Sobradinho'}">Sobradinho</option>
+                        <option value="Planaltina" th:selected="${usuario.regiao == 'Planaltina'}">Planaltina</option>
+                        <option value="Gama" th:selected="${usuario.regiao == 'Gama'}">Gama</option>
+                        <option value="Águas Claras" th:selected="${usuario.regiao == 'Águas Claras'}">Águas Claras
+                        </option>
+                        <option value="Guará" th:selected="${usuario.regiao == 'Guará'}">Guará</option>
+                        <option value="Samambaia" th:selected="${usuario.regiao == 'Samambaia'}">Samambaia</option>
+                        <option value="Recanto das Emas" th:selected="${usuario.regiao == 'Recanto das Emas'}">Recanto
+                            das Emas</option>
+                        <option value="Santa Maria" th:selected="${usuario.regiao == 'Santa Maria'}">Santa Maria
+                        </option>
+                        <option value="Outro DF" th:selected="${usuario.regiao == 'Outro DF'}">Outro (DF)</option>
+                        <option value="Entorno" th:selected="${usuario.regiao == 'Entorno'}">Entorno</option>
+                    </select>
+                </div>
+
+                <!-- ETAPA ALVO (PAS) -->
+                <div class="mb-8">
+                    <label class="block text-sm font-black uppercase mb-2">
+                        Qual PAS você está se preparando?
+                    </label>
+                    <p class="text-xs text-gray-500 font-mono mb-4">
+                        O algoritmo de revisão prioriza erros da etapa que você está estudando.
+                    </p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="etapaAlvo" value="1" class="peer sr-only"
+                                th:checked="${usuario.etapaAlvo == null || usuario.etapaAlvo == 1}">
+                            <div class="border-4 border-black p-4 text-center transition
+                                        peer-checked:bg-darcy-yellow peer-checked:shadow-[4px_4px_0px_black]
+                                        hover:bg-gray-100">
+                                <div class="text-3xl font-black italic">1</div>
+                                <div class="text-[10px] font-mono font-bold uppercase mt-1">PAS 1</div>
+                                <div class="text-[9px] text-gray-500 mt-1">1º Ano</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="etapaAlvo" value="2" class="peer sr-only"
+                                th:checked="${usuario.etapaAlvo == 2}">
+                            <div class="border-4 border-black p-4 text-center transition
+                                        peer-checked:bg-darcy-yellow peer-checked:shadow-[4px_4px_0px_black]
+                                        hover:bg-gray-100">
+                                <div class="text-3xl font-black italic">2</div>
+                                <div class="text-[10px] font-mono font-bold uppercase mt-1">PAS 2</div>
+                                <div class="text-[9px] text-gray-500 mt-1">2º Ano</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="etapaAlvo" value="3" class="peer sr-only"
+                                th:checked="${usuario.etapaAlvo == 3}">
+                            <div class="border-4 border-black p-4 text-center transition
+                                        peer-checked:bg-darcy-yellow peer-checked:shadow-[4px_4px_0px_black]
+                                        hover:bg-gray-100">
+                                <div class="text-3xl font-black italic">3</div>
+                                <div class="text-[10px] font-mono font-bold uppercase mt-1">PAS 3</div>
+                                <div class="text-[9px] text-gray-500 mt-1">3º Ano</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="mt-3 p-3 bg-blue-50 border-2 border-blue-200 text-xs font-mono">
+                        <strong>💡 Como isso afeta seus estudos:</strong>
+                        Erros em questões da etapa selecionada terão <span class="text-blue-600 font-bold">prioridade
+                            máxima</span> no Protocolo de Expurgo.
+                    </div>
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="flex gap-4">
+                    <a href="/perfil"
+                        class="flex-1 text-center bg-gray-200 text-black py-3 font-black uppercase text-sm border-4 border-black hover:bg-gray-300 transition">
+                        Cancelar
+                    </a>
+                    <button type="submit"
+                        class="flex-1 bg-darcy-yellow text-black py-3 font-black uppercase text-sm border-4 border-black hover:bg-black hover:text-darcy-yellow transition shadow-[4px_4px_0px_black]">
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+
+            <!-- DANGER ZONE -->
+            <div class="mt-10 p-6 border-4 border-dashed border-red-400 bg-red-50">
+                <h3 class="font-black uppercase text-red-600 mb-2">⚠️ Zona de Perigo</h3>
+                <p class="text-sm text-gray-600 mb-4">Ações irreversíveis</p>
+                <button disabled
+                    class="bg-red-600 text-white px-4 py-2 font-bold uppercase text-xs opacity-50 cursor-not-allowed border-2 border-red-800">
+                    Excluir Conta (Em breve)
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>lucide.createIcons();</script>
+    </th:block>
+</body>
+
+</html>
