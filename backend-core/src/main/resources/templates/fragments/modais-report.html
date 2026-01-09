@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- 
+    FRAGMENTOS DE MODAIS (REPORTS E ADMIN)
+    Usados pelo ReportController e AdminController
+-->
+
+<!-- 1. MODAL DE REPORT DE CONTEÚDO (Para o Aluno) -->
+<div th:fragment="modal-conteudo">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full max-w-lg p-6 relative animate-in fade-in zoom-in duration-200">
+            
+            <button onclick="this.closest('.fixed').remove()" class="absolute top-2 right-2 p-1 hover:bg-gray-100">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <h3 class="font-black text-xl uppercase mb-4 flex items-center gap-2">
+                <i data-lucide="flag" class="w-5 h-5 text-red-600"></i> Reportar Erro
+            </h3>
+
+            <div class="mb-4 p-3 bg-gray-50 border border-gray-200 text-sm font-mono">
+                <span class="block font-bold" th:text="'Questão #' + ${questao.numero}">Questão #10</span>
+                <span class="text-gray-500" th:text="${questao.prova != null ? questao.prova.titulo : 'Banco de Questões'}">Prova tal...</span>
+            </div>
+
+            <form hx-post="/report/salvar-conteudo" hx-swap="outerHTML" class="space-y-4">
+                <input type="hidden" name="questaoId" th:value="${questao.id}">
+
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Qual o problema?</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label th:each="tipo : ${tiposErro}" class="flex items-center gap-2 p-2 border border-gray-300 cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="tipoErro" th:value="${tipo}" required class="accent-black">
+                            <span class="text-xs font-bold" th:text="${tipo}">GABARITO_ERRADO</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Descrição (Opcional)</label>
+                    <textarea name="descricao" rows="3" class="w-full border-2 border-black p-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Consegue dar mais detalhes?"></textarea>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button type="submit" class="bg-black text-white px-6 py-2 font-bold uppercase hover:bg-gray-800 transition">
+                        Enviar Report
+                    </button>
+                </div>
+            </form>
+            <script>lucide.createIcons();</script>
+        </div>
+    </div>
+</div>
+
+<!-- 2. MODAL DE BUG TÉCNICO (Geral) -->
+<div th:fragment="modal-bug">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] w-full max-w-lg p-6 relative">
+            
+            <button onclick="this.closest('.fixed').remove()" class="absolute top-2 right-2 p-1 hover:bg-gray-100">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <h3 class="font-black text-xl uppercase mb-4 flex items-center gap-2 text-red-600">
+                <i data-lucide="bug" class="w-6 h-6"></i> Reportar Bug
+            </h3>
+
+            <p class="text-sm text-gray-600 mb-4">
+                Encontrou um problema técnico? A gente arruma rapidinho se você nos avisar.
+            </p>
+
+            <form hx-post="/report/salvar-bug" hx-swap="outerHTML" class="space-y-4">
+                <!-- Dados capturados automaticamente via JS -->
+                <input type="hidden" name="urlAtual" id="bugUrl">
+                <input type="hidden" name="userAgent" id="bugUa">
+                <input type="hidden" name="resolucao" id="bugRes">
+
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">Título do Problema</label>
+                    <input type="text" name="titulo" required class="w-full border-2 border-black p-2 font-bold" placeholder="Ex: Botão travando...">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1">O que aconteceu?</label>
+                    <textarea name="descricao" rows="4" required class="w-full border-2 border-black p-2 text-sm" placeholder="Descreva os passos para reproduzir o erro."></textarea>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button type="submit" class="bg-red-600 text-white px-6 py-2 font-bold uppercase hover:bg-red-700 transition w-full">
+                        Reportar Bug
+                    </button>
+                </div>
+            </form>
+
+            <script>
+                document.getElementById('bugUrl').value = window.location.href;
+                document.getElementById('bugUa').value = navigator.userAgent;
+                document.getElementById('bugRes').value = window.innerWidth + 'x' + window.innerHeight;
+                lucide.createIcons();
+            </script>
+        </div>
+    </div>
+</div>
+
+<!-- 3. ADMIN: DETALHES DE BUG (Para o Painel Admin) -->
+<div th:fragment="modal-bug-admin">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white border-4 border-black w-full max-w-2xl p-0 relative flex flex-col max-h-[90vh]">
+            
+            <!-- Header -->
+            <div class="bg-red-600 text-white p-4 flex justify-between items-center shrink-0">
+                <h3 class="font-black text-lg uppercase flex items-center gap-2">
+                    <i data-lucide="bug" class="w-5 h-5"></i> Bug #<span th:text="${bug.id}">123</span>
+                </h3>
+                <button onclick="this.closest('.fixed').remove()" class="hover:bg-red-700 p-1 rounded"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <!-- Content Scrollable -->
+            <div class="p-6 overflow-y-auto">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-black mb-2" th:text="${bug.titulo}">Botão não funciona</h2>
+                    <div class="flex gap-4 text-xs font-mono text-gray-500">
+                        <span th:text="${#temporals.format(bug.dataReport, 'dd/MM/yyyy HH:mm')}">Data</span>
+                        <span>|</span>
+                        <span th:text="${bug.usuario != null ? bug.usuario.nome : 'Anônimo'}">User</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6 text-xs bg-gray-100 p-4 border border-gray-300 font-mono">
+                    <div><strong>URL:</strong> <span class="break-all" th:text="${bug.urlOrigem}">/simulado/1</span></div>
+                    <div><strong>Resolução:</strong> <span th:text="${bug.resolucaoTela}">1920x1080</span></div>
+                    <div class="col-span-2"><strong>User Agent:</strong> <span class="break-all text-[10px]" th:text="${bug.userAgent}">Mozilla...</span></div>
+                </div>
+
+                <div class="prose prose-sm max-w-none mb-6">
+                    <h4 class="font-bold uppercase text-xs mb-2">Descrição</h4>
+                    <p class="whitespace-pre-wrap bg-white border p-3" th:text="${bug.descricao}">Descrição...</p>
+                </div>
+
+                 <!-- Mock de Logs (Opcional) -->
+                <div class="mb-6" th:if="${logs != null}">
+                    <h4 class="font-bold uppercase text-xs mb-2">Logs do Sistema (Contexto)</h4>
+                    <pre class="bg-black text-green-400 text-[10px] p-3 overflow-x-auto"><code th:each="log : ${logs}" th:text="${log} + '\n'"></code></pre>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center shrink-0">
+                <span class="text-xs font-bold uppercase px-2 py-1 rounded border" 
+                      th:classappend="${bug.resolvido} ? 'bg-green-100 text-green-700 border-green-300' : 'bg-yellow-100 text-yellow-700 border-yellow-300'"
+                      th:text="${bug.resolvido ? 'RESOLVIDO' : 'PENDENTE'}">STATUS</span>
+                
+                <button th:unless="${bug.resolvido}"
+                        hx-post="/admin/bug/resolver/{id}(id=${bug.id})"
+                        hx-target="closest .fixed"
+                        hx-swap="delete"
+                        class="bg-black text-white px-4 py-2 text-xs font-bold uppercase hover:bg-green-600 transition flex items-center gap-2">
+                    <i data-lucide="check" class="w-4 h-4"></i> Marcar Resolvido
+                </button>
+            </div>
+            <script>lucide.createIcons();</script>
+        </div>
+    </div>
+</div>
+
+<!-- 4. ADMIN: DETALHES DE REPORT (Conteúdo) -->
+<div th:fragment="modal-report-admin">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white border-4 border-black w-full max-w-2xl p-0 relative flex flex-col max-h-[90vh]">
+             <!-- Header -->
+             <div class="bg-yellow-400 text-black p-4 flex justify-between items-center shrink-0 border-b-4 border-black">
+                <h3 class="font-black text-lg uppercase flex items-center gap-2">
+                    <i data-lucide="flag" class="w-5 h-5"></i> Report #<span th:text="${rep.id}">99</span>
+                </h3>
+                <button onclick="this.closest('.fixed').remove()" class="hover:bg-white/50 p-1 rounded"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <div class="p-6 overflow-y-auto">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="bg-gray-100 p-4 border border-gray-300 flex-1">
+                        <h4 class="font-bold text-xs uppercase mb-2">Questão Reportada</h4>
+                        <div class="text-sm font-serif mb-2" th:utext="${questao.enunciado}">Enunciado...</div>
+                        <div class="text-xs font-mono">
+                            <strong>Gabarito:</strong> <span th:text="${questao.gabarito}">A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-gray-500">Motivo</span>
+                        <div class="font-black text-lg" th:text="${rep.tipoErro}">GABARITO_ERRADO</div>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold uppercase text-gray-500">Comentário do Aluno</span>
+                        <p class="bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm italic" th:text="${rep.descricao}">"Acho que é B..."</p>
+                    </div>
+                </div>
+            </div>
+
+             <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-end gap-2 shrink-0">
+                <button class="px-4 py-2 border border-gray-300 text-xs font-bold uppercase hover:bg-gray-100">Ignorar</button>
+                <button class="bg-black text-white px-4 py-2 text-xs font-bold uppercase hover:bg-darcy-green transition">Editar Questão</button>
+            </div>
+            <script>lucide.createIcons();</script>
+        </div>
+    </div>
+</div>
+
+<!-- 5. ADMIN: DETALHES DA PROVA -->
+<div th:fragment="modal-prova-admin">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white border-4 border-black w-full max-w-3xl p-6 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="this.closest('.fixed').remove()" class="absolute top-2 right-2 p-1 hover:bg-gray-100">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <h2 class="text-2xl font-black mb-1" th:text="${prova.titulo}">PAS 1 - 2023</h2>
+            <p class="font-mono text-xs text-gray-500 mb-6" th:text="'ID: ' + ${prova.id} + ' | ' + ${#lists.size(questoes)} + ' Questões'">ID: 10 | 100 Questões</p>
+
+            <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                    <tr class="border-b-2 border-black">
+                        <th class="py-2 font-black uppercase">#</th>
+                        <th class="py-2 font-black uppercase">Disciplina (Bloco)</th>
+                        <th class="py-2 font-black uppercase">Tipo</th>
+                        <th class="py-2 font-black uppercase">Gab</th>
+                        <th class="py-2 font-black uppercase">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="q : ${questoes}" class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="py-2 font-mono font-bold" th:text="${q.numero}">1</td>
+                        <td class="py-2 text-xs" th:text="${q.bloco != null ? q.bloco.disciplina : '-'}">INGLÊS</td>
+                        <td class="py-2 text-xs" th:text="${q.tipo}">C</td>
+                        <td class="py-2 font-mono font-bold" th:text="${q.gabarito}">A</td>
+                        <td class="py-2">
+                             <span class="text-[10px] uppercase px-1 border" 
+                                   th:classappend="${q.status == T(com.example.PlataformaDarcy.model.StatusRevisao).OK} ? 'bg-green-100 border-green-300 text-green-700' : 'bg-gray-100 border-gray-300'"
+                                   th:text="${q.status}">OK</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <script>lucide.createIcons();</script>
+        </div>
+    </div>
+</div>
+
+</html>

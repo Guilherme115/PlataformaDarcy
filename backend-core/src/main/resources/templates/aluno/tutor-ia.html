@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5]'">
+
+<head>
+    <title>Tutor Darcy IA - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-hub {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .card-sidebar {
+                background: white;
+                border: 2px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+            }
+
+            .quick-btn {
+                background: white;
+                border: 2px solid black;
+                box-shadow: 3px 3px 0px 0px black;
+                transition: all 0.15s;
+            }
+
+            .quick-btn:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 5px 5px 0px 0px black;
+                background: #fffbeb;
+            }
+
+            .quick-btn:active {
+                transform: translate(1px, 1px);
+                box-shadow: 1px 1px 0px 0px black;
+            }
+
+            .msg-ai {
+                background: white;
+                border: 2px solid black;
+            }
+
+            .msg-user {
+                background: #facc15;
+                border: 2px solid black;
+            }
+
+            .obra-item {
+                transition: all 0.15s;
+                border-left: 3px solid transparent;
+            }
+
+            .obra-item:hover {
+                background: #fffbeb;
+                border-left-color: #facc15;
+            }
+
+            .obra-item.active {
+                background: #fef3c7;
+                border-left-color: black;
+            }
+
+            .stat-box {
+                background: #f5f5f5;
+                border: 2px solid #e5e5e5;
+            }
+
+            .input-brutal {
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+            }
+
+            .input-brutal:focus {
+                outline: none;
+                box-shadow: 6px 6px 0px 0px black;
+                transform: translate(-2px, -2px);
+            }
+
+            .btn-send {
+                background: black;
+                color: white;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.3);
+                transition: all 0.15s;
+            }
+
+            .btn-send:hover {
+                background: #facc15;
+                color: black;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="flex-1 flex flex-col p-4 md:p-6">
+
+        <!-- HEADER -->
+        <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <div class="flex items-end gap-4">
+                <div
+                    class="w-16 h-16 bg-darcy-yellow border-4 border-black flex items-center justify-center shadow-hard shrink-0">
+                    <span class="font-serif font-black text-4xl text-black italic">D.</span>
+                </div>
+                <div>
+                    <div
+                        class="bg-black text-white px-2 py-0.5 text-[10px] font-mono font-bold inline-block mb-1 uppercase tracking-wide">
+                        IA Conectada ao Seu Desempenho
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black italic tracking-tighter leading-[0.9]">TUTOR DARCY.</h1>
+                </div>
+            </div>
+            <a href="/" class="font-mono text-xs font-bold uppercase hover:underline flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Dashboard
+            </a>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex gap-6 min-h-0">
+
+            <!-- SIDEBAR ESQUERDA - OBRAS -->
+            <aside class="w-64 shrink-0 flex flex-col card-sidebar overflow-hidden">
+                <div class="p-4 border-b-2 border-black bg-black text-white">
+                    <h2 class="text-xs font-black uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                        Obras do PAS
+                    </h2>
+                </div>
+
+                <div id="obras-container" class="flex-1 overflow-y-auto">
+                    <div th:each="entry : ${obrasAgrupadas}" class="border-b border-gray-200 last:border-0">
+                        <div class="text-[10px] font-mono uppercase text-gray-500 px-4 py-2 bg-gray-50 font-bold"
+                            th:text="${entry.key}">TIPO</div>
+                        <div th:each="obra : ${entry.value}"
+                            class="obra-item px-4 py-2 cursor-pointer text-sm font-mono" th:data-id="${obra.id}"
+                            th:data-titulo="${obra.titulo}" onclick="selectObra(this)">
+                            <span class="line-clamp-1" th:text="${obra.titulo}">Título</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="obra-selecionada" class="hidden p-3 border-t-2 border-black bg-darcy-yellow">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-mono uppercase font-bold">Foco</span>
+                            <p id="obra-nome" class="text-xs font-bold line-clamp-1">Nenhuma</p>
+                        </div>
+                        <button onclick="clearObra()"
+                            class="w-6 h-6 bg-black text-white flex items-center justify-center hover:bg-red-600">
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ÁREA CENTRAL - CHAT -->
+            <main class="flex-1 flex flex-col card-hub overflow-hidden">
+                <!-- QUICK COMMANDS -->
+                <div class="shrink-0 p-4 border-b-2 border-black bg-gray-50 overflow-x-auto">
+                    <div class="flex gap-3 min-w-max">
+                        <button class="quick-btn px-4 py-2 text-xs font-mono font-bold uppercase"
+                            onclick="sendQuickCmd('desempenho')">
+                            📊 Desempenho
+                        </button>
+                        <button class="quick-btn px-4 py-2 text-xs font-mono font-bold uppercase"
+                            onclick="sendQuickCmd('criticos')">
+                            🔥 Erros Críticos
+                        </button>
+                        <button class="quick-btn px-4 py-2 text-xs font-mono font-bold uppercase"
+                            onclick="sendQuickCmd('prioridade')">
+                            📚 Priorizar Matéria
+                        </button>
+                        <button class="quick-btn px-4 py-2 text-xs font-mono font-bold uppercase"
+                            onclick="sendQuickCmd('ultimo-simulado')">
+                            📝 Último Simulado
+                        </button>
+                        <button class="quick-btn px-4 py-2 text-xs font-mono font-bold uppercase"
+                            onclick="sendQuickCmd('erros-geral')">
+                            ❌ Todos Erros
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CHAT MESSAGES -->
+                <div id="chat-box" class="flex-1 overflow-y-auto p-6 space-y-4 bg-white">
+                    <!-- Mensagem inicial -->
+                    <div class="flex gap-4 max-w-3xl">
+                        <div
+                            class="w-10 h-10 bg-black text-darcy-yellow flex items-center justify-center font-black text-sm shrink-0 border-2 border-black">
+                            IA</div>
+                        <div class="msg-ai p-4">
+                            <p class="font-serif text-sm mb-2">Olá! Sou o <strong>Darcy</strong>, seu tutor IA.</p>
+                            <p class="font-mono text-xs text-gray-600">Eu tenho acesso a:</p>
+                            <ul class="font-mono text-xs text-gray-600 list-disc list-inside mt-1">
+                                <li>Seus <strong>erros</strong> e simulados</li>
+                                <li>Seu <strong>desempenho por matéria</strong></li>
+                                <li>Todas as <strong>obras do PAS</strong></li>
+                            </ul>
+                            <p class="font-mono text-xs mt-2 text-gray-500">Use os <strong>botões acima</strong> ou
+                                <strong>selecione uma obra</strong> na lateral!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INPUT -->
+                <div class="shrink-0 p-4 border-t-2 border-black bg-gray-50">
+                    <form id="chat-form" class="flex gap-3">
+                        <input type="text" id="user-input" name="mensagem"
+                            class="flex-1 input-brutal px-4 py-3 font-mono text-sm bg-white"
+                            placeholder="Digite sua dúvida aqui..." autocomplete="off" required>
+                        <button type="submit" id="btn-submit" class="btn-send px-6 py-3 font-black text-sm uppercase">
+                            Enviar
+                        </button>
+                    </form>
+                    <div id="loading" class="hidden text-center text-xs font-mono text-gray-500 mt-2 animate-pulse">
+                        ⏳ Darcy está consultando o acervo...
+                    </div>
+                </div>
+            </main>
+
+            <!-- SIDEBAR DIREITA - CONTEXTO -->
+            <aside class="w-56 shrink-0 flex flex-col card-sidebar overflow-hidden">
+                <div class="p-4 border-b-2 border-black bg-black text-white">
+                    <h2 class="text-xs font-black uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        Seu Contexto
+                    </h2>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                    <!-- Nome -->
+                    <div class="stat-box p-3">
+                        <div class="font-black text-lg" th:text="${contexto.nome}">Aluno</div>
+                        <div class="text-[10px] font-mono text-gray-500">
+                            Preparando para <span class="font-bold text-black">PAS <span
+                                    th:text="${contexto.etapaAlvo}">1</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Taxa de Acerto -->
+                    <div class="stat-box p-3">
+                        <div class="text-[10px] font-mono uppercase text-gray-500 mb-1">Taxa de Acerto</div>
+                        <div class="text-3xl font-black">
+                            <span th:text="${contexto.taxaAcertoGeral}">0</span><span class="text-sm">%</span>
+                        </div>
+                    </div>
+
+                    <!-- Erros Críticos -->
+                    <div class="stat-box p-3 border-red-200 bg-red-50">
+                        <div class="text-[10px] font-mono uppercase text-red-600 mb-1">Erros Críticos</div>
+                        <div class="text-2xl font-black text-red-600" th:text="${contexto.errosCriticos}">0</div>
+                    </div>
+
+                    <!-- Matéria Fraca -->
+                    <div class="stat-box p-3 border-orange-200 bg-orange-50">
+                        <div class="text-[10px] font-mono uppercase text-orange-600 mb-1">Priorizar</div>
+                        <div class="text-sm font-black text-orange-600" th:text="${contexto.materiaFraca}">N/A</div>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div class="p-3 border-t-2 border-black bg-gray-50 space-y-1">
+                    <a href="/simulado/erros"
+                        class="block text-[10px] font-mono font-bold uppercase hover:text-red-600">→ Caderno de
+                        Erros</a>
+                    <a href="/expurgo/protocolo"
+                        class="block text-[10px] font-mono font-bold uppercase hover:text-orange-600">→ Protocolo
+                        Expurgo</a>
+                    <a href="/perfil" class="block text-[10px] font-mono font-bold uppercase hover:text-purple-600">→
+                        Meu Perfil</a>
+                </div>
+            </aside>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            const chatBox = document.getElementById('chat-box');
+            const chatForm = document.getElementById('chat-form');
+            const userInput = document.getElementById('user-input');
+            const loading = document.getElementById('loading');
+
+            let selectedObra = null;
+
+            function selectObra(el) {
+                document.querySelectorAll('.obra-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+                selectedObra = el.dataset.id;
+                document.getElementById('obra-nome').textContent = el.dataset.titulo;
+                document.getElementById('obra-selecionada').classList.remove('hidden');
+            }
+
+            function clearObra() {
+                document.querySelectorAll('.obra-item').forEach(i => i.classList.remove('active'));
+                selectedObra = null;
+                document.getElementById('obra-selecionada').classList.add('hidden');
+            }
+
+            async function sendQuickCmd(cmd) {
+                const endpoints = {
+                    'desempenho': ['/tutor/desempenho', '📊 Analise meu desempenho'],
+                    'criticos': ['/tutor/analisar-criticos', '🔥 Analise meus erros críticos'],
+                    'prioridade': ['/tutor/prioridade', '📚 Qual matéria priorizar?'],
+                    'ultimo-simulado': ['/tutor/ultimo-simulado', '📝 Analise meu último simulado'],
+                    'erros-geral': ['/tutor/analisar-erros', '❌ Analise todos os meus erros']
+                };
+
+                const [endpoint, label] = endpoints[cmd];
+                appendMessage(label, true);
+                loading.classList.remove('hidden');
+
+                try {
+                    const response = await fetch(endpoint, { method: 'POST' });
+                    const text = await response.text();
+                    const bubble = appendMessage('', false);
+                    typeWriter(bubble, text);
+                } catch (e) {
+                    appendMessage('Erro de conexão.', false);
+                } finally {
+                    loading.classList.add('hidden');
+                }
+            }
+
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const msg = userInput.value.trim();
+                if (!msg) return;
+
+                appendMessage(msg, true);
+                userInput.value = '';
+                loading.classList.remove('hidden');
+
+                try {
+                    let endpoint, body;
+                    if (selectedObra) {
+                        endpoint = `/tutor/obra/${selectedObra}`;
+                        body = `pergunta=${encodeURIComponent(msg)}`;
+                    } else {
+                        endpoint = '/tutor/perguntar';
+                        body = `mensagem=${encodeURIComponent(msg)}`;
+                    }
+
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: body
+                    });
+                    const text = await response.text();
+                    const bubble = appendMessage('', false);
+                    typeWriter(bubble, text);
+                } catch (e) {
+                    appendMessage('Erro de conexão.', false);
+                } finally {
+                    loading.classList.add('hidden');
+                    userInput.focus();
+                }
+            });
+
+            function appendMessage(text, isUser) {
+                const div = document.createElement('div');
+                div.className = isUser ? 'flex gap-4 max-w-3xl ml-auto flex-row-reverse' : 'flex gap-4 max-w-3xl';
+
+                const avatar = document.createElement('div');
+                avatar.className = isUser
+                    ? 'w-10 h-10 bg-darcy-yellow text-black flex items-center justify-center font-black text-sm shrink-0 border-2 border-black'
+                    : 'w-10 h-10 bg-black text-darcy-yellow flex items-center justify-center font-black text-sm shrink-0 border-2 border-black';
+                avatar.textContent = isUser ? 'VC' : 'IA';
+
+                const bubble = document.createElement('div');
+                bubble.className = isUser ? 'msg-user p-4 font-mono text-sm' : 'msg-ai p-4 font-serif text-sm';
+                bubble.textContent = text;
+
+                div.appendChild(avatar);
+                div.appendChild(bubble);
+                chatBox.appendChild(div);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                return bubble;
+            }
+
+            function typeWriter(element, text, speed = 10) {
+                let i = 0;
+                element.innerHTML = '';
+                function type() {
+                    if (i < text.length) {
+                        if (text.charAt(i) === '\n') element.innerHTML += '<br>';
+                        else element.innerHTML += text.charAt(i);
+                        i++;
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                        setTimeout(type, speed);
+                    } else {
+                        element.innerHTML = parseMarkdown(element.innerHTML);
+                    }
+                }
+                type();
+            }
+
+            function parseMarkdown(text) {
+                return text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/^- (.*$)/gm, '• $1');
+            }
+
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>
