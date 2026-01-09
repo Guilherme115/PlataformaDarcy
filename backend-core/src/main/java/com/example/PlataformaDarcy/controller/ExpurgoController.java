@@ -10,17 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/expurgo")
 public class ExpurgoController {
 
-    @Autowired private ExpurgoService expurgoService; // <--- AGORA USAMOS O SERVICE
-    @Autowired private AuthService authService;
-    @Autowired private TaxonomyService taxonomyService;
-    @Autowired private RegistroErroRepository erroRepo; // Apenas para leitura simples (detalhes)
+    @Autowired
+    private ExpurgoService expurgoService;
+    @Autowired
+    private AuthService authService;
+    @Autowired
+    private TaxonomyService taxonomyService;
+    @Autowired
+    private RegistroErroRepository erroRepo;
 
-    // DASHBOARD
     @GetMapping("/central")
     public String dashboard(Model model) {
         Usuario usuario = authService.getUsuarioLogado();
@@ -35,44 +39,63 @@ public class ExpurgoController {
         } catch (Exception e) {
             model.addAttribute("taxonomyJson", "{}");
         }
-        return "expurgo-central";
+        return "simulado/expurgo-central"; // Refatorado: agora dentro da pasta simulado
     }
 
-    // AÇÕES HTMX (Detalhamento e Expurgo)
+    /**
+     * NOVO: Dashboard principal do Protocolo de Expurgo
+     * Mostra análise completa por matéria com sugestões
+     */
+    @GetMapping("/protocolo")
+    public String protocoloDashboard(Model model) {
+        Usuario usuario = authService.getUsuarioLogado();
+
+        // Carrega todos os dados do dashboard
+        Map<String, Object> dados = expurgoService.getDadosDashboard(usuario);
+        model.addAllAttributes(dados);
+
+        return "simulado/protocolo-dashboard";
+    }
+
     @GetMapping("/detalhar/{id}")
     public String detalharErro(@PathVariable Long id, Model model) {
         model.addAttribute("erro", erroRepo.findById(id).orElseThrow());
-        return "expurgo-central :: modal-revisao";
+        return "simulado/expurgo-central :: modal-revisao"; // Fragmento dentro do novo arquivo
     }
 
     @PostMapping("/confirmar/{id}")
     @ResponseBody
     public String confirmarExpurgo(@PathVariable Long id) {
-        expurgoService.expurgarErro(id); // Lógica movida para o service
+        expurgoService.expurgarErro(id);
         return "";
     }
 
-    // GERADORES DE SIMULADO
-    @PostMapping("/protocolo")
-    public String iniciarProtocolo() {
+    /**
+     * RENOMEADO: Agora é /emergencia para gerar simulado direto
+     * O /protocolo mostra o dashboard primeiro
+     */
+    @PostMapping("/emergencia")
+    public String iniciarEmergencia() {
         Usuario usuario = authService.getUsuarioLogado();
         Simulado s = expurgoService.gerarProtocoloEmergencia(usuario);
 
-        if (s == null) return "redirect:/expurgo/central?msg=sem_criticos";
+        if (s == null)
+            return "redirect:/expurgo/protocolo?msg=sem_criticos";
         return "redirect:/simulado/" + s.getId();
     }
 
     @PostMapping("/criar-bateria")
     public String criarBateria(@RequestParam(required = false) String materia,
-                               @RequestParam(required = false) String topico,
-                               @RequestParam(required = false) Integer etapa,
-                               @RequestParam(defaultValue = "10") Integer quantidade,
-                               @RequestParam(defaultValue = "false") boolean usarIA) {
+            @RequestParam(required = false) String topico,
+            @RequestParam(required = false) Integer etapa,
+            @RequestParam(defaultValue = "10") Integer quantidade,
+            @RequestParam(defaultValue = "false") boolean usarIA) {
 
         Usuario usuario = authService.getUsuarioLogado();
         Simulado s = expurgoService.gerarBateriaPersonalizada(usuario, materia, topico, etapa, quantidade, usarIA);
 
-        if (s == null) return "redirect:/expurgo/central?msg=sem_erros_filtro";
+        if (s == null)
+            return "redirect:/expurgo/central?msg=sem_erros_filtro";
         return "redirect:/simulado/" + s.getId();
     }
 }

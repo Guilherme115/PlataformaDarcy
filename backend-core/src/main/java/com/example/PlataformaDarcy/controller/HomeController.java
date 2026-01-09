@@ -2,6 +2,7 @@ package com.example.PlataformaDarcy.controller;
 
 import com.example.PlataformaDarcy.model.RegistroErro;
 import com.example.PlataformaDarcy.model.Usuario;
+import com.example.PlataformaDarcy.repository.ComunicadoRepository;
 import com.example.PlataformaDarcy.repository.RegistroErroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,17 +16,28 @@ public class HomeController {
     @Autowired
     private RegistroErroRepository erroRepo;
 
+    @Autowired
+    private ComunicadoRepository comunicadoRepo;
+
     @GetMapping("/")
     public String home(@AuthenticationPrincipal Usuario usuario, Model model) {
         if (usuario != null) {
             model.addAttribute("nome", usuario.getNome());
 
             // Verifica pendências para o alerta no card "Caderno de Erros"
-            long pendentes = erroRepo.findByUsuarioAndStatus(usuario, RegistroErro.StatusCiclo.PENDENTE_TRIAGEM).size();
+            long pendentes = 0;
+            try {
+                pendentes = erroRepo.findByUsuarioAndStatus(usuario, RegistroErro.StatusCiclo.PENDENTE_TRIAGEM).size();
+            } catch (Exception e) {
+                /* Ignora se der erro no banco vazio */ }
+
             model.addAttribute("errosPendentes", pendentes);
 
-            return "aluno-home";
+            // Feed do Subsolo - Comunicados ativos
+            model.addAttribute("feed", comunicadoRepo.findByAtivoTrueOrderByDataEnvioDesc());
+
+            return "aluno/home"; // Caminho: templates/aluno/home.html
         }
-        return "index";
+        return "public/index"; // Caminho: templates/public/index.html
     }
 }

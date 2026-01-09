@@ -3,7 +3,6 @@ package com.example.PlataformaDarcy.controller;
 import com.example.PlataformaDarcy.model.*;
 import com.example.PlataformaDarcy.repository.*;
 import com.example.PlataformaDarcy.service.AuthService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +23,7 @@ public class ReportController {
         Questao q = questaoRepo.findById(id).orElseThrow();
         model.addAttribute("questao", q);
         model.addAttribute("tiposErro", ReportConteudo.TipoErro.values());
+        // Caminho: templates/fragments/modais-report.html
         return "fragments/modais-report :: modal-conteudo";
     }
 
@@ -51,10 +51,10 @@ public class ReportController {
 
         reportRepo.save(r);
 
-        return "<div class='bg-green-100 text-green-800 p-4 font-bold border-2 border-green-600 text-center'>✅ Report enviado! Analisaremos em breve.</div>";
+        return "<div class='bg-green-100 text-green-800 p-4 font-bold border-2 border-green-600 text-center'>✅ Report enviado!</div>";
     }
 
-    // 4. SALVAR BUG TÉCNICO (Com dados automáticos)
+    // 4. SALVAR BUG TÉCNICO
     @PostMapping("/salvar-bug")
     @ResponseBody
     public String salvarBug(@RequestParam String titulo,
@@ -66,17 +66,17 @@ public class ReportController {
         BugTracker bug = new BugTracker();
         try {
             bug.setUsuario(authService.getUsuarioLogado());
-        } catch (Exception e) { /* Usuário pode não estar logado */ }
+        } catch (Exception e) { }
 
         bug.setTitulo(titulo);
         bug.setDescricao(descricao);
         bug.setUrlOrigem(urlAtual);
         bug.setUserAgent(userAgent);
         bug.setResolucaoTela(resolucao);
-        bug.setCategoria("GERAL"); // Pode melhorar com input depois
+        bug.setCategoria("GERAL");
 
         bugRepo.save(bug);
 
-        return "<div class='bg-black text-white p-4 font-mono font-bold text-center'>🐛 Bug registrado no sistema. Obrigado, agente.</div>";
+        return "<div class='bg-black text-white p-4 font-mono font-bold text-center'>🐛 Bug registrado.</div>";
     }
 }

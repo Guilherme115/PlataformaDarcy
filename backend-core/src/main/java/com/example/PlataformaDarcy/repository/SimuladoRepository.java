@@ -12,4 +12,7 @@ public interface SimuladoRepository extends JpaRepository<Simulado, Long> {
     Optional<Simulado> findFirstByUsuarioAndDataFimIsNullOrderByDataInicioDesc(Usuario usuario);
 
     List<Simulado> findByUsuarioOrderByDataInicioDesc(Usuario usuario);
+
+    // OTIMIZADO: Busca apenas os 3 primeiros em aberto (sem filtrar em memória)
+    List<Simulado> findTop3ByUsuarioAndDataFimIsNullOrderByDataInicioDesc(Usuario usuario);
 }

@@ -1,7 +1,13 @@
 package com.example.PlataformaDarcy.repository;
 
+import com.example.PlataformaDarcy.model.Usuario;
 import com.example.PlataformaDarcy.model.WikiPost;
+import com.example.PlataformaDarcy.model.WikiPost.TipoConteudo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,18 +15,55 @@ import java.util.List;
 @Repository
 public interface WikiPostRepository extends JpaRepository<WikiPost, Long> {
 
-    // --- MÉTODOS PARA A HOME (DESTAQUES) ---
-    // Busca os 3 posts mais curtidos de uma etapa específica (ex: Destaques PAS 1)
-    List<WikiPost> findTop3ByEtapaOrderByCurtidasDesc(Integer etapa);
+    // --- DESTAQUES (HOME) ---
+    List<WikiPost> findTop3ByEtapaAndRascunhoFalseOrderByCurtidasDesc(Integer etapa);
 
-    // --- MÉTODOS PARA A PÁGINA "EXPLORAR" (FILTROS) ---
+    List<WikiPost> findTop6ByRascunhoFalseOrderByVisualizacoesDesc(); // Populares
 
-    // Filtra só pela Etapa (ex: Tudo do PAS 3)
-    List<WikiPost> findByEtapaOrderByCurtidasDesc(Integer etapa);
+    List<WikiPost> findTop6ByRascunhoFalseOrderByDataCriacaoDesc(); // Recentes
 
-    // Filtra pela Matéria (ex: Todos de BIOLOGIA)
-    List<WikiPost> findByDisciplinaOrderByCurtidasDesc(String disciplina);
+    // --- EXPLORAR (FILTROS PÚBLICOS) ---
+    List<WikiPost> findByEtapaAndRascunhoFalseOrderByCurtidasDesc(Integer etapa);
 
-    // Filtra pelo Tópico Específico (ex: Só sobre BARROCO)
-    List<WikiPost> findByTopicoOrderByCurtidasDesc(String topico);
+    List<WikiPost> findByDisciplinaAndRascunhoFalseOrderByCurtidasDesc(String disciplina);
+
+    List<WikiPost> findByTopicoAndRascunhoFalseOrderByCurtidasDesc(String topico);
+
+    List<WikiPost> findByTipoConteudoAndRascunhoFalseOrderByVisualizacoesDesc(TipoConteudo tipo);
+
+    // --- CATÁLOGO PAGINADO ---
+    Page<WikiPost> findByRascunhoFalseOrderByDataCriacaoDesc(Pageable pageable);
+
+    Page<WikiPost> findByDisciplinaAndRascunhoFalseOrderByDataCriacaoDesc(String disciplina, Pageable pageable);
+
+    // --- BUSCA ---
+    @Query("SELECT w FROM WikiPost w WHERE w.rascunho = false AND " +
+            "(LOWER(w.titulo) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
+            "LOWER(w.topico) LIKE LOWER(CONCAT('%', :termo, '%')))")
+    List<WikiPost> buscarPorTermo(@Param("termo") String termo);
+
+    // --- MEUS POSTS (AUTOR) ---
+    List<WikiPost> findByAutorOrderByDataCriacaoDesc(Usuario autor);
+
+    List<WikiPost> findByAutorAndRascunhoTrueOrderByDataAtualizacaoDesc(Usuario autor); // Drafts
+
+    // --- RELACIONADOS ---
+    List<WikiPost> findTop5ByDisciplinaAndIdNotAndRascunhoFalseOrderByCurtidasDesc(String disciplina, Long id);
+
+    // --- LEGACY (mantém compatibilidade) ---
+    default List<WikiPost> findTop3ByEtapaOrderByCurtidasDesc(Integer etapa) {
+        return findTop3ByEtapaAndRascunhoFalseOrderByCurtidasDesc(etapa);
+    }
+
+    default List<WikiPost> findByEtapaOrderByCurtidasDesc(Integer etapa) {
+        return findByEtapaAndRascunhoFalseOrderByCurtidasDesc(etapa);
+    }
+
+    default List<WikiPost> findByDisciplinaOrderByCurtidasDesc(String disciplina) {
+        return findByDisciplinaAndRascunhoFalseOrderByCurtidasDesc(disciplina);
+    }
+
+    default List<WikiPost> findByTopicoOrderByCurtidasDesc(String topico) {
+        return findByTopicoAndRascunhoFalseOrderByCurtidasDesc(topico);
+    }
 }

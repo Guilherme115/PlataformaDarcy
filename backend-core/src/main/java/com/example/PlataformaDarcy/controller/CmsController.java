@@ -37,8 +37,7 @@ public class CmsController {
         model.addAttribute("anoAtivo", ano);
 
         try {
-            String taxonomyJson = new ObjectMapper().writeValueAsString(taxonomyService.getTaxonomy());
-            model.addAttribute("taxonomyJson", taxonomyJson);
+            model.addAttribute("taxonomyJson", new ObjectMapper().writeValueAsString(taxonomyService.getTaxonomy()));
         } catch (Exception e) {
             model.addAttribute("taxonomyJson", "{}");
         }
@@ -46,7 +45,8 @@ public class CmsController {
         if (ano == null) {
             List<Integer> anosDisponiveis = provaRepo.findAnosByEtapa(etapa);
             model.addAttribute("anosDisponiveis", anosDisponiveis);
-            return "cms-selecao-ano";
+            // Refatorado: admin/cms-selecao-ano.html
+            return "admin/cms-selecao-ano";
         }
 
         List<Bloco> blocos = blocoRepo.findAllByProvaEtapaAndAno(etapa, ano);
@@ -60,7 +60,8 @@ public class CmsController {
         }
 
         model.addAttribute("blocoAtivo", blocoAtivo);
-        return "cms";
+        // Refatorado: admin/cms.html
+        return "admin/cms";
     }
 
     @PostMapping("/salvar-bloco/{id}")
@@ -72,7 +73,6 @@ public class CmsController {
         return "<span class='text-green-600 font-bold text-xs'>TEXTO SALVO!</span>";
     }
 
-    // SALVAR QUESTÃO
     @PostMapping("/salvar-questao/{id}")
     @ResponseBody
     public String salvarQuestao(@PathVariable Long id,
@@ -93,11 +93,7 @@ public class CmsController {
         if (gabarito != null) q.setGabarito(gabarito.toUpperCase());
         if (tags != null) q.setTags(tags.toUpperCase());
 
-        if ("REVISADO".equals(statusCheck)) {
-            q.setStatus(StatusRevisao.REVISADO);
-        } else {
-            q.setStatus(StatusRevisao.PENDENTE);
-        }
+        q.setStatus("REVISADO".equals(statusCheck) ? StatusRevisao.REVISADO : StatusRevisao.PENDENTE);
 
         if (q.getTipo() == TipoQuestao.C) {
             try {
@@ -111,14 +107,13 @@ public class CmsController {
         }
 
         questaoRepo.save(q);
-
         String cor = q.getStatus() == StatusRevisao.REVISADO ? "text-green-600" : "text-orange-500";
         String texto = q.getStatus() == StatusRevisao.REVISADO ? "REVISADO" : "PENDENTE";
 
         return "<span class='" + cor + " font-bold text-[10px] bg-white border border-black px-2 uppercase tracking-widest'>" + texto + "</span>";
     }
 
-    // --- CARREGAR GALERIA ---
+    // --- GALERIA ---
     @GetMapping("/galeria")
     public String carregarGaleria(@RequestParam Integer ano,
                                   @RequestParam Integer etapa,
@@ -132,28 +127,24 @@ public class CmsController {
         model.addAttribute("tagAlvo", tag);
         model.addAttribute("pasta", ano + "_" + etapa);
 
-        return "cms-modal :: modal-galeria";
+        // Refatorado: admin/fragments/cms-modal.html
+        return "admin/fragments/cms-modal :: modal-galeria";
     }
 
     @PostMapping("/vincular-imagem")
-    public String vincularImagem(@RequestParam Long qid,
-                                 @RequestParam String caminho,
-                                 @RequestParam String tag,
-                                 Model model) {
+    public String vincularImagem(@RequestParam Long qid, @RequestParam String caminho, @RequestParam String tag, Model model) {
         imageService.vincularImagemExistente(qid, caminho, tag);
         Questao q = questaoRepo.findById(qid).orElseThrow();
         model.addAttribute("q", q);
-        return "cms :: lista-imagens-questao";
+        return "admin/cms :: lista-imagens-questao";
     }
 
     @PostMapping("/upload-tag")
-    public String uploadTag(@RequestParam("file") MultipartFile file,
-                            @RequestParam("qid") Long qid,
-                            @RequestParam("tag") String tag, Model model) throws IOException {
+    public String uploadTag(@RequestParam("file") MultipartFile file, @RequestParam("qid") Long qid, @RequestParam("tag") String tag, Model model) throws IOException {
         imageService.uploadImagemComTag(qid, file, tag);
         Questao q = questaoRepo.findById(qid).orElseThrow();
         model.addAttribute("q", q);
-        return "cms :: lista-imagens-questao";
+        return "admin/cms :: lista-imagens-questao";
     }
 
     @DeleteMapping("/imagem/{id}")

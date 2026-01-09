@@ -15,12 +15,19 @@ public interface RegistroErroRepository extends JpaRepository<RegistroErro, Long
     // Filtra por status (usado para Triagem Pendente)
     List<RegistroErro> findByUsuarioAndStatus(Usuario usuario, RegistroErro.StatusCiclo status);
 
+    // OTIMIZADO: Conta erros pendentes sem carregar tudo em memória
+    long countByUsuarioAndStatus(Usuario usuario, RegistroErro.StatusCiclo status);
+
     // NOVO: Busca tudo ordenado pela urgência (Temperatura)
     List<RegistroErro> findByUsuarioOrderByTemperaturaDesc(Usuario usuario);
 
     // NOVO: Busca apenas os críticos (temperatura >= X)
-    List<RegistroErro> findByUsuarioAndTemperaturaGreaterThanEqualOrderByTemperaturaDesc(Usuario usuario, Integer temperatura);
+    List<RegistroErro> findByUsuarioAndTemperaturaGreaterThanEqualOrderByTemperaturaDesc(Usuario usuario,
+            Integer temperatura);
+
     // --- ADICIONE ESTE NOVO PARA O DASHBOARD ---
-    // Busca tudo que NÃO foi expurgado ainda, ordenado por data (mais recente primeiro)
-    List<RegistroErro> findByUsuarioAndStatusNotOrderByDataUltimoErroDesc(Usuario usuario, RegistroErro.StatusCiclo status);
+    // Busca tudo que NÃO foi expurgado ainda, ordenado por data (mais recente
+    // primeiro)
+    List<RegistroErro> findByUsuarioAndStatusNotOrderByDataUltimoErroDesc(Usuario usuario,
+            RegistroErro.StatusCiclo status);
 }

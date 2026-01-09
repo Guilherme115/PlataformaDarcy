@@ -22,14 +22,19 @@ public class Prova {
     @Column(length = 50)
     private String origem;
 
-    // --- ESTE CAMPO É OBRIGATÓRIO PARA O .getQuestoes() FUNCIONAR ---
-    // O Lombok (@Data) vai gerar o método getQuestoes() automaticamente por causa desse campo.
+    // --- CORREÇÃO AQUI ---
+    // Adicionamos o campo que o Dashboard está pedindo
+    @Transient
+    private Boolean ativo = true; // Coloquei = true para as provas já nascerem ativas
+    // ---------------------
+
     @OneToMany(mappedBy = "prova", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Questao> questoes;
 
-    // Helper simples para exibição (não é campo do banco)
     public String getTituloDisplay() {
         if (titulo != null) return titulo;
         return "Prova de " + ano + " (PDF)";
+
+
     }
 }

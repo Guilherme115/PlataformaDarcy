@@ -10,13 +10,16 @@ import java.util.List;
 @Table(name = "blocos")
 @Data
 public class Bloco {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(columnDefinition = "TEXT")
     private String textoBase;
 
     private String caminhoImagem;
+
+    private String disciplina; // ESPANHOL, FRANCÊS, INGLÊS, GERAL
 
     @ManyToOne
     @JoinColumn(name = "prova_id")

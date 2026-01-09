@@ -1,4 +1,4 @@
-package com.example.PlataformaDarcy.dto;
+package com.example.PlataformaDarcy.model.dto;
 
 import com.example.PlataformaDarcy.model.Resolucao;
 import com.example.PlataformaDarcy.model.Simulado;
