@@ -2,3 +2,7 @@ mysql-connector-python
 pdfplumber
 pymupdf
 Pillow
+podcastfy
+fastapi
+uvicorn[standard]
+python-multipart
