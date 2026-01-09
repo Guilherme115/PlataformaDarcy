@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5]'">
+
+<head>
+    <title>Buscar PDFs - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-hub {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .search-input {
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+                transition: all 0.2s;
+            }
+
+            .search-input:focus {
+                outline: none;
+                box-shadow: 6px 6px 0px 0px black;
+                transform: translate(-2px, -2px);
+            }
+
+            .btn-search {
+                background: black;
+                color: white;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.3);
+                transition: all 0.15s;
+            }
+
+            .btn-search:hover {
+                background: #facc15;
+                color: black;
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.3);
+            }
+
+            .btn-search:disabled {
+                background: #a3a3a3;
+                cursor: not-allowed;
+            }
+
+            .suggestion-btn {
+                background: white;
+                border: 2px solid black;
+                box-shadow: 3px 3px 0px 0px black;
+                transition: all 0.15s;
+            }
+
+            .suggestion-btn:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 5px 5px 0px 0px black;
+                background: #fffbeb;
+            }
+
+            .pdf-card {
+                background: white;
+                border: 2px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+                transition: all 0.15s;
+            }
+
+            .pdf-card:hover {
+                transform: translate(-3px, -3px);
+                box-shadow: 7px 7px 0px 0px black;
+                border-color: #facc15;
+            }
+
+            .pdf-icon {
+                background: #ef4444;
+                color: white;
+                font-weight: 900;
+                font-size: 12px;
+            }
+
+            @keyframes pulse-border {
+
+                0%,
+                100% {
+                    border-color: black;
+                }
+
+                50% {
+                    border-color: #facc15;
+                }
+            }
+
+            .loading .search-input {
+                animation: pulse-border 1s infinite;
+            }
+
+            .skeleton {
+                background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+                background-size: 200% 100%;
+                animation: skeleton-loading 1.5s infinite;
+            }
+
+            @keyframes skeleton-loading {
+                0% {
+                    background-position: 200% 0;
+                }
+
+                100% {
+                    background-position: -200% 0;
+                }
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="flex-1 flex flex-col p-4 md:p-8">
+
+        <!-- HEADER -->
+        <header
+            class="max-w-4xl mx-auto w-full mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <div class="flex items-end gap-4">
+                <div
+                    class="w-16 h-16 bg-red-500 border-4 border-black flex items-center justify-center shadow-hard shrink-0">
+                    <span class="font-mono font-black text-2xl text-white">PDF</span>
+                </div>
+                <div>
+                    <div
+                        class="bg-black text-white px-2 py-0.5 text-[10px] font-mono font-bold inline-flex items-center gap-2 mb-1 uppercase tracking-wide">
+                        <i data-lucide="search" class="w-3 h-3"></i>
+                        Busca Inteligente com IA
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black italic tracking-tighter leading-[0.9]">BUSCAR PDFS.</h1>
+                </div>
+            </div>
+            <a href="/" class="font-mono text-xs font-bold uppercase hover:underline flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+            </a>
+        </header>
+
+        <!-- MAIN -->
+        <main class="max-w-4xl mx-auto w-full flex-1">
+
+            <!-- Search Box -->
+            <div id="search-container" class="card-hub p-6 mb-8">
+                <form id="search-form">
+                    <label class="block font-black uppercase text-sm mb-3">
+                        <i data-lucide="sparkles" class="w-4 h-4 inline"></i>
+                        O que voce quer estudar?
+                    </label>
+                    <div class="flex gap-3">
+                        <input type="text" id="search-input" name="query"
+                            class="search-input flex-1 px-4 py-4 font-mono text-sm bg-white"
+                            placeholder="Ex: Numeros complexos e geometria analitica..." autocomplete="off" required>
+                        <button type="submit" id="search-btn" class="btn-search px-8 py-4 font-black uppercase text-sm">
+                            <i data-lucide="search" class="w-5 h-5 inline mr-2"></i>
+                            Buscar
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Suggestions -->
+                <div class="mt-4 pt-4 border-t-2 border-gray-200">
+                    <span class="font-mono text-[10px] uppercase text-gray-500 mb-3 block">Sugestoes rapidas:</span>
+                    <div id="suggestions" class="flex flex-wrap gap-2">
+                        <button class="suggestion-btn px-3 py-1.5 font-mono text-xs" onclick="buscarSugestao(this)">
+                            Numeros complexos
+                        </button>
+                        <button class="suggestion-btn px-3 py-1.5 font-mono text-xs" onclick="buscarSugestao(this)">
+                            Leis de Newton
+                        </button>
+                        <button class="suggestion-btn px-3 py-1.5 font-mono text-xs" onclick="buscarSugestao(this)">
+                            Quimica organica
+                        </button>
+                        <button class="suggestion-btn px-3 py-1.5 font-mono text-xs" onclick="buscarSugestao(this)">
+                            Modernismo brasileiro
+                        </button>
+                        <button class="suggestion-btn px-3 py-1.5 font-mono text-xs" onclick="buscarSugestao(this)">
+                            Redacao ENEM
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="results-section" class="hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-black uppercase text-lg flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                        Resultados
+                    </h2>
+                    <span id="results-count" class="font-mono text-xs text-gray-500">0 PDFs encontrados</span>
+                </div>
+
+                <!-- Loading Skeleton -->
+                <div id="loading-skeleton" class="hidden space-y-4">
+                    <div class="pdf-card p-4">
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 skeleton"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 skeleton w-3/4"></div>
+                                <div class="h-3 skeleton w-1/2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pdf-card p-4">
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 skeleton"></div>
+                            <div class="flex-1 space-y-2">
+                                <div class="h-4 skeleton w-2/3"></div>
+                                <div class="h-3 skeleton w-1/3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results List -->
+                <div id="results-list" class="space-y-4"></div>
+
+                <!-- Empty State -->
+                <div id="no-results" class="hidden text-center py-12 card-hub">
+                    <i data-lucide="search-x" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                    <p class="font-mono text-sm text-gray-500">Nenhum PDF encontrado</p>
+                    <p class="font-mono text-xs text-gray-400 mt-1">Tente buscar com outros termos</p>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="mt-8 p-4 bg-gray-100 border-2 border-dashed border-gray-300">
+                <h3 class="font-bold text-sm mb-2 flex items-center gap-2">
+                    <i data-lucide="lightbulb" class="w-4 h-4 text-yellow-500"></i>
+                    Dicas de busca
+                </h3>
+                <ul class="font-mono text-xs text-gray-600 space-y-1">
+                    <li>• Seja especifico: "calculo integral exercicios resolvidos"</li>
+                    <li>• Mencione o nivel: "fisica ensino medio" ou "calculo nivel superior"</li>
+                    <li>• Inclua universidades: "apostila matematica UFMG"</li>
+                </ul>
+            </div>
+
+        </main>
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const searchContainer = document.getElementById('search-container');
+            const resultsSection = document.getElementById('results-section');
+            const resultsList = document.getElementById('results-list');
+            const resultsCount = document.getElementById('results-count');
+            const loadingSkeleton = document.getElementById('loading-skeleton');
+            const noResults = document.getElementById('no-results');
+
+            // Buscar por sugestao
+            function buscarSugestao(btn) {
+                searchInput.value = btn.textContent.trim();
+                searchForm.dispatchEvent(new Event('submit'));
+            }
+
+            // Submit do formulario
+            searchForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const query = searchInput.value.trim();
+                if (!query) return;
+
+                // UI: Loading
+                searchContainer.classList.add('loading');
+                searchBtn.disabled = true;
+                searchBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 inline mr-2 animate-spin"></i> Buscando...';
+
+                resultsSection.classList.remove('hidden');
+                loadingSkeleton.classList.remove('hidden');
+                resultsList.innerHTML = '';
+                noResults.classList.add('hidden');
+
+                try {
+                    const response = await fetch('/pdf-search/buscar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `query=${encodeURIComponent(query)}`
+                    });
+
+                    const pdfs = await response.json();
+
+                    loadingSkeleton.classList.add('hidden');
+
+                    if (pdfs.length === 0) {
+                        noResults.classList.remove('hidden');
+                        resultsCount.textContent = '0 PDFs encontrados';
+                    } else {
+                        resultsCount.textContent = `${pdfs.length} PDF${pdfs.length > 1 ? 's' : ''} encontrado${pdfs.length > 1 ? 's' : ''}`;
+                        renderResults(pdfs);
+                    }
+
+                } catch (error) {
+                    console.error('Erro na busca:', error);
+                    loadingSkeleton.classList.add('hidden');
+                    noResults.classList.remove('hidden');
+                } finally {
+                    searchContainer.classList.remove('loading');
+                    searchBtn.disabled = false;
+                    searchBtn.innerHTML = '<i data-lucide="search" class="w-5 h-5 inline mr-2"></i> Buscar';
+                    lucide.createIcons();
+                }
+            });
+
+            // Render resultados
+            function renderResults(pdfs) {
+                resultsList.innerHTML = pdfs.map((pdf, i) => `
+                    <a href="${pdf.url}" target="_blank" rel="noopener" class="pdf-card p-4 flex gap-4 block">
+                        <div class="w-12 h-12 pdf-icon flex items-center justify-center shrink-0">
+                            PDF
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-sm line-clamp-1 mb-1">${escapeHtml(pdf.titulo)}</h3>
+                            <p class="font-mono text-xs text-gray-500 line-clamp-1 mb-2">${escapeHtml(pdf.descricao)}</p>
+                            <div class="flex items-center gap-3">
+                                <span class="font-mono text-[10px] uppercase text-gray-400">
+                                    <i data-lucide="globe" class="w-3 h-3 inline"></i> ${escapeHtml(pdf.fonte)}
+                                </span>
+                                <span class="font-mono text-[10px] uppercase text-green-600 font-bold">
+                                    <i data-lucide="download" class="w-3 h-3 inline"></i> Abrir PDF
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="external-link" class="w-5 h-5 text-gray-400"></i>
+                        </div>
+                    </a>
+                `).join('');
+
+                lucide.createIcons();
+            }
+
+            // Escape HTML
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Init
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>
