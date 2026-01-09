@@ -1,96 +1,315 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}"
-      th:with="bodyClass='bg-[#e5e5e5] text-black font-serif min-h-screen flex flex-col'">
+      layout:decorate="~{layouts/base}">
 
 <head>
   <title>Resultado - Plataforma Darcy</title>
+  <!-- Fonts & Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Configuration for this page -->
+  <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'headline': ['"Playfair Display"', 'serif'],
+                    'tech': ['"JetBrains Mono"', 'monospace'],
+                    'sans': ['"Inter"', 'sans-serif'],
+                },
+                colors: {
+                    'darcy-black': '#0a0a0a',
+                    'darcy-yellow': '#facc15',
+                    'darcy-red': '#dc2626',
+                    'darcy-green': '#16a34a',
+                    'paper': '#fdfdfd',
+                },
+                boxShadow: {
+                    'brutal': '6px 6px 0px 0px rgba(0,0,0,1)',
+                    'brutal-sm': '3px 3px 0px 0px rgba(0,0,0,1)',
+                }
+            }
+        }
+    }
+  </script>
+
+  <style>
+    body {
+        background-color: #e5e5e5;
+        background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+        font-family: 'Inter', sans-serif;
+        color: #0a0a0a;
+    }
+
+    .cespe-box {
+        background-color: white;
+        border: 3px solid black;
+        box-shadow: 6px 6px 0px 0px black;
+    }
+
+    /* Efeito de Carimbo */
+    .stamp {
+        border: 4px double currentColor;
+        padding: 0.5rem 1rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 900;
+        text-transform: uppercase;
+        transform: rotate(-5deg);
+        opacity: 0.8;
+        mix-blend-mode: multiply;
+        display: inline-block;
+    }
+    .stamp.warning { color: #f59e0b; border-color: #f59e0b; }
+
+    /* Grid de Detalhes */
+    .detail-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 1rem;
+        border-bottom: 1px dashed #ccc;
+        padding: 0.5rem 0;
+        font-size: 0.75rem;
+    }
+    .detail-row:last-child { border-bottom: none; }
+  </style>
 </head>
 
-<body>
-<div layout:fragment="content" class="flex flex-col h-full w-full p-0">
+<body class="min-h-screen flex flex-col items-center py-8 px-4">
 
-  <header class="h-16 bg-[#111] text-white flex items-center px-6 border-b-4 border-black shrink-0">
-    <div class="flex items-center gap-4">
-      <div class="w-10 h-10 bg-white text-black font-black flex items-center justify-center text-xl">D.</div>
-      <h1 class="text-xs font-bold uppercase tracking-[0.2em] font-mono">Boletim de Desempenho</h1>
+<div layout:fragment="content" class="w-full max-w-6xl mx-auto flex flex-col gap-8 py-8 px-4">
+
+  <!-- NAV -->
+  <nav class="w-full mb-4 flex justify-between items-center text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-2">
+    <a href="/simulado" class="flex items-center gap-2 hover:underline">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Dashboard
+    </a>
+    <span class="font-mono bg-black text-white px-2 py-0.5" th:text="'RELATÓRIO #' + ${simulado.id}">RELATÓRIO DE AUDITORIA</span>
+  </nav>
+
+  <!-- 1. O VEREDITO (Resultados Centrais) -->
+  <section class="cespe-box p-8 relative overflow-hidden">
+    <div class="absolute top-4 right-4 rotate-12 hidden md:block">
+      <div class="stamp warning text-2xl">FINALIZADO</div>
     </div>
-    <a href="/simulado" class="ml-auto text-xs font-bold hover:underline">VOLTAR AO MENU</a>
-  </header>
 
-  <main class="flex-1 p-8 overflow-y-auto">
-    <div class="max-w-5xl mx-auto">
+    <h1 class="font-headline font-black text-3xl uppercase mb-8 flex items-center gap-3 border-b-2 border-black pb-4">
+      Resultado Final
+      <span class="text-xs font-sans font-bold bg-gray-200 px-2 py-1 border border-black rounded-sm uppercase tracking-wide text-gray-600" th:text="${simulado.titulo}">Simulado PAS 3</span>
+    </h1>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
-        <div class="bg-black text-white p-6 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]">
-          <p class="text-xs font-mono uppercase text-gray-400">Nota Final (Cespe)</p>
-          <div class="text-6xl font-black mt-2" th:text="${simulado.notaFinal}">10.0</div>
-          <p class="text-xs mt-2 text-gray-500">Uma errada anula uma certa.</p>
-        </div>
-
-        <div class="bg-white p-6 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] flex flex-col justify-center">
-          <div class="flex items-center gap-3 text-green-600 mb-2">
-            <i data-lucide="check-circle" class="w-6 h-6"></i>
-            <span class="font-bold text-xl" th:text="${statsAcertos} + ' Acertos'"></span>
-          </div>
-          <div class="flex items-center gap-3 text-red-600 mb-2">
-            <i data-lucide="x-circle" class="w-6 h-6"></i>
-            <span class="font-bold text-xl" th:text="${statsErros} + ' Erros'"></span>
-          </div>
-          <div class="flex items-center gap-3 text-gray-400">
-            <i data-lucide="minus-circle" class="w-6 h-6"></i>
-            <span class="font-bold text-xl" th:text="${statsBranco} + ' Em Branco'"></span>
-          </div>
-        </div>
-
-      </div>
-
-      <h2 class="text-2xl font-black mb-6 uppercase tracking-tighter border-b-4 border-black pb-2">Detalhamento</h2>
-
-      <div class="space-y-4">
-        <div th:each="res : ${resolucoes}" class="bg-white border-2 border-black p-4 flex gap-6 items-start relative group transition hover:translate-x-1"
-             th:classappend="${res.correta == true} ? 'bg-green-50 border-green-900' : (${res.correta == false and res.respostaAluno != null} ? 'bg-red-50 border-red-900' : 'opacity-70')">
-
-          <div class="w-12 text-center shrink-0">
-            <span class="block text-xs font-bold text-gray-400">ITEM</span>
-            <span class="text-2xl font-black" th:text="${res.questao.numero}">1</span>
-          </div>
-
-          <div class="flex-1">
-            <div class="text-sm font-serif line-clamp-2" th:utext="${res.questao.enunciado}">Texto da questão...</div>
-
-            <div class="mt-2 flex gap-4 text-xs font-mono font-bold uppercase">
-
-              <div th:if="${res.respostaAluno != null}">
-                <span class="text-gray-500">Você marcou:</span>
-                <span th:text="${res.respostaAluno}"
-                      th:class="${res.correta} ? 'text-green-600 bg-green-200 px-1' : 'text-red-600 bg-red-200 px-1'">C</span>
-              </div>
-              <div th:if="${res.respostaAluno == null}">
-                <span class="text-gray-400 bg-gray-200 px-1">EM BRANCO</span>
-              </div>
-
-              <div>
-                <span class="text-gray-500">Gabarito:</span>
-                <span class="text-black bg-yellow-200 px-1" th:text="${res.questao.gabarito}">C</span>
-              </div>
-
+      <!-- A. Escore Líquido -->
+      <div class="text-center md:text-left">
+        <div class="flex items-end gap-4 mb-2 justify-center md:justify-start">
+          <div>
+            <p class="font-tech text-xs font-bold uppercase text-gray-500 mb-1">Escore Líquido</p>
+            <div class="text-8xl font-black font-headline tracking-tighter text-darcy-black leading-none"
+                 th:text="${simulado.notaFinal > 0 ? '+' : ''} + ${#numbers.formatDecimal(simulado.notaFinal, 1, 1)}">
+              +28.0
             </div>
           </div>
-
-          <div class="shrink-0 pt-1">
-            <i th:if="${res.correta == true}" data-lucide="check" class="w-6 h-6 text-green-600"></i>
-            <i th:if="${res.correta == false and res.respostaAluno != null}" data-lucide="x" class="w-6 h-6 text-red-600"></i>
-            <i th:if="${res.respostaAluno == null}" data-lucide="minus" class="w-6 h-6 text-gray-300"></i>
+          <!-- Mock de percentil, futuramente pode ser calculado -->
+          <div class="mb-4">
+                         <span class="text-xs font-bold bg-yellow-200 px-2 py-1 border border-black uppercase"
+                               th:if="${possiveisPontos > 0}"
+                               th:text="'Aproveitamento ' + ${#numbers.formatInteger((simulado.notaFinal / possiveisPontos) * 100, 1)} + '%'">Percentil</span>
           </div>
+        </div>
+        <p class="font-mono text-sm text-gray-400 font-bold mb-6" th:text="'De ' + ${possiveisPontos} + ' pontos possíveis'">De 90.0 possíveis</p>
 
+        <!-- A Matemática (Explicação Visual) -->
+        <div class="bg-gray-50 border-2 border-dashed border-gray-300 p-4 font-mono text-xs space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-green-700 font-bold flex items-center gap-2"><i data-lucide="check-circle" class="w-3 h-3"></i> Acertos Brutos (<span th:text="${statsAcertos}">40</span>)</span>
+            <span class="font-bold bg-green-100 px-2 border border-green-200" th:text="'+' + ${statsAcertos} + '.0 pts'">+40.0 pts</span>
+          </div>
+          <div class="flex justify-between items-center text-red-600 font-bold">
+            <span class="flex items-center gap-2"><i data-lucide="x-circle" class="w-3 h-3"></i> Erros (<span th:text="${statsErros}">12</span>)</span>
+            <span class="bg-red-100 px-2 border border-red-200" th:text="'-' + ${statsErros} + '.0 pts'">-12.0 pts</span>
+          </div>
+          <div class="flex justify-between items-center text-gray-400">
+            <span class="flex items-center gap-2"><i data-lucide="minus-circle" class="w-3 h-3"></i> Em Branco (<span th:text="${statsBranco}">38</span>)</span>
+            <span>0.0 pts</span>
+          </div>
+          <div class="border-t-2 border-black pt-2 flex justify-between font-black text-lg mt-2">
+            <span>NOTA FINAL</span>
+            <span th:text="${#numbers.formatDecimal(simulado.notaFinal, 1, 1)}">28.0</span>
+          </div>
         </div>
       </div>
 
+      <!-- B. Métricas Avançadas (Tempo e Comparativo) -->
+      <div class="flex flex-col gap-6">
+
+        <!-- Gestão de Tempo -->
+        <div class="border-2 border-black p-4 bg-white shadow-[4px_4px_0px_0px_#000]">
+          <h3 class="font-bold text-xs uppercase mb-3 flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4"></i> Cronometria
+          </h3>
+          <div class="grid grid-cols-2 gap-4 text-center">
+            <div>
+              <span class="block text-[10px] uppercase text-gray-500 font-bold">Tempo Total</span>
+              <span class="text-xl font-mono font-black" th:text="${tempoTotal}">02:14:00</span>
+            </div>
+            <div>
+              <span class="block text-[10px] uppercase text-gray-500 font-bold">Tempo Médio/Item</span>
+              <span class="text-xl font-mono font-black text-green-600" th:text="${tempoMedio}">2m 30s</span>
+            </div>
+          </div>
+          <div class="mt-3 text-[10px] bg-gray-100 p-2 border border-gray-300 text-center italic">
+            "O tempo é o tecido da sua aprovação."
+          </div>
+        </div>
+
+        <!-- Gráfico de Comparação (Barra Horizontal Simplificada) -->
+        <div>
+          <h3 class="font-bold text-xs uppercase mb-2">Desempenho Relativo</h3>
+          <div class="relative h-8 w-full bg-gray-200 border-2 border-black mt-4 overflow-hidden">
+            <!-- Barra de progresso visual baseada na nota vs nota máxima -->
+            <div class="absolute top-0 bottom-0 left-0 bg-darcy-yellow border-r-2 border-black"
+                 th:style="'width: ' + (${possiveisPontos} > 0 ? ${(simulado.notaFinal / possiveisPontos) * 100} : 0) + '%'">
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold uppercase z-20">
+              Seu aproveitamento
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </main>
+  </section>
+
+  <!-- 2. MICRO-ANÁLISE (Detalhe por Matéria) -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <div th:each="materiaStat : ${rankingMaterias}" class="cespe-box p-5 bg-white">
+      <div class="flex justify-between items-center border-b-2 border-gray-200 pb-2 mb-3">
+        <h3 class="font-black uppercase text-sm" th:text="${materiaStat.nome}">FÍSICA</h3>
+        <span class="text-xs font-mono font-bold"
+              th:classappend="${materiaStat.pontos >= 0} ? 'text-green-600' : 'text-red-600'"
+              th:text="${materiaStat.pontos > 0 ? '+' : ''} + ${#numbers.formatDecimal(materiaStat.pontos, 1, 1)} + ' pts'">-2.0 pts</span>
+      </div>
+
+      <div class="space-y-0">
+        <div class="detail-row" th:classappend="${materiaStat.erros > 0} ? 'bg-red-50' : ''">
+          <span class="font-bold">Geral</span>
+          <span class="text-green-600 text-right" th:text="${materiaStat.acertos} + ' Acertos'">2 Acertos</span>
+          <span class="text-right"
+                th:classappend="${materiaStat.erros > 0} ? 'text-red-600 font-bold' : 'text-gray-400'"
+                th:text="${materiaStat.erros} + ' Erros'">3 Erros</span>
+        </div>
+        <div class="detail-row">
+          <span class="font-bold text-gray-500">Em Branco</span>
+          <span class="col-span-2 text-right text-gray-400" th:text="${materiaStat.branco} + ' itens'">0 itens</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- 3. AÇÕES DE CORREÇÃO (Barra Inferior) -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <!-- Ação Principal: Necrotério -->
+    <div class="md:col-span-2 cespe-box p-6 bg-darcy-black text-white relative overflow-hidden group cursor-pointer hover:bg-gray-900 transition border-white shadow-[8px_8px_0px_0px_#b91c1c]"
+         onclick="window.location.href='/simulado/erros'">
+      <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+        <i data-lucide="skull" class="w-32 h-32"></i>
+      </div>
+
+      <div class="relative z-10">
+        <h3 class="font-headline font-black text-2xl uppercase italic text-darcy-yellow mb-2">Protocolo de Autópsia</h3>
+        <p class="font-sans text-xs text-gray-300 mb-6 max-w-md leading-relaxed">
+          Detectamos <strong th:text="${statsErros} + ' erros'">12 erros</strong> neste simulado. Envie estes itens para a Triagem agora para alimentar o algoritmo de revisão.
+        </p>
+
+        <button class="bg-white text-black px-6 py-3 font-mono font-bold text-xs uppercase hover:bg-darcy-yellow hover:scale-105 transition shadow-sm flex items-center justify-center gap-2 border-2 border-transparent">
+          <i data-lucide="microscope" class="w-4 h-4"></i> Ir para Caderno de Erros
+        </button>
+      </div>
+    </div>
+
+    <!-- Ações Secundárias -->
+    <div class="flex flex-col gap-4">
+
+      <button class="flex-1 cespe-box p-4 flex items-center justify-between hover:bg-gray-50 transition group"
+              onclick="window.print()">
+        <div class="flex items-center gap-3">
+          <div class="bg-gray-200 p-2 border-2 border-black group-hover:bg-darcy-yellow group-hover:text-black transition">
+            <i data-lucide="printer" class="w-5 h-5"></i>
+          </div>
+          <div class="text-left">
+            <span class="block font-bold text-xs uppercase">Imprimir Relatório</span>
+            <span class="block text-[9px] font-mono text-gray-500">Gerar PDF</span>
+          </div>
+        </div>
+      </button>
+
+      <a href="/simulado" class="flex-1 cespe-box p-4 flex items-center justify-between hover:bg-gray-50 transition group">
+        <div class="flex items-center gap-3">
+          <div class="bg-gray-200 p-2 border-2 border-black group-hover:bg-black group-hover:text-white transition">
+            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+          </div>
+          <div class="text-left">
+            <span class="block font-bold text-xs uppercase">Novo Simulado</span>
+            <span class="block text-[9px] font-mono text-gray-500">Voltar ao Menu</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- 4. LISTA COMPLETA (DETALHAMENTO) -->
+  <!-- Mantido abaixo para conferência, mas com estilo atualizado -->
+  <section class="mt-8">
+    <h2 class="text-xl font-black mb-6 uppercase tracking-tighter border-b-4 border-black pb-2">Gabarito Detalhado</h2>
+    <div class="space-y-4">
+      <div th:each="res : ${resolucoes}" class="bg-white border-2 border-black p-4 flex gap-6 items-start relative group transition hover:translate-x-1"
+           th:classappend="${res.correta == true} ? 'bg-green-50 border-green-900' : (${res.correta == false and res.respostaAluno != null} ? 'bg-red-50 border-red-900' : 'opacity-70')">
+
+        <div class="w-12 text-center shrink-0">
+          <span class="block text-xs font-bold text-gray-400">ITEM</span>
+          <span class="text-2xl font-black" th:text="${res.questao.numero}">1</span>
+        </div>
+
+        <div class="flex-1">
+          <div class="text-sm font-serif line-clamp-2" th:utext="${res.questao.enunciado}">Texto da questão...</div>
+          <div class="mt-2 flex gap-4 text-xs font-mono font-bold uppercase">
+            <div th:if="${res.respostaAluno != null}">
+              <span class="text-gray-500">Você:</span>
+              <span th:text="${res.respostaAluno}"
+                    th:class="${res.correta} ? 'text-green-600 bg-green-200 px-1 border border-green-600' : 'text-red-600 bg-red-200 px-1 border border-red-600'">C</span>
+            </div>
+            <div th:if="${res.respostaAluno == null}">
+              <span class="text-gray-400 bg-gray-200 px-1 border border-gray-400">EM BRANCO</span>
+            </div>
+            <div>
+              <span class="text-gray-500">Gabarito:</span>
+              <span class="text-black bg-darcy-yellow px-1 border border-black" th:text="${res.questao.gabarito}">C</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="shrink-0 pt-1">
+          <i th:if="${res.correta == true}" data-lucide="check" class="w-6 h-6 text-green-600"></i>
+          <i th:if="${res.correta == false and res.respostaAluno != null}" data-lucide="x" class="w-6 h-6 text-red-600"></i>
+          <i th:if="${res.respostaAluno == null}" data-lucide="minus" class="w-6 h-6 text-gray-300"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  lucide.createIcons();
+</script>
+
 </div>
 </body>
 </html>

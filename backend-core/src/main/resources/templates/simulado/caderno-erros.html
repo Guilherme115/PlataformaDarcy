@@ -1,141 +1,296 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='flex flex-col min-h-screen text-black font-serif p-8'">
+
 <head>
     <title>Caderno de Erros - Darcy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,400;0,900;1,400&display=swap" rel="stylesheet">
-    <style>
-        body { background-color: #e5e5e5; background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px; }
-        .card-brutal { background: white; border: 3px solid black; box-shadow: 6px 6px 0px 0px black; transition: all 0.2s; }
-        .card-brutal:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0px 0px black; }
-        .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 800; line-height: 1; }
-        .stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-transform: uppercase; font-weight: bold; color: #666; }
 
-        .btn-action { height: 100%; display: flex; flex-direction: column; justify-content: space-between; p-6; cursor: pointer; }
-    </style>
+    <th:block layout:fragment="head-extras">
+        <style>
+            body {
+                background-color: #e5e5e5;
+                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+            }
+
+            .card-brutal {
+                background: white;
+                border: 4px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+                transition: all 0.2s;
+            }
+
+            .card-brutal:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 10px 10px 0px 0px black;
+            }
+
+            .stat-value {
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 800;
+                line-height: 1;
+            }
+
+            .stat-label {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                font-weight: bold;
+                color: #666;
+            }
+
+            .temp-bar {
+                height: 8px;
+                background: linear-gradient(to right, #10b981 0%, #facc15 50%, #ef4444 100%);
+                border: 2px solid black;
+            }
+
+            .error-row {
+                border: 3px solid black;
+                transition: all 0.2s;
+            }
+
+            .error-row:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 4px 4px 0px black;
+            }
+        </style>
+    </th:block>
 </head>
-<body class="flex flex-col min-h-screen text-black font-serif p-8">
 
-<header class="max-w-7xl mx-auto w-full mb-8 border-b-4 border-black pb-6 flex justify-between items-end">
-    <div>
-        <div class="bg-black text-white px-2 py-1 text-xs font-bold inline-block mb-2 uppercase">MÓDULO DE INTELIGÊNCIA</div>
-        <h1 class="text-5xl font-black italic tracking-tighter mb-2 uppercase">Caderno de Erros.</h1>
-    </div>
-    <a href="/" class="text-xs font-mono font-bold uppercase hover:underline flex items-center gap-2 border-2 border-transparent hover:border-black px-3 py-1 transition">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
-    </a>
-</header>
+<body>
+    <div layout:fragment="content">
 
-<main class="max-w-7xl mx-auto w-full space-y-8">
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        <a href="/expurgo/protocolo" class="card-brutal bg-[#111] text-white p-8 group relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-2 opacity-20">
-                <i data-lucide="siren" class="w-32 h-32 text-red-600 animate-pulse"></i>
-            </div>
-            <div class="relative z-10">
-                <h2 class="text-3xl font-black italic uppercase text-red-500 mb-2">Protocolo de<br>Expurgo</h2>
-                <p class="font-mono text-xs text-gray-400 mb-6 max-w-sm">
-                    UTI Cognitiva. O algoritmo seleciona seus erros mais críticos (>70º) e a IA refatora o enunciado para garantir aprendizado real, não decoreba.
-                </p>
-                <span class="bg-red-600 text-white px-4 py-2 text-xs font-black uppercase inline-flex items-center gap-2 group-hover:bg-white group-hover:text-red-600 transition">
-                    <i data-lucide="zap" class="w-4 h-4"></i> Iniciar Emergência
-                </span>
-            </div>
-        </a>
-
-        <a href="/expurgo/central" class="card-brutal bg-white p-8 group relative">
-            <div class="absolute top-0 right-0 p-2 opacity-10">
-                <i data-lucide="archive" class="w-32 h-32"></i>
-            </div>
-            <div class="relative z-10">
-                <h2 class="text-3xl font-black italic uppercase mb-2">Central de<br>Expurgo</h2>
-                <p class="font-mono text-xs text-gray-600 mb-6 max-w-sm">
-                    Arquivo Vivo. Filtre seus erros por matéria ou causa e monte baterias de revisão personalizadas. Opção de ativar IA disponível.
-                </p>
-                <span class="border-2 border-black px-4 py-2 text-xs font-black uppercase inline-flex items-center gap-2 group-hover:bg-black group-hover:text-white transition">
-                    <i data-lucide="filter" class="w-4 h-4"></i> Acessar Arquivo
-                </span>
-            </div>
-        </a>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <div class="md:col-span-8 card-brutal bg-yellow-400 p-6 flex items-center justify-between">
+        <header class="max-w-7xl mx-auto w-full mb-8 border-b-4 border-black pb-6 flex justify-between items-end">
             <div>
-                <span class="text-black font-mono text-xs font-bold uppercase tracking-widest block mb-1">Tempo Restante (PAS 2025)</span>
-                <div class="font-black italic text-5xl md:text-6xl leading-none" id="countdown">000<span class="text-xl">D</span></div>
+                <div class="bg-black text-white px-2 py-1 text-xs font-bold inline-block mb-2 uppercase">Módulo de
+                    Inteligência</div>
+                <h1 class="text-5xl font-black italic tracking-tighter mb-2 uppercase">Caderno de Erros.</h1>
+                <p class="text-sm font-mono text-gray-500">Algoritmo baseado na Curva de Ebbinghaus • Intervalos: 1, 3,
+                    7, 14, 30 dias</p>
             </div>
-            <i data-lucide="hourglass" class="w-12 h-12 text-black opacity-20"></i>
-        </div>
+            <a href="/aluno/home"
+                class="text-xs font-mono font-bold uppercase hover:underline flex items-center gap-2 border-2 border-transparent hover:border-black px-3 py-1 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+            </a>
+        </header>
 
-        <div class="md:col-span-4 grid grid-cols-2 gap-2">
-            <div class="card-brutal p-3 text-center">
-                <span class="stat-value text-2xl block" th:text="${statTotal}">0</span>
-                <span class="stat-label">Falhas Totais</span>
+        <main class="max-w-7xl mx-auto w-full space-y-8">
+
+            <!-- GRID DE ESTATÍSTICAS -->
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                <div class="card-brutal p-4 text-center">
+                    <span class="stat-value text-3xl block" th:text="${statTotal}">0</span>
+                    <span class="stat-label">Total Erros</span>
+                </div>
+                <div class="card-brutal p-4 text-center bg-orange-50 border-orange-400">
+                    <span class="stat-value text-3xl block text-orange-600" th:text="${statPendentes}">0</span>
+                    <span class="stat-label">Triagem</span>
+                </div>
+                <div class="card-brutal p-4 text-center bg-blue-50 border-blue-400">
+                    <span class="stat-value text-3xl block text-blue-600" th:text="${statProtocolo}">0</span>
+                    <span class="stat-label">Em Revisão</span>
+                </div>
+                <div class="card-brutal p-4 text-center bg-green-50 border-green-400">
+                    <span class="stat-value text-3xl block text-green-600" th:text="${statDominados}">0</span>
+                    <span class="stat-label">Dominados</span>
+                </div>
+                <div class="card-brutal p-4 text-center bg-red-50 border-red-400">
+                    <span class="stat-value text-3xl block text-red-600" th:text="${statCriticos}">0</span>
+                    <span class="stat-label">Críticos</span>
+                </div>
+                <div class="card-brutal p-4 text-center">
+                    <span class="stat-value text-3xl block" th:text="${statTempMedia} + '°'">0°</span>
+                    <span class="stat-label">Temp. Média</span>
+                </div>
             </div>
-            <div class="card-brutal p-3 text-center bg-red-50 text-red-600 border-red-200">
-                <span class="stat-value text-2xl block" th:text="${statTipoC}">0</span>
-                <span class="stat-label">Erros Tipo C</span>
-            </div>
-        </div>
-    </div>
 
-    <div>
-        <h2 class="text-xl font-black italic mb-4 uppercase border-b-2 border-black pb-2 inline-block">
-            Triagem Pendente (<span th:text="${triagem.size()}">0</span>)
-        </h2>
-
-        <div th:if="${triagem.isEmpty()}" class="p-6 border-2 border-dashed border-gray-400 text-center">
-            <p class="font-mono text-xs text-gray-500 font-bold uppercase">Caixa de entrada limpa.</p>
-        </div>
-
-        <div class="grid gap-4">
-            <div th:each="erro : ${triagem}" class="card-brutal p-6 relative">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="font-mono text-xs font-bold text-gray-500">#<span th:text="${erro.questaoOriginal.id}">000</span></span>
-                            <span class="text-xs font-bold uppercase bg-gray-200 px-1">PAS <span th:text="${erro.questaoOriginal.prova.etapa}">1</span></span>
-                        </div>
-                        <p class="font-serif text-sm italic border-l-2 border-yellow-400 pl-3 py-1 mb-2 text-gray-800 line-clamp-2"
-                           th:text="${erro.questaoOriginal.enunciado}">Texto...</p>
+            <!-- CARDS PRINCIPAIS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- PROTOCOLO DE EXPURGO -->
+                <a href="/expurgo/protocolo"
+                    class="card-brutal bg-[#111] text-white p-8 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-2 opacity-20">
+                        <i data-lucide="siren" class="w-32 h-32 text-red-600 animate-pulse"></i>
                     </div>
+                    <div class="relative z-10">
+                        <h2 class="text-3xl font-black italic uppercase text-red-500 mb-2">Protocolo de<br>Expurgo</h2>
+                        <p class="font-mono text-xs text-gray-400 mb-6 max-w-sm">
+                            UTI Cognitiva. O algoritmo seleciona seus erros mais críticos (>70°) e a IA refatora o
+                            enunciado para garantir aprendizado real.
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="bg-red-600 text-white px-4 py-2 text-xs font-black uppercase inline-flex items-center gap-2 group-hover:bg-white group-hover:text-red-600 transition">
+                                <i data-lucide="zap" class="w-4 h-4"></i> Iniciar Emergência
+                            </span>
+                            <span class="text-red-400 font-mono text-xs" th:text="${statCriticos} + ' críticos'">0
+                                críticos</span>
+                        </div>
+                    </div>
+                </a>
 
-                    <div class="flex flex-col gap-2 min-w-[150px]">
-                        <span class="text-[9px] font-bold uppercase text-gray-400 text-center">Classificar Erro:</span>
-                        <div class="grid grid-cols-2 gap-2">
-                            <form th:action="@{/simulado/erros/classificar/{id}(id=${erro.id})}" method="post">
-                                <input type="hidden" name="causa" value="LACUNA_CONTEUDO">
-                                <button class="w-full border border-black py-1 text-[9px] font-bold uppercase hover:bg-black hover:text-white transition">Não Sabia</button>
-                            </form>
-                            <form th:action="@{/simulado/erros/classificar/{id}(id=${erro.id})}" method="post">
-                                <input type="hidden" name="causa" value="DESATENCAO">
-                                <button class="w-full border border-black py-1 text-[9px] font-bold uppercase hover:bg-yellow-400 transition">Desatenção</button>
-                            </form>
+                <!-- CENTRAL DE EXPURGO -->
+                <a href="/expurgo/central" class="card-brutal bg-white p-8 group relative">
+                    <div class="absolute top-0 right-0 p-2 opacity-10">
+                        <i data-lucide="archive" class="w-32 h-32"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h2 class="text-3xl font-black italic uppercase mb-2">Central de<br>Expurgo</h2>
+                        <p class="font-mono text-xs text-gray-600 mb-6 max-w-sm">
+                            Arquivo Vivo. Filtre seus erros por matéria ou causa e monte baterias de revisão
+                            personalizadas.
+                        </p>
+                        <span
+                            class="border-2 border-black px-4 py-2 text-xs font-black uppercase inline-flex items-center gap-2 group-hover:bg-black group-hover:text-white transition">
+                            <i data-lucide="filter" class="w-4 h-4"></i> Acessar Arquivo
+                        </span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- REVISÕES PENDENTES HOJE -->
+            <div th:if="${!revisoesPendentes.isEmpty()}" class="card-brutal bg-darcy-yellow p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-black italic uppercase flex items-center gap-2">
+                        <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+                        Revisões Agendadas para Hoje
+                    </h2>
+                    <span class="font-mono text-sm font-bold" th:text="${revisoesPendentes.size()} + ' pendente(s)'">0
+                        pendentes</span>
+                </div>
+                <p class="font-mono text-xs text-gray-700 mb-4">Erros que precisam ser revisados hoje baseado no
+                    algoritmo de Ebbinghaus.</p>
+                <form th:action="@{/expurgo/criar-bateria}" method="post">
+                    <input type="hidden" name="quantidade" th:value="${revisoesPendentes.size()}">
+                    <button
+                        class="bg-black text-white px-6 py-2 font-black uppercase text-sm hover:bg-white hover:text-black border-2 border-black transition">
+                        <i data-lucide="play" class="w-4 h-4 inline mr-2"></i> Iniciar Sessão de Revisão
+                    </button>
+                </form>
+            </div>
+
+            <!-- TRIAGEM PENDENTE -->
+            <div>
+                <h2
+                    class="text-xl font-black italic mb-4 uppercase border-b-4 border-black pb-2 inline-block flex items-center gap-2">
+                    <i data-lucide="inbox" class="w-5 h-5 text-orange-500"></i>
+                    Triagem Pendente (<span th:text="${triagem.size()}">0</span>)
+                </h2>
+
+                <div th:if="${triagem.isEmpty()}"
+                    class="p-8 border-4 border-dashed border-gray-300 text-center bg-white">
+                    <i data-lucide="check-circle" class="w-12 h-12 text-green-500 mx-auto mb-3"></i>
+                    <p class="font-mono text-sm font-bold uppercase text-gray-600">Caixa de entrada limpa!</p>
+                    <p class="text-xs text-gray-400 mt-1">Nenhum erro novo para classificar.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div th:each="erro : ${triagem}" class="error-row bg-white p-6">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <!-- INFO DO ERRO -->
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="font-mono text-xs font-bold text-gray-500">#<span
+                                            th:text="${erro.questaoOriginal.id}">000</span></span>
+                                    <span th:if="${erro.questaoOriginal.prova != null}"
+                                        class="text-xs font-bold uppercase bg-gray-200 px-2 py-0.5 border border-gray-300">PAS
+                                        <span th:text="${erro.questaoOriginal.prova.etapa}">1</span></span>
+                                    <span
+                                        class="text-xs font-bold uppercase bg-orange-100 text-orange-700 px-2 py-0.5 border border-orange-300"
+                                        th:text="${erro.totalErros} + 'x errado'">1x errado</span>
+                                </div>
+                                <p class="font-serif text-sm italic border-l-4 border-darcy-yellow pl-3 py-1 mb-2 text-gray-800 line-clamp-2"
+                                    th:text="${erro.questaoOriginal.enunciado}">Texto do enunciado...</p>
+
+                                <!-- BARRA DE TEMPERATURA -->
+                                <div class="mt-3">
+                                    <div class="flex justify-between mb-1">
+                                        <span
+                                            class="text-[10px] font-mono font-bold uppercase text-gray-400">Temperatura</span>
+                                        <span class="text-xs font-mono font-bold"
+                                            th:text="${erro.temperatura} + '°'">50°</span>
+                                    </div>
+                                    <div class="temp-bar rounded-full overflow-hidden">
+                                        <div class="h-full bg-black" th:style="'width:' + ${erro.temperatura} + '%'">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AÇÕES DE CLASSIFICAÇÃO -->
+                            <div class="flex flex-col gap-2 min-w-[180px]">
+                                <span class="text-[10px] font-bold uppercase text-gray-500 text-center mb-1">Por que
+                                    você errou?</span>
+                                <form th:action="@{/simulado/erros/classificar/{id}(id=${erro.id})}" method="post"
+                                    class="contents">
+                                    <input type="hidden" name="causa" value="LACUNA_CONTEUDO">
+                                    <button
+                                        class="w-full border-2 border-red-500 bg-red-50 py-2 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition flex items-center justify-center gap-1">
+                                        <i data-lucide="brain" class="w-3 h-3"></i> Não Sabia
+                                    </button>
+                                </form>
+                                <form th:action="@{/simulado/erros/classificar/{id}(id=${erro.id})}" method="post"
+                                    class="contents">
+                                    <input type="hidden" name="causa" value="INTERPRETACAO">
+                                    <button
+                                        class="w-full border-2 border-purple-500 bg-purple-50 py-2 text-xs font-bold uppercase hover:bg-purple-500 hover:text-white transition flex items-center justify-center gap-1">
+                                        <i data-lucide="glasses" class="w-3 h-3"></i> Interpretação
+                                    </button>
+                                </form>
+                                <form th:action="@{/simulado/erros/classificar/{id}(id=${erro.id})}" method="post"
+                                    class="contents">
+                                    <input type="hidden" name="causa" value="DESATENCAO">
+                                    <button
+                                        class="w-full border-2 border-yellow-500 bg-yellow-50 py-2 text-xs font-bold uppercase hover:bg-yellow-500 hover:text-black transition flex items-center justify-center gap-1">
+                                        <i data-lucide="eye-off" class="w-3 h-3"></i> Desatenção
+                                    </button>
+                                </form>
+                                <form th:action="@{/simulado/erros/classificar/{id}(id=${erro.id})}" method="post"
+                                    class="contents">
+                                    <input type="hidden" name="causa" value="CHUTE">
+                                    <button
+                                        class="w-full border-2 border-gray-400 bg-gray-100 py-2 text-xs font-bold uppercase hover:bg-gray-400 hover:text-white transition flex items-center justify-center gap-1">
+                                        <i data-lucide="dice-5" class="w-3 h-3"></i> Chutei
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- EXPLICAÇÃO DO ALGORITMO -->
+            <div class="card-brutal p-6 bg-gray-50">
+                <h3 class="font-black uppercase text-sm mb-3 flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4"></i> Como funciona o algoritmo?
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+                    <div class="border-l-4 border-darcy-yellow pl-3">
+                        <strong>Temperatura (0-100°)</strong>
+                        <p class="text-gray-600">Urgência de revisão. Erros reincidentes aumentam; acertos consecutivos
+                            reduzem.</p>
+                    </div>
+                    <div class="border-l-4 border-blue-500 pl-3">
+                        <strong>Intervalos Ebbinghaus</strong>
+                        <p class="text-gray-600">Revisões espaçadas: 1, 3, 7, 14 e 30 dias. Cada acerto aumenta o
+                            intervalo.</p>
+                    </div>
+                    <div class="border-l-4 border-green-500 pl-3">
+                        <strong>Dominado (5 acertos)</strong>
+                        <p class="text-gray-600">Após 5 acertos consecutivos, o erro é considerado dominado e sai do
+                            protocolo.</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
-</main>
-
-<script>
-    lucide.createIcons();
-    const targetDate = new Date("2025-11-23T00:00:00").getTime();
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-        if (distance < 0) { document.getElementById("countdown").innerText = "HOJE"; return; }
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        document.getElementById("countdown").innerHTML = days + `<span class="text-xl text-black ml-1">D</span>`;
-    }
-    updateCountdown();
-</script>
+    <th:block layout:fragment="page-scripts">
+        <script>
+            lucide.createIcons();
+        </script>
+    </th:block>
 </body>
+
 </html>

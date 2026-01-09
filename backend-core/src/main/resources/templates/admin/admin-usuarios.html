@@ -1,142 +1,111 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}"
+      th:with="bodyClass='bg-gray-100 p-8 font-sans text-black min-h-screen'">
+
 <head>
   <title>Base de Usuários - Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: { 'sans': ['Inter', 'sans-serif'], 'mono': ['JetBrains Mono', 'monospace'] },
-                colors: { 'darcy-yellow': '#fbbf24', 'darcy-red': '#dc2626' }
-            }
-        }
-    }
-  </script>
 </head>
-<body class="bg-gray-100 p-8 font-sans text-black min-h-screen">
 
-<div class="flex justify-between items-end mb-8 border-b-4 border-black pb-4">
-  <div>
-    <h1 class="text-4xl font-black uppercase tracking-tighter italic">Base de Usuários</h1>
-    <p class="text-sm font-mono text-gray-500 font-bold uppercase tracking-widest">Gestão de Acesso e Perfis</p>
+<body>
+<div layout:fragment="content">
+
+  <div class="flex justify-between items-end mb-8 border-b-4 border-black pb-4">
+    <div>
+      <h1 class="text-4xl font-black uppercase tracking-tighter italic">Base de Usuários</h1>
+      <p class="text-sm font-mono text-gray-500 font-bold uppercase tracking-widest">Gestão de Acesso e Perfis</p>
+    </div>
+    <a href="/admin/dashboard" class="bg-black text-white px-6 py-3 font-bold uppercase hover:bg-gray-800 transition border-4 border-transparent hover:border-black flex items-center gap-2">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Painel
+    </a>
   </div>
-  <a href="/admin/dashboard" class="bg-black text-white px-6 py-3 font-bold uppercase hover:bg-gray-800 transition border-4 border-transparent hover:border-black flex items-center gap-2">
-    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Painel
-  </a>
-</div>
 
-<div class="bg-white border-4 border-black p-4 mb-8 shadow-[8px_8px_0px_black] flex gap-4">
-  <div class="flex-1 flex items-center border-2 border-black px-4 bg-gray-50 h-12">
-    <i data-lucide="search" class="w-5 h-5 text-gray-400 mr-3"></i>
-    <input type="text"
-           name="termo"
-           class="w-full bg-transparent p-2 focus:outline-none font-bold uppercase placeholder:text-gray-400 font-mono"
-           placeholder="BUSCAR POR NOME OU MATRÍCULA..."
-           hx-post="/admin/usuarios/buscar"
-           hx-trigger="keyup changed delay:500ms"
-           hx-target="#tabela-corpo"
-           hx-indicator="#loading">
+  <div class="bg-white border-4 border-black p-4 mb-8 shadow-[8px_8px_0px_black] flex gap-4">
+    <div class="flex-1 flex items-center border-2 border-black px-4 bg-gray-50 h-12">
+      <i data-lucide="search" class="w-5 h-5 text-gray-400 mr-3"></i>
+      <input type="text"
+             name="termo"
+             class="w-full bg-transparent p-2 focus:outline-none font-bold uppercase placeholder:text-gray-400 font-mono"
+             placeholder="BUSCAR POR NOME OU MATRÍCULA..."
+             hx-post="/admin/usuarios/buscar"
+             hx-trigger="keyup changed delay:500ms"
+             hx-target="#tabela-corpo"
+             hx-indicator="#loading">
+    </div>
+    <div id="loading" class="htmx-indicator flex items-center gap-2 font-mono text-xs font-bold text-gray-500">
+      <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> BUSCANDO...
+    </div>
   </div>
-  <div id="loading" class="htmx-indicator flex items-center gap-2 font-mono text-xs font-bold text-gray-500">
-    <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> BUSCANDO...
-  </div>
-</div>
 
-<div class="bg-white border-4 border-black overflow-hidden shadow-[8px_8px_0px_black]">
-  <table class="w-full text-left border-collapse">
-    <thead class="bg-black text-white font-mono text-sm">
-    <tr>
-      <th class="p-4 border-r-2 border-gray-700">MATRÍCULA</th>
-      <th class="p-4 border-r-2 border-gray-700">NOME / EMAIL</th>
-      <th class="p-4 border-r-2 border-gray-700 text-center">STATUS</th>
-      <th class="p-4 border-r-2 border-gray-700">PERFIL</th>
-      <th class="p-4 text-center">AÇÕES</th>
-    </tr>
-    </thead>
+  <div class="bg-white border-4 border-black overflow-hidden shadow-[8px_8px_0px_black]">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-black text-white font-mono text-sm">
+      <tr>
+        <th class="p-4 border-r-2 border-gray-700">MATRÍCULA</th>
+        <th class="p-4 border-r-2 border-gray-700">NOME / EMAIL</th>
+        <th class="p-4 border-r-2 border-gray-700 text-center">STATUS</th>
+        <th class="p-4 border-r-2 border-gray-700">PERFIL</th>
+        <th class="p-4 text-center">AÇÕES</th>
+      </tr>
+      </thead>
 
-    <tbody id="tabela-corpo" th:fragment="lista-tabela">
+      <tbody id="tabela-corpo" th:fragment="lista-tabela">
+      <tr th:each="u : ${usuarios}" th:fragment="linha-usuario" class="border-b-2 border-black hover:bg-yellow-50 transition group">
+        <td class="p-4 border-r-2 border-black font-mono font-bold text-sm" th:text="${u.matricula}">19000</td>
 
-    <tr th:each="u : ${usuarios}" th:fragment="linha-usuario" class="border-b-2 border-black hover:bg-yellow-50 transition group">
-
-      <td class="p-4 border-r-2 border-black font-mono font-bold text-sm" th:text="${u.matricula}">19000</td>
-
-      <td class="p-4 border-r-2 border-black">
-        <div class="font-black text-sm uppercase" th:text="${u.nome}">NOME ALUNO</div>
-        <div class="text-[10px] font-mono text-gray-500" th:text="${u.email}">email@aluno.com</div>
-
-        <div class="mt-1 flex items-center gap-1" th:if="${u.ultimoLogin != null}">
-          <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-          <span class="text-[9px] font-bold text-gray-400 uppercase">
+        <td class="p-4 border-r-2 border-black">
+          <div class="font-black text-sm uppercase" th:text="${u.nome}">NOME ALUNO</div>
+          <div class="text-[10px] font-mono text-gray-500" th:text="${u.email}">email@aluno.com</div>
+          <div class="mt-1 flex items-center gap-1" th:if="${u.ultimoLogin != null}">
+            <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+            <span class="text-[9px] font-bold text-gray-400 uppercase">
                                 Acesso: <span th:text="${#temporals.format(u.ultimoLogin, 'dd/MM HH:mm')}"></span>
                             </span>
-        </div>
-        <div class="mt-1 text-[9px] font-bold text-red-400 uppercase" th:if="${u.ultimoLogin == null}">
-          Nunca Acessou
-        </div>
-      </td>
+          </div>
+          <div class="mt-1 text-[9px] font-bold text-red-400 uppercase" th:if="${u.ultimoLogin == null}">
+            Nunca Acessou
+          </div>
+        </td>
 
-      <td class="p-4 border-r-2 border-black text-center align-middle">
-                        <span th:if="${u.ativo == true or u.ativo == null}"
-                              class="bg-green-100 text-green-800 border-2 border-green-800 px-2 py-1 text-[10px] font-black uppercase tracking-wider">
-                            ATIVO
-                        </span>
-        <span th:if="${u.ativo == false}"
-              class="bg-red-600 text-white border-2 border-black px-2 py-1 text-[10px] font-black uppercase tracking-wider animate-pulse shadow-[2px_2px_0px_black]">
-                            BANIDO
-                        </span>
-      </td>
+        <td class="p-4 border-r-2 border-black text-center align-middle">
+          <span th:if="${u.ativo == true or u.ativo == null}" class="bg-green-100 text-green-800 border-2 border-green-800 px-2 py-1 text-[10px] font-black uppercase tracking-wider">ATIVO</span>
+          <span th:if="${u.ativo == false}" class="bg-red-600 text-white border-2 border-black px-2 py-1 text-[10px] font-black uppercase tracking-wider animate-pulse shadow-sm">BANIDO</span>
+        </td>
 
-      <td class="p-4 border-r-2 border-black align-middle">
-        <form th:attr="hx-post=@{/admin/usuarios/{id}/mudar-perfil(id=${u.id})}"
-              hx-target="closest tr"
-              hx-swap="outerHTML">
+        <td class="p-4 border-r-2 border-black align-middle">
+          <form th:attr="hx-post=@{/admin/usuarios/{id}/mudar-perfil(id=${u.id})}" hx-target="closest tr" hx-swap="outerHTML">
+            <select name="novoPerfil" onchange="this.form.requestSubmit()" class="border-2 border-black bg-white text-xs font-bold p-2 cursor-pointer hover:bg-black hover:text-white transition w-full uppercase outline-none focus:ring-0">
+              <option value="ESTUDANTE" th:selected="${u.perfil == 'ESTUDANTE'}">Estudante</option>
+              <option value="ADMIN" th:selected="${u.perfil == 'ADMIN'}">Administrador</option>
+              <option value="MONITOR" th:selected="${u.perfil == 'MONITOR'}">Monitor</option>
+            </select>
+          </form>
+        </td>
 
-          <select name="novoPerfil" onchange="this.form.requestSubmit()"
-                  class="border-2 border-black bg-white text-xs font-bold p-2 cursor-pointer hover:bg-black hover:text-white transition w-full uppercase outline-none focus:ring-0">
-            <option value="ESTUDANTE" th:selected="${u.perfil == 'ESTUDANTE'}">Estudante</option>
-            <option value="ADMIN" th:selected="${u.perfil == 'ADMIN'}">Administrador</option>
-            <option value="MONITOR" th:selected="${u.perfil == 'MONITOR'}">Monitor</option>
-          </select>
-        </form>
-      </td>
+        <td class="p-4 flex justify-center items-center gap-3">
+          <button class="w-10 h-10 flex items-center justify-center border-2 border-black transition shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+                  th:classappend="${u.ativo == false} ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-white hover:bg-red-100 text-red-600'"
+                  th:attr="hx-post=@{/admin/usuarios/{id}/toggle-ban(id=${u.id})}"
+                  hx-target="closest tr" hx-swap="outerHTML">
+            <i th:if="${u.ativo == false}" data-lucide="unlock" class="w-5 h-5"></i>
+            <i th:if="${u.ativo == true or u.ativo == null}" data-lucide="ban" class="w-5 h-5"></i>
+          </button>
 
-      <td class="p-4 flex justify-center items-center gap-3">
-
-        <button class="w-10 h-10 flex items-center justify-center border-2 border-black transition shadow-[2px_2px_0px_black] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-                th:classappend="${u.ativo == false} ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-white hover:bg-red-100 text-red-600'"
-                th:attr="hx-post=@{/admin/usuarios/{id}/toggle-ban(id=${u.id})}"
-                hx-target="closest tr"
-                hx-swap="outerHTML"
-                th:title="${u.ativo == false} ? 'Desbloquear Aluno' : 'Banir Aluno'">
-          <i th:if="${u.ativo == false}" data-lucide="unlock" class="w-5 h-5"></i>
-          <i th:if="${u.ativo == true or u.ativo == null}" data-lucide="ban" class="w-5 h-5"></i>
-        </button>
-
-        <div id="area-senha" class="relative">
-          <button class="w-10 h-10 bg-darcy-yellow text-black flex items-center justify-center border-2 border-black transition shadow-[2px_2px_0px_black] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none hover:bg-yellow-300"
+          <button class="w-10 h-10 bg-darcy-yellow text-black flex items-center justify-center border-2 border-black transition shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none hover:bg-yellow-300"
                   th:attr="hx-post=@{/admin/usuarios/{id}/reset-senha(id=${u.id})}"
-                  hx-swap="outerHTML"
-                  title="Resetar Senha para '123456'">
+                  hx-swap="outerHTML" title="Resetar Senha">
             <i data-lucide="key-round" class="w-5 h-5"></i>
           </button>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-  <div th:if="${#lists.isEmpty(usuarios)}" class="p-8 text-center bg-yellow-50 font-mono text-xs text-gray-500">
-    NENHUM USUÁRIO ENCONTRADO NA BASE DE DADOS.
+    <div th:if="${#lists.isEmpty(usuarios)}" class="p-8 text-center bg-yellow-50 font-mono text-xs text-gray-500">
+      NENHUM USUÁRIO ENCONTRADO NA BASE DE DADOS.
+    </div>
   </div>
 </div>
-
-<script>
-  lucide.createIcons();
-</script>
 </body>
 </html>

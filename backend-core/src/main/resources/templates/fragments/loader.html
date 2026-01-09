@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- PROGRESS BAR LOADER (subtle, top of screen) -->
+<div th:fragment="global-loader" id="global-loader">
+  <style>
+    #progress-bar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      z-index: 99999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    #progress-bar-container.active {
+      opacity: 1;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+      background-size: 200% 100%;
+      animation: shimmer 1s linear infinite;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.7), 0 0 5px rgba(251, 191, 36, 0.5);
+      transition: width 0.2s ease-out;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+  </style>
+
+  <div id="progress-bar-container">
+    <div id="progress-bar"></div>
+  </div>
+</div>
+
+<!-- HTMX small indicator (for partial loads) -->
+<div th:fragment="htmx-loader" id="htmx-loader"
+  class="htmx-indicator fixed top-4 right-4 z-50 bg-black text-white px-3 py-1 font-mono text-xs font-bold uppercase shadow-hard-sm animate-pulse flex items-center gap-2">
+  <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+  Processando...
+</div>
+
 </html>

@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head-content">
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/x-icon" th:href="@{/img/onda.ico?v=2}">
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/onda.ico?v=2}">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'sans': ['Inter', 'sans-serif'],
+                    'serif': ['Merriweather', 'serif'],
+                    'mono': ['JetBrains Mono', 'monospace']
+                },
+                colors: {
+                    'darcy-yellow': '#fbbf24',
+                    'darcy-red': '#dc2626',
+                    'darcy-purple': '#7e22ce',
+                    'paper': '#fdfbf7'
+                },
+                boxShadow: {
+                    'hard': '6px 6px 0px 0px black',
+                    'hard-sm': '3px 3px 0px 0px black',
+                }
+            }
+        }
+    }
+  </script>
+
+  <style>
+    .htmx-indicator { display: none; opacity: 0; transition: opacity 200ms ease-in;}
+    .htmx-request .htmx-indicator { display: flex; opacity: 1; }
+    .htmx-request.htmx-indicator { display: flex; opacity: 1; }
+
+    .btn-action { transition: all 0.1s; cursor: pointer; }
+    .btn-action:active { transform: translate(2px, 2px); box-shadow: none; }
+  </style>
 </head>
-<body>
-$END$
-</body>
 </html>

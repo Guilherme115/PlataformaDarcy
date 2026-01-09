@@ -1,128 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}"
+      th:with="bodyClass='min-h-screen text-black font-serif p-8 flex flex-col items-center bg-[#f3f4f6]'">
+
 <head>
     <title>Gerador Oficial IA - Darcy</title>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { 'serif': ['Times New Roman', 'serif'], 'mono': ['Courier New', 'monospace'] },
-                    boxShadow: { 'brutal': '6px 6px 0px 0px rgba(0,0,0,1)' }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { background-color: #f3f4f6; background-image: radial-gradient(#d1d5db 1px, transparent 1px); background-size: 20px 20px; }
-
-        /* Animação de Loading */
-        .htmx-indicator { display: none; }
-        .htmx-request .htmx-indicator { display: flex; }
-        .htmx-request.btn-gerar { opacity: 0.5; pointer-events: none; }
-    </style>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .htmx-request .btn-gerar { opacity: 0.5; pointer-events: none; }
+        </style>
+    </th:block>
 </head>
-<body class="min-h-screen text-black font-serif p-8 flex flex-col items-center">
 
-<header class="w-full max-w-4xl mb-12 flex justify-between items-end border-b-4 border-black pb-4 bg-white p-6 shadow-brutal">
-    <div>
-        <div class="bg-black text-white px-2 py-1 text-[10px] font-mono font-bold inline-block mb-2 uppercase">Admin Zone</div>
-        <h1 class="text-4xl font-black italic tracking-tighter uppercase">
-            Fábrica de Provas <span class="text-yellow-500">A.I.</span>
-        </h1>
-        <p class="font-mono text-xs text-gray-500 mt-2">
-            Geração procedural baseada na Matriz de Referência UnB.
-        </p>
-    </div>
-    <a href="/cms" class="text-xs font-bold uppercase hover:underline flex items-center gap-2">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao CMS
-    </a>
-</header>
+<body>
+<div layout:fragment="content" class="w-full max-w-4xl flex flex-col items-center">
 
-<main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
-
-    <div class="flex flex-col gap-6">
-
-        <div class="bg-white border-2 border-black p-6 shadow-brutal hover:translate-x-1 transition group relative overflow-hidden">
-            <div class="absolute -right-4 -top-4 bg-gray-100 text-gray-200 text-9xl font-black select-none z-0 rotate-12">1</div>
-            <div class="relative z-10">
-                <h2 class="text-2xl font-black uppercase mb-1">Etapa 1</h2>
-                <p class="text-xs font-mono text-gray-500 mb-4">Foco: Obras Visuais, Cultura Antiga, Ciências Base.</p>
-
-                <button hx-post="/admin/gerador/criar/1"
-                        hx-target="#console-log"
-                        hx-swap="afterbegin"
-                        hx-indicator="#loading-overlay"
-                        class="btn-gerar w-full bg-black text-white font-bold uppercase py-3 px-4 hover:bg-yellow-400 hover:text-black border-2 border-transparent hover:border-black transition flex items-center justify-center gap-2">
-                    <i data-lucide="zap" class="w-4 h-4"></i> Gerar Simulado PAS 1
-                </button>
-            </div>
+    <header class="w-full mb-12 flex justify-between items-end border-b-4 border-black pb-4 bg-white p-6 shadow-hard">
+        <div>
+            <div class="bg-black text-white px-2 py-1 text-[10px] font-mono font-bold inline-block mb-2 uppercase">Admin Zone</div>
+            <h1 class="text-4xl font-black italic tracking-tighter uppercase">
+                Fábrica de Provas <span class="text-yellow-500">A.I.</span>
+            </h1>
+            <p class="font-mono text-xs text-gray-500 mt-2">
+                Geração procedural baseada na Matriz de Referência UnB.
+            </p>
         </div>
+        <a href="/cms" class="text-xs font-bold uppercase hover:underline flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao CMS
+        </a>
+    </header>
 
-        <div class="bg-white border-2 border-black p-6 shadow-brutal hover:translate-x-1 transition group relative overflow-hidden">
-            <div class="absolute -right-4 -top-4 bg-gray-100 text-gray-200 text-9xl font-black select-none z-0 rotate-12">2</div>
-            <div class="relative z-10">
-                <h2 class="text-2xl font-black uppercase mb-1">Etapa 2</h2>
-                <p class="text-xs font-mono text-gray-500 mb-4">Foco: Século XIX, Ondulatória, Termodinâmica.</p>
+    <main class="w-full grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                <button hx-post="/admin/gerador/criar/2"
-                        hx-target="#console-log"
-                        hx-swap="afterbegin"
-                        hx-indicator="#loading-overlay"
-                        class="btn-gerar w-full bg-black text-white font-bold uppercase py-3 px-4 hover:bg-yellow-400 hover:text-black border-2 border-transparent hover:border-black transition flex items-center justify-center gap-2">
-                    <i data-lucide="zap" class="w-4 h-4"></i> Gerar Simulado PAS 2
-                </button>
-            </div>
-        </div>
+        <div class="flex flex-col gap-6">
+            <div class="bg-white border-2 border-black p-6 shadow-hard hover:translate-x-1 transition group relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 bg-gray-100 text-gray-200 text-9xl font-black select-none z-0 rotate-12">1</div>
+                <div class="relative z-10">
+                    <h2 class="text-2xl font-black uppercase mb-1">Etapa 1</h2>
+                    <p class="text-xs font-mono text-gray-500 mb-4">Foco: Obras Visuais, Cultura Antiga, Ciências Base.</p>
 
-        <div class="bg-white border-2 border-black p-6 shadow-brutal hover:translate-x-1 transition group relative overflow-hidden">
-            <div class="absolute -right-4 -top-4 bg-gray-100 text-gray-200 text-9xl font-black select-none z-0 rotate-12">3</div>
-            <div class="relative z-10">
-                <h2 class="text-2xl font-black uppercase mb-1">Etapa 3</h2>
-                <p class="text-xs font-mono text-gray-500 mb-4">Foco: Contemporâneo, Física Moderna, Genética.</p>
-
-                <button hx-post="/admin/gerador/criar/3"
-                        hx-target="#console-log"
-                        hx-swap="afterbegin"
-                        hx-indicator="#loading-overlay"
-                        class="btn-gerar w-full bg-black text-white font-bold uppercase py-3 px-4 hover:bg-yellow-400 hover:text-black border-2 border-transparent hover:border-black transition flex items-center justify-center gap-2">
-                    <i data-lucide="zap" class="w-4 h-4"></i> Gerar Simulado PAS 3
-                </button>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="flex flex-col h-full">
-        <div class="bg-black text-white px-4 py-2 text-xs font-mono font-bold uppercase flex justify-between items-center border-2 border-black">
-            <span>Console de Operações</span>
-            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-        </div>
-
-        <div class="flex-1 bg-gray-50 border-x-2 border-b-2 border-black p-4 overflow-y-auto relative h-[500px]">
-
-            <div id="loading-overlay" class="htmx-indicator absolute inset-0 bg-white/80 z-20 flex flex-col items-center justify-center backdrop-blur-sm">
-                <div class="w-12 h-12 border-4 border-black border-t-yellow-400 rounded-full animate-spin mb-4"></div>
-                <p class="font-mono text-sm font-bold uppercase animate-pulse">A.I. trabalhando...</p>
-                <p class="font-mono text-[10px] text-gray-500">Criando questões inéditas</p>
-            </div>
-
-            <div id="console-log" class="flex flex-col gap-2">
-                <div class="text-gray-400 font-mono text-xs text-center mt-10">
-                    Aguardando comando...<br>
-                    Selecione uma etapa para iniciar.
+                    <button hx-post="/admin/gerador/criar/1"
+                            hx-target="#console-log"
+                            hx-swap="afterbegin"
+                            hx-indicator="#loading-overlay"
+                            class="btn-gerar w-full bg-black text-white font-bold uppercase py-3 px-4 hover:bg-yellow-400 hover:text-black border-2 border-transparent hover:border-black transition flex items-center justify-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4"></i> Gerar Simulado PAS 1
+                    </button>
                 </div>
             </div>
 
         </div>
-    </div>
 
-</main>
+        <div class="flex flex-col h-full">
+            <div class="bg-black text-white px-4 py-2 text-xs font-mono font-bold uppercase flex justify-between items-center border-2 border-black">
+                <span>Console de Operações</span>
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            </div>
 
-<script>
-    lucide.createIcons();
-</script>
+            <div class="flex-1 bg-gray-50 border-x-2 border-b-2 border-black p-4 overflow-y-auto relative h-[500px]">
+                <div id="loading-overlay" class="htmx-indicator absolute inset-0 bg-white/80 z-20 flex flex-col items-center justify-center backdrop-blur-sm">
+                    <div class="w-12 h-12 border-4 border-black border-t-yellow-400 rounded-full animate-spin mb-4"></div>
+                    <p class="font-mono text-sm font-bold uppercase animate-pulse">A.I. trabalhando...</p>
+                    <p class="font-mono text-[10px] text-gray-500">Criando questões inéditas</p>
+                </div>
+
+                <div id="console-log" class="flex flex-col gap-2">
+                    <div class="text-gray-400 font-mono text-xs text-center mt-10">
+                        Aguardando comando...<br>
+                        Selecione uma etapa para iniciar.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
 </body>
 </html>

@@ -1,177 +1,153 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}"
+      th:with="bodyClass='h-screen flex flex-col overflow-hidden text-gray-900 bg-[#f3f4f6]'">
+
 <head>
   <title>Sala de Estudos Darcy</title>
-  <meta charset="UTF-8">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
-  <style>
-    body { background-color: #f3f4f6; font-family: 'Merriweather', serif; }
-    /* Estilo da barra de rolagem */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #e5e7eb; }
-    ::-webkit-scrollbar-thumb { background: #000; }
-
-    .cursor-blink { animation: blink 1s infinite; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-    /* Markdown simples */
-    .prose strong { color: #b45309; font-weight: 900; } /* Amarelo/Laranja escuro */
-    .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; }
-  </style>
+  <th:block layout:fragment="head-extras">
+    <style>
+      /* Fonte específica desta página */
+      body { font-family: 'Merriweather', serif; }
+      /* Estilo da barra de rolagem */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #e5e7eb; }
+      ::-webkit-scrollbar-thumb { background: #000; }
+      /* Markdown simples */
+      .prose strong { color: #b45309; font-weight: 900; }
+      .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; }
+    </style>
+  </th:block>
 </head>
-<body class="h-screen flex flex-col overflow-hidden text-gray-900">
 
-<header class="bg-black text-white p-4 border-b-4 border-yellow-400 flex justify-between items-center shrink-0 shadow-lg z-10">
-  <div class="flex items-center gap-3">
-    <div class="w-10 h-10 bg-yellow-400 border-2 border-white flex items-center justify-center text-black font-black text-xl shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)]">D.</div>
-    <div>
-      <h1 class="text-lg font-black uppercase tracking-widest">Tutor Darcy</h1>
-      <p class="text-[10px] font-sans text-gray-400 uppercase tracking-wider">IA Integrada ao Acervo PAS</p>
+<body>
+<div layout:fragment="content" class="flex flex-col h-full w-full">
+  <header class="bg-black text-white p-4 border-b-4 border-yellow-400 flex justify-between items-center shrink-0 shadow-lg z-10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-yellow-400 border-2 border-white flex items-center justify-center text-black font-black text-xl shadow-sm">D.</div>
+      <div>
+        <h1 class="text-lg font-black uppercase tracking-widest">Tutor Darcy</h1>
+        <p class="text-[10px] font-sans text-gray-400 uppercase tracking-wider">IA Integrada ao Acervo PAS</p>
+      </div>
     </div>
-  </div>
-  <a href="/" class="text-xs font-sans font-bold uppercase hover:text-yellow-400 transition">Sair</a>
-</header>
+    <a href="/" class="text-xs font-sans font-bold uppercase hover:text-yellow-400 transition">Sair</a>
+  </header>
 
-<main id="chat-box" class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-100 scroll-smooth pb-32">
-
-  <div class="flex gap-4 max-w-3xl">
-    <div class="w-8 h-8 bg-black text-white rounded-none flex items-center justify-center font-bold text-xs shrink-0 mt-1">IA</div>
-    <div class="bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-      <p class="text-sm leading-relaxed">
-        Olá! Sou o Darcy. Tenho acesso a todas as obras e conteúdos do PAS.
-        <br><br>
-        <strong>Pergunte sobre:</strong> Músicas, textos, pinturas ou matérias específicas. Como posso ajudar?
-      </p>
+  <main id="chat-box" class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-100 scroll-smooth pb-32">
+    <div class="flex gap-4 max-w-3xl">
+      <div class="w-8 h-8 bg-black text-white rounded-none flex items-center justify-center font-bold text-xs shrink-0 mt-1">IA</div>
+      <div class="bg-white border-2 border-black p-4 shadow-sm">
+        <p class="text-sm leading-relaxed">
+          Olá! Sou o Darcy. Tenho acesso a todas as obras e conteúdos do PAS.
+          <br><br>
+          <strong>Pergunte sobre:</strong> Músicas, textos, pinturas ou matérias específicas. Como posso ajudar?
+        </p>
+      </div>
     </div>
-  </div>
+  </main>
 
-</main>
-
-<footer class="bg-white border-t-2 border-black p-4 shrink-0">
-  <div class="max-w-3xl mx-auto relative">
-    <form id="chat-form" class="flex gap-2">
-      <input type="text" id="user-input" name="mensagem"
-             class="w-full bg-gray-50 border-2 border-black p-4 font-sans text-sm outline-none focus:bg-yellow-50 transition placeholder-gray-500 shadow-inner"
-             placeholder="Digite sua dúvida aqui..." autocomplete="off" required>
-
-      <button type="submit" id="btn-send"
-              class="bg-black text-white px-6 font-bold uppercase text-xs tracking-widest hover:bg-yellow-400 hover:text-black border-2 border-black transition shadow-[4px_4px_0px_0px_#000] active:translate-y-1 active:shadow-none">
-        Enviar
-      </button>
-    </form>
-    <div id="loading-indicator" class="hidden absolute -top-8 left-0 text-xs font-sans font-bold uppercase animate-pulse text-gray-500">
-      Darcy está consultando o acervo...
+  <footer class="bg-white border-t-2 border-black p-4 shrink-0">
+    <div class="max-w-3xl mx-auto relative">
+      <form id="chat-form" class="flex gap-2">
+        <input type="text" id="user-input" name="mensagem"
+               class="w-full bg-gray-50 border-2 border-black p-4 font-sans text-sm outline-none focus:bg-yellow-50 transition placeholder-gray-500 shadow-inner"
+               placeholder="Digite sua dúvida aqui..." autocomplete="off" required>
+        <button type="submit" id="btn-send"
+                class="bg-black text-white px-6 font-bold uppercase text-xs tracking-widest hover:bg-yellow-400 hover:text-black border-2 border-black transition shadow-hard active:translate-y-1 active:shadow-none">
+          Enviar
+        </button>
+      </form>
+      <div id="loading-indicator" class="hidden absolute -top-8 left-0 text-xs font-sans font-bold uppercase animate-pulse text-gray-500">
+        Darcy está consultando o acervo...
+      </div>
     </div>
-  </div>
-</footer>
+  </footer>
+</div>
 
-<script>
-  const chatBox = document.getElementById('chat-box');
-  const chatForm = document.getElementById('chat-form');
-  const userInput = document.getElementById('user-input');
-  const btnSend = document.getElementById('btn-send');
-  const loading = document.getElementById('loading-indicator');
+<th:block layout:fragment="page-scripts">
+  <script>
+    const chatBox = document.getElementById('chat-box');
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const btnSend = document.getElementById('btn-send');
+    const loading = document.getElementById('loading-indicator');
 
-  // EFEITO DE DIGITAÇÃO (LETRA POR LETRA)
-  function typeWriter(element, text, speed = 15) {
-      let i = 0;
-      // Processa markdown simples antes de digitar?
-      // Para o efeito funcionar bem com HTML, precisamos digitar o TEXTO, não as tags.
-      // Simplificação: Vamos converter quebras de linha primeiro.
+    function typeWriter(element, text, speed = 15) {
+        let i = 0;
+        element.innerHTML = "";
+        function type() {
+            if (i < text.length) {
+                if (text.charAt(i) === '\n') { element.innerHTML += '<br>'; }
+                else { element.innerHTML += text.charAt(i); }
+                i++;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                setTimeout(type, speed);
+            } else {
+                element.innerHTML = parseMarkdown(element.innerHTML);
+            }
+        }
+        type();
+    }
 
-      // Truque: Renderiza instantaneamente mas esconde, e vai revelando?
-      // Ou digita texto puro? Vamos de texto puro com suporte básico a HTML no final.
+    function parseMarkdown(text) {
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                   .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                   .replace(/- (.*?)(<br>|$)/g, '• $1$2');
+    }
 
-      element.innerHTML = ""; // Limpa
+    function appendMessage(text, isUser) {
+        const div = document.createElement('div');
+        div.className = isUser ? "flex gap-4 max-w-3xl self-end flex-row-reverse" : "flex gap-4 max-w-3xl";
 
-      function type() {
-          if (i < text.length) {
-              // Se encontrar quebra de linha
-              if (text.charAt(i) === '\n') {
-                  element.innerHTML += '<br>';
-              } else {
-                  element.innerHTML += text.charAt(i);
-              }
-              i++;
-              chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
-              setTimeout(type, speed);
-          } else {
-              // Ao terminar, aplica formatação Markdown simples
-              element.innerHTML = parseMarkdown(element.innerHTML);
-          }
-      }
-      type();
-  }
+        const avatar = document.createElement('div');
+        avatar.className = isUser
+            ? "w-8 h-8 bg-yellow-400 border-2 border-black flex items-center justify-center font-bold text-xs shrink-0 mt-1"
+            : "w-8 h-8 bg-black text-white flex items-center justify-center font-bold text-xs shrink-0 mt-1";
+        avatar.innerText = isUser ? "VC" : "IA";
 
-  function parseMarkdown(text) {
-      return text
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negrito
-          .replace(/\*(.*?)\*/g, '<em>$1</em>') // Itálico
-          .replace(/- (.*?)(<br>|$)/g, '• $1$2'); // Listas simples
-  }
+        const bubble = document.createElement('div');
+        bubble.className = isUser
+            ? "bg-yellow-50 border-2 border-black p-4 shadow-hard text-right"
+            : "bg-white border-2 border-black p-4 shadow-sm prose text-sm leading-relaxed";
 
-  function appendMessage(text, isUser) {
-      const div = document.createElement('div');
-      div.className = isUser ? "flex gap-4 max-w-3xl self-end flex-row-reverse" : "flex gap-4 max-w-3xl";
+        div.appendChild(avatar);
+        div.appendChild(bubble);
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return bubble;
+    }
 
-      const avatar = document.createElement('div');
-      avatar.className = isUser
-          ? "w-8 h-8 bg-yellow-400 border-2 border-black flex items-center justify-center font-bold text-xs shrink-0 mt-1"
-          : "w-8 h-8 bg-black text-white flex items-center justify-center font-bold text-xs shrink-0 mt-1";
-      avatar.innerText = isUser ? "VC" : "IA";
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = userInput.value.trim();
+        if (!msg) return;
 
-      const bubble = document.createElement('div');
-      bubble.className = isUser
-          ? "bg-yellow-50 border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-right"
-          : "bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] prose text-sm leading-relaxed";
+        appendMessage(msg, true).innerText = msg;
+        userInput.value = '';
+        userInput.disabled = true;
+        btnSend.disabled = true;
+        loading.classList.remove('hidden');
 
-      div.appendChild(avatar);
-      div.appendChild(bubble);
-      chatBox.appendChild(div);
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      return bubble; // Retorna o balão para digitar dentro dele
-  }
-
-  chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const msg = userInput.value.trim();
-      if (!msg) return;
-
-      // 1. Mostra msg do usuário
-      appendMessage(msg, true).innerText = msg;
-      userInput.value = '';
-      userInput.disabled = true;
-      btnSend.disabled = true;
-      loading.classList.remove('hidden');
-
-      try {
-          // 2. Chama o Backend
-          const response = await fetch('/tutor/perguntar', {
-              method: 'POST',
-              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-              body: 'mensagem=' + encodeURIComponent(msg)
-          });
-
-          const text = await response.text();
-
-          // 3. Cria balão da IA e inicia efeito de digitação
-          const iaBubble = appendMessage("", false);
-          typeWriter(iaBubble, text);
-
-      } catch (error) {
-          appendMessage("Erro de conexão. Tente novamente.", false);
-      } finally {
-          loading.classList.add('hidden');
-          userInput.disabled = false;
-          btnSend.disabled = false;
-          userInput.focus();
-      }
-  });
-
-  lucide.createIcons();
-</script>
+        try {
+            const response = await fetch('/tutor/perguntar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'mensagem=' + encodeURIComponent(msg)
+            });
+            const text = await response.text();
+            const iaBubble = appendMessage("", false);
+            typeWriter(iaBubble, text);
+        } catch (error) {
+            appendMessage("Erro de conexão. Tente novamente.", false);
+        } finally {
+            loading.classList.add('hidden');
+            userInput.disabled = false;
+            btnSend.disabled = false;
+            userInput.focus();
+        }
+    });
+  </script>
+</th:block>
 </body>
 </html>

@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="script-content">
+  <script>
+    // Inicia os ícones na primeira carga
+    lucide.createIcons();
+
+    // Reinicia ícones sempre que o HTMX troca um pedaço da tela
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        lucide.createIcons();
+    });
+
+    // Função global para fechar modais
+    function fecharModal() {
+        document.getElementById('modal-container').innerHTML = '';
+    }
+  </script>
+</div>
+
 </html>

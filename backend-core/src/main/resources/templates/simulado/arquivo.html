@@ -9,12 +9,18 @@
 
     <th:block layout:fragment="head-extras">
         <style>
-            /* Estilo específico da aba ativa no menu de arquivos */
             .tab-active {
                 background-color: #a7f3d0;
                 border-color: black;
                 box-shadow: 4px 4px 0px 0px black;
                 transform: translate(-2px, -2px);
+            }
+
+            /* Estilo dos Radios de Idioma */
+            .lang-radio:checked + span {
+                background-color: black;
+                color: white;
+                border-color: black;
             }
         </style>
     </th:block>
@@ -34,27 +40,18 @@
     <main class="max-w-7xl mx-auto w-full">
 
         <div class="grid grid-cols-4 gap-4 mb-12 font-mono">
-            <a href="/simulado/arquivo?etapa=1"
-               class="border-2 border-black p-4 text-center cursor-pointer hover:bg-white transition flex flex-col items-center justify-center group"
-               th:classappend="${etapaAtiva == 1} ? 'tab-active bg-green-200' : 'bg-gray-100 opacity-60 hover:opacity-100'">
+            <a href="/simulado/arquivo?etapa=1" class="border-2 border-black p-4 text-center cursor-pointer hover:bg-white transition flex flex-col items-center justify-center group" th:classappend="${etapaAtiva == 1} ? 'tab-active bg-green-200' : 'bg-gray-100 opacity-60 hover:opacity-100'">
                 <span class="text-[9px] font-bold uppercase mb-1">ARQUIVO</span>
                 <span class="text-3xl font-serif font-black italic">PAS 1</span>
             </a>
-
-            <a href="/simulado/arquivo?etapa=2"
-               class="border-2 border-black p-4 text-center cursor-pointer hover:bg-white transition flex flex-col items-center justify-center group"
-               th:classappend="${etapaAtiva == 2} ? 'tab-active bg-green-200' : 'bg-gray-100 opacity-60 hover:opacity-100'">
+            <a href="/simulado/arquivo?etapa=2" class="border-2 border-black p-4 text-center cursor-pointer hover:bg-white transition flex flex-col items-center justify-center group" th:classappend="${etapaAtiva == 2} ? 'tab-active bg-green-200' : 'bg-gray-100 opacity-60 hover:opacity-100'">
                 <span class="text-[9px] font-bold uppercase mb-1">ARQUIVO</span>
                 <span class="text-3xl font-serif font-black italic">PAS 2</span>
             </a>
-
-            <a href="/simulado/arquivo?etapa=3"
-               class="border-2 border-black p-4 text-center cursor-pointer hover:bg-white transition flex flex-col items-center justify-center group"
-               th:classappend="${etapaAtiva == 3} ? 'tab-active bg-green-200' : 'bg-gray-100 opacity-60 hover:opacity-100'">
+            <a href="/simulado/arquivo?etapa=3" class="border-2 border-black p-4 text-center cursor-pointer hover:bg-white transition flex flex-col items-center justify-center group" th:classappend="${etapaAtiva == 3} ? 'tab-active bg-green-200' : 'bg-gray-100 opacity-60 hover:opacity-100'">
                 <span class="text-[9px] font-bold uppercase mb-1">ARQUIVO</span>
                 <span class="text-3xl font-serif font-black italic">PAS 3</span>
             </a>
-
             <div class="border-2 border-black p-4 text-center opacity-40 bg-gray-200 cursor-not-allowed flex flex-col items-center justify-center">
                 <span class="text-[9px] font-bold uppercase mb-1">ARQUIVO</span>
                 <span class="text-3xl font-serif font-black italic">VEST</span>
@@ -64,19 +61,40 @@
         <div class="mb-8 border-b border-black pb-4 flex justify-between items-end">
             <div>
                 <h2 class="text-3xl font-black italic mb-1">GAVETA: <span th:text="${etapaAtiva == 1 ? 'PRIMEIRA' : (etapaAtiva == 2 ? 'SEGUNDA' : 'TERCEIRA')}">PRIMEIRA</span> ETAPA</h2>
-                <p class="font-mono text-xs text-gray-600">Acervo completo digitalizado.</p>
+                <p class="font-mono text-xs text-gray-600">Selecione o idioma estrangeiro antes de iniciar.</p>
             </div>
         </div>
 
         <div class="grid grid-cols-3 gap-6">
-            <div th:each="p : ${provas}" class="bg-white border-2 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative group hover:-translate-y-1 transition-all">
-                <span class="absolute top-4 right-4 bg-green-600 text-white text-[9px] font-bold px-2 py-1 uppercase">Disponível</span>
-                <h3 class="text-5xl font-black mb-1" th:text="${p.ano}">2023</h3>
-                <p class="font-mono text-[9px] text-gray-500 uppercase tracking-widest mb-6">Prova Completa</p>
+            <div th:each="p : ${provas}" class="bg-white border-2 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative group hover:-translate-y-1 transition-all flex flex-col justify-between">
+                <div>
+                    <span class="absolute top-4 right-4 bg-green-600 text-white text-[9px] font-bold px-2 py-1 uppercase">Disponível</span>
+                    <h3 class="text-5xl font-black mb-1" th:text="${p.ano}">2023</h3>
+                    <p class="font-mono text-[9px] text-gray-500 uppercase tracking-widest mb-6">Prova Completa Oficial</p>
+                </div>
 
-                <form th:action="@{/simulado/gerar-prova-completa/{id}(id=${p.id})}" method="post" class="w-full">
+                <form th:action="@{/simulado/gerar-prova-completa/{id}(id=${p.id})}" method="post" class="w-full mt-auto">
+
+                    <div class="mb-4">
+                        <p class="text-[10px] font-bold uppercase mb-2">Língua Estrangeira:</p>
+                        <div class="flex gap-2">
+                            <label class="cursor-pointer flex-1">
+                                <input type="radio" name="idioma" value="INGLES" class="hidden lang-radio" checked>
+                                <span class="block border border-black text-center text-[10px] font-bold py-1 transition hover:bg-gray-100">ING</span>
+                            </label>
+                            <label class="cursor-pointer flex-1">
+                                <input type="radio" name="idioma" value="ESPANHOL" class="hidden lang-radio">
+                                <span class="block border border-black text-center text-[10px] font-bold py-1 transition hover:bg-gray-100">ESP</span>
+                            </label>
+                            <label class="cursor-pointer flex-1">
+                                <input type="radio" name="idioma" value="FRANCES" class="hidden lang-radio">
+                                <span class="block border border-black text-center text-[10px] font-bold py-1 transition hover:bg-gray-100">FRA</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <button type="submit" class="w-full bg-black text-white py-3 text-xs font-bold uppercase border-2 border-black hover:bg-gray-800 flex items-center justify-center gap-2 transition">
-                        <i data-lucide="play" class="w-3 h-3 fill-current"></i> INICIAR
+                        <i data-lucide="play" class="w-3 h-3 fill-current"></i> INICIAR PROVA
                     </button>
                 </form>
             </div>
@@ -84,7 +102,6 @@
             <div th:if="${provas.isEmpty()}" class="col-span-3 text-center py-20 opacity-50 border-2 border-dashed border-black">
                 <i data-lucide="ghost" class="w-12 h-12 mx-auto mb-4"></i>
                 <p class="font-mono text-sm font-bold">Nenhuma prova encontrada nesta etapa.</p>
-                <p class="text-xs">Rode o importador Python para popular o banco.</p>
             </div>
         </div>
 

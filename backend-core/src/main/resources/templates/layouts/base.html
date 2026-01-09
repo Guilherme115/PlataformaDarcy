@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title layout:title-pattern="$CONTENT_TITLE - Plataforma Darcy">Darcy</title>
 
-    <meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"/>
-    <meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title layout:title-pattern="$CONTENT_TITLE - Plataforma Darcy">Plataforma Darcy</title>
 
+    <link rel="icon" type="image/x-icon" th:href="@{/img/onda.ico?v=2}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/onda.ico?v=2}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&family=Merriweather:ital,wght@0,300;0,900;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap"
+        rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -21,18 +23,18 @@
                 extend: {
                     fontFamily: {
                         'sans': ['Inter', 'sans-serif'],
-                        'mono': ['JetBrains Mono', 'monospace'],
-                        'serif': ['Merriweather', 'serif']
+                        'serif': ['Merriweather', 'serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
                     },
                     colors: {
                         'darcy-yellow': '#fbbf24',
                         'darcy-red': '#dc2626',
                         'darcy-purple': '#7e22ce',
-                        'darcy-black': '#111'
+                        'paper': '#fdfbf7'
                     },
                     boxShadow: {
                         'hard': '6px 6px 0px 0px black',
-                        'hard-sm': '3px 3px 0px 0px black'
+                        'hard-sm': '3px 3px 0px 0px black',
                     }
                 }
             }
@@ -40,49 +42,119 @@
     </script>
 
     <style>
-        body {
-            background-color: #e5e5e5;
-            /* Padrão de pontilhados (Dot Grid) */
-            background-image: radial-gradient(#a3a3a3 1px, transparent 1px);
-            background-size: 20px 20px;
+        .htmx-indicator {
+            display: none;
+            opacity: 0;
+            transition: opacity 200ms ease-in;
         }
-        /* Estilos HTMX */
-        .htmx-indicator { display: none; }
-        .htmx-request .htmx-indicator { display: flex; }
 
-        /* Utilitários Brutalistas */
+        .htmx-request .htmx-indicator {
+            display: flex;
+            opacity: 1;
+        }
+
+        .htmx-request.htmx-indicator {
+            display: flex;
+            opacity: 1;
+        }
+
         .btn-action {
-            border: 2px solid black; font-weight: 800; text-transform: uppercase;
-            font-size: 0.65rem; padding: 4px 12px; transition: all 0.1s;
-            background: white; color: black; cursor: pointer;
+            transition: all 0.1s;
+            cursor: pointer;
         }
-        .btn-action:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0px black; }
-        .btn-action:active { transform: translate(0, 0); box-shadow: 0 0 0 black; }
+
+        .btn-action:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
     </style>
+
+    <th:block layout:fragment="head-extras"></th:block>
+
 </head>
-<body class="flex flex-col min-h-screen text-black overflow-x-hidden">
 
-<div th:replace="~{layout/loader :: global-loader}"></div>
+<body th:class="${bodyClass != null ? bodyClass : 'bg-[#e5e5e5] text-black font-sans flex flex-col min-h-screen'}"
+    style="background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px;">
 
-<div layout:fragment="content" class="flex-1 w-full"></div>
+    <div th:replace="~{fragments/loader :: global-loader}"></div>
 
-<div id="modal-container" class="relative z-[100]"></div>
+    <main layout:fragment="content" class="flex-1 w-full h-full"></main>
 
-<script>
-    lucide.createIcons();
-    // Recarrega ícones após trocas do HTMX
-    document.body.addEventListener('htmx:afterSwap', () => lucide.createIcons());
+    <script>
+        lucide.createIcons();
+        document.body.addEventListener('htmx:afterSwap', function (evt) {
+            lucide.createIcons();
+        });
 
-    // Configura CSRF para chamadas AJAX do HTMX
-    document.body.addEventListener('htmx:configRequest', (event) => {
-        const csrfHeader = document.querySelector('meta[name="_csrf_header"]');
-        const csrfToken = document.querySelector('meta[name="_csrf"]');
-        if (csrfHeader && csrfToken) {
-            event.detail.headers[csrfHeader.getAttribute('content')] = csrfToken.getAttribute('content');
+        // ========== PROGRESS BAR LOADER ==========
+        const progressContainer = document.getElementById('progress-bar-container');
+        const progressBar = document.getElementById('progress-bar');
+        let progressTimeout = null;
+        let progressInterval = null;
+        let currentProgress = 0;
+
+        function startProgress() {
+            // Only show after 150ms delay (fast loads won't trigger it)
+            progressTimeout = setTimeout(() => {
+                currentProgress = 0;
+                progressBar.style.width = '0%';
+                progressContainer.classList.add('active');
+
+                // Animate progress (slow down as it approaches 90%)
+                progressInterval = setInterval(() => {
+                    if (currentProgress < 90) {
+                        currentProgress += (90 - currentProgress) * 0.1;
+                        progressBar.style.width = currentProgress + '%';
+                    }
+                }, 100);
+            }, 150);
         }
-    });
 
-    function fecharModal() { document.getElementById('modal-container').innerHTML = ''; }
-</script>
+        function finishProgress() {
+            clearTimeout(progressTimeout);
+            clearInterval(progressInterval);
+
+            if (progressContainer.classList.contains('active')) {
+                progressBar.style.width = '100%';
+                setTimeout(() => {
+                    progressContainer.classList.remove('active');
+                    progressBar.style.width = '0%';
+                    currentProgress = 0;
+                }, 200);
+            }
+        }
+
+        // Show progress on link click (except HTMX and external links)
+        document.addEventListener('click', function (e) {
+            const link = e.target.closest('a');
+            if (link &&
+                link.href &&
+                !link.href.startsWith('javascript:') &&
+                !link.href.startsWith('#') &&
+                !link.hasAttribute('hx-get') &&
+                !link.hasAttribute('hx-post') &&
+                !link.hasAttribute('data-no-loader') &&
+                link.target !== '_blank' &&
+                link.hostname === window.location.hostname) {
+
+                startProgress();
+            }
+        });
+
+        // Show progress on form submit
+        document.addEventListener('submit', function (e) {
+            const form = e.target;
+            if (!form.hasAttribute('hx-post') && !form.hasAttribute('hx-get') && !form.hasAttribute('data-no-loader')) {
+                startProgress();
+            }
+        });
+
+        // Finish progress when page loads
+        window.addEventListener('pageshow', finishProgress);
+        window.addEventListener('load', finishProgress);
+    </script>
+
+    <th:block layout:fragment="page-scripts"></th:block>
 </body>
+
 </html>
