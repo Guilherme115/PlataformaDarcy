@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5] p-4 md:p-8'">
+
+<head>
+    <title>Checkout - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-checkout {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .qr-container {
+                background: white;
+                border: 4px solid black;
+                padding: 16px;
+            }
+
+            .copy-btn {
+                background: black;
+                color: white;
+                border: 2px solid black;
+                transition: all 0.15s;
+            }
+
+            .copy-btn:hover {
+                background: #facc15;
+                color: black;
+            }
+
+            .timer {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 2rem;
+                font-weight: 900;
+            }
+
+            .status-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                animation: pulse 1.5s infinite;
+            }
+
+            @keyframes pulse {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.5;
+                }
+            }
+
+            .btn-simular {
+                background: #22c55e;
+                color: white;
+                border: 3px solid #166534;
+                box-shadow: 4px 4px 0px 0px #166534;
+            }
+
+            .btn-simular:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px #166534;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="max-w-2xl mx-auto w-full">
+
+        <!-- HEADER -->
+        <div class="mb-8 text-center">
+            <div
+                class="w-20 h-20 bg-darcy-yellow border-4 border-black flex items-center justify-center shadow-hard mx-auto mb-4">
+                <span class="font-serif font-black text-5xl text-black italic">D.</span>
+            </div>
+            <h1 class="text-4xl font-black italic tracking-tighter">CHECKOUT</h1>
+            <p class="font-mono text-sm text-gray-600 mt-2">Pague via Pix para ativar seu plano PRO</p>
+        </div>
+
+        <!-- CARD CHECKOUT -->
+        <div class="card-checkout p-8 mb-6">
+
+            <!-- Resumo -->
+            <div class="flex justify-between items-center border-b-2 border-black pb-4 mb-6">
+                <div>
+                    <div class="font-black text-xl">Plano PRO</div>
+                    <div class="font-mono text-xs text-gray-600">12 meses de acesso</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-black">R$ <span
+                            th:text="${#numbers.formatDecimal(cobranca.valor, 1, 2)}">19,90</span></div>
+                </div>
+            </div>
+
+            <!-- QR Code -->
+            <div class="text-center mb-6">
+                <p class="font-mono text-xs text-gray-500 mb-4 uppercase">Escaneie o QR Code com seu app do banco</p>
+                <div class="qr-container inline-block">
+                    <img th:src="${cobranca.qrcode}" alt="QR Code Pix" class="w-64 h-64">
+                </div>
+            </div>
+
+            <!-- Copia e Cola -->
+            <div class="mb-6">
+                <label class="font-mono text-xs text-gray-500 uppercase block mb-2">Ou copie o código Pix</label>
+                <div class="flex gap-2">
+                    <input type="text" id="pix-code" th:value="${cobranca.copiaECola}"
+                        class="flex-1 bg-gray-100 border-2 border-black px-4 py-3 font-mono text-xs truncate" readonly>
+                    <button onclick="copyPix()" class="copy-btn px-4 py-3 font-bold text-sm uppercase">
+                        <i data-lucide="copy" class="w-4 h-4 inline"></i> Copiar
+                    </button>
+                </div>
+                <div id="copy-feedback" class="hidden font-mono text-xs text-green-600 mt-2">
+                    ✓ Código copiado!
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div class="bg-gray-100 border-2 border-gray-300 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div id="status-dot" class="status-dot bg-yellow-500"></div>
+                    <div>
+                        <div class="font-bold text-sm">Aguardando pagamento</div>
+                        <div class="font-mono text-[10px] text-gray-500">ID: <span
+                                th:text="${cobranca.txid}">txid</span></div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="font-mono text-[10px] text-gray-500 uppercase">Expira em</div>
+                    <div id="timer" class="timer text-red-600">30:00</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTÃO SIMULAR (apenas para testes) -->
+        <form th:action="@{/planos/simular/{txid}(txid=${cobranca.txid})}" method="post" class="text-center mb-6">
+            <button type="submit" class="btn-simular px-8 py-4 font-black uppercase">
+                ✓ Simular Pagamento (Teste)
+            </button>
+            <p class="font-mono text-[10px] text-gray-500 mt-2">
+                Este botão será removido em produção
+            </p>
+        </form>
+
+        <!-- VOLTAR -->
+        <div class="text-center">
+            <a href="/planos" class="font-mono text-xs font-bold uppercase hover:underline">
+                ← Escolher outro plano
+            </a>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            // Timer de expiração
+            let tempoRestante = 30 * 60; // 30 minutos
+            const timerEl = document.getElementById('timer');
+
+            function atualizarTimer() {
+                const min = Math.floor(tempoRestante / 60);
+                const seg = tempoRestante % 60;
+                timerEl.textContent = `${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
+
+                if (tempoRestante <= 0) {
+                    timerEl.textContent = 'EXPIRADO';
+                    timerEl.classList.add('text-gray-400');
+                } else {
+                    tempoRestante--;
+                    setTimeout(atualizarTimer, 1000);
+                }
+            }
+            atualizarTimer();
+
+            // Copiar Pix
+            function copyPix() {
+                const input = document.getElementById('pix-code');
+                input.select();
+                document.execCommand('copy');
+                document.getElementById('copy-feedback').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('copy-feedback').classList.add('hidden');
+                }, 3000);
+            }
+
+            // Polling de status
+            const txid = '[[${cobranca.txid}]]';
+            function checkStatus() {
+                fetch(`/planos/status/${txid}`)
+                    .then(r => r.text())
+                    .then(status => {
+                        if (status === 'CONCLUIDA') {
+                            window.location.href = '/planos/sucesso';
+                        } else {
+                            setTimeout(checkStatus, 3000);
+                        }
+                    });
+            }
+            checkStatus();
+
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>

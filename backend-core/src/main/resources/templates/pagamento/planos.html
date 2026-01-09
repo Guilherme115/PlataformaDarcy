@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5] p-4 md:p-8'">
+
+<head>
+    <title>Planos - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-plan {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+                transition: all 0.2s;
+            }
+
+            .card-plan:hover {
+                transform: translate(-4px, -4px);
+                box-shadow: 10px 10px 0px 0px black;
+            }
+
+            .card-pro {
+                border-color: #facc15;
+                box-shadow: 6px 6px 0px 0px #facc15;
+            }
+
+            .card-pro:hover {
+                box-shadow: 10px 10px 0px 0px #facc15;
+            }
+
+            .btn-assinar {
+                background: black;
+                color: white;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.3);
+                transition: all 0.15s;
+            }
+
+            .btn-assinar:hover {
+                background: #facc15;
+                color: black;
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.3);
+            }
+
+            .badge-promo {
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.8;
+                }
+            }
+
+            .feature-check {
+                color: #22c55e;
+            }
+
+            .feature-x {
+                color: #ef4444;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="max-w-5xl mx-auto w-full">
+
+        <!-- HEADER -->
+        <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <div class="flex items-end gap-4">
+                <div
+                    class="w-16 h-16 bg-darcy-yellow border-4 border-black flex items-center justify-center shadow-hard shrink-0">
+                    <span class="font-serif font-black text-4xl text-black italic">D.</span>
+                </div>
+                <div>
+                    <div
+                        class="bg-black text-white px-2 py-0.5 text-[10px] font-mono font-bold inline-block mb-1 uppercase tracking-wide">
+                        Escolha seu Plano
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black italic tracking-tighter leading-[0.9]">PLANOS.</h1>
+                </div>
+            </div>
+            <a href="/" class="font-mono text-xs font-bold uppercase hover:underline flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+            </a>
+        </div>
+
+        <!-- STATUS ATUAL -->
+        <div th:if="${planoInfo.isPro}" class="mb-8 bg-green-100 border-2 border-green-600 p-4 flex items-center gap-4">
+            <i data-lucide="crown" class="w-8 h-8 text-green-600"></i>
+            <div>
+                <div class="font-black text-green-700">Você é PRO!</div>
+                <div class="font-mono text-xs text-green-600">
+                    Expira em <span th:text="${planoInfo.diasRestantes}">0</span> dias
+                </div>
+            </div>
+        </div>
+
+        <!-- CARDS DE PLANOS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+
+            <!-- PLANO FREE -->
+            <div class="card-plan p-8">
+                <div class="text-[10px] font-mono uppercase text-gray-500 mb-2">Plano Básico</div>
+                <h2 class="text-4xl font-black italic mb-2">FREE</h2>
+                <div class="text-5xl font-black mb-6">R$0<span class="text-lg">/mês</span></div>
+
+                <ul class="space-y-3 mb-8 font-mono text-sm">
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
+                        Simulados ilimitados
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
+                        Caderno de Erros
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
+                        Protocolo de Expurgo
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
+                        Wiki colaborativa
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-400">
+                        <i data-lucide="x" class="w-5 h-5 feature-x"></i>
+                        <span class="line-through">Tutor IA Darcy</span>
+                    </li>
+                </ul>
+
+                <div class="text-center font-mono text-sm text-gray-500 border-t-2 border-gray-200 pt-4">
+                    Seu plano atual
+                </div>
+            </div>
+
+            <!-- PLANO PRO -->
+            <div class="card-plan card-pro p-8 relative">
+                <!-- Badge Promo -->
+                <div
+                    class="absolute -top-4 -right-4 bg-red-600 text-white px-4 py-2 font-black text-sm uppercase border-2 border-black shadow-hard badge-promo rotate-3">
+                    -66% OFF
+                </div>
+
+                <div class="text-[10px] font-mono uppercase text-darcy-yellow mb-2 font-bold">Recomendado</div>
+                <h2 class="text-4xl font-black italic mb-2">PRO</h2>
+
+                <div class="flex items-baseline gap-2 mb-2">
+                    <span class="text-2xl text-gray-400 line-through">R$<span
+                            th:text="${#numbers.formatDecimal(precoNormal, 1, 2)}">59</span></span>
+                    <span class="text-5xl font-black">R$<span
+                            th:text="${#numbers.formatDecimal(precoPromo, 1, 2)}">19,90</span></span>
+                    <span class="text-lg">/mês</span>
+                </div>
+                <div class="font-mono text-xs text-gray-600 mb-6">por 12 meses</div>
+
+                <ul class="space-y-3 mb-8 font-mono text-sm">
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
+                        <strong>Tudo do FREE +</strong>
+                    </li>
+                    <li class="flex items-center gap-2 font-bold">
+                        <i data-lucide="bot" class="w-5 h-5 text-darcy-yellow"></i>
+                        Tutor IA Darcy
+                    </li>
+                    <li class="flex items-center gap-2 pl-7 text-gray-600">
+                        • Análise de erros personalizada
+                    </li>
+                    <li class="flex items-center gap-2 pl-7 text-gray-600">
+                        • Desempenho por matéria
+                    </li>
+                    <li class="flex items-center gap-2 pl-7 text-gray-600">
+                        • Explicações de obras do PAS
+                    </li>
+                    <li class="flex items-center gap-2 pl-7 text-gray-600">
+                        • Chat ilimitado com IA
+                    </li>
+                </ul>
+
+                <form th:action="@{/planos/assinar}" method="post">
+                    <button type="submit" class="btn-assinar w-full py-4 font-black text-lg uppercase">
+                        <i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>
+                        Assinar PRO
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- FAQ -->
+        <div class="bg-white border-2 border-black p-6 shadow-hard-sm">
+            <h3 class="font-black uppercase text-lg mb-4 flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-5 h-5"></i>
+                Perguntas Frequentes
+            </h3>
+            <div class="space-y-4 font-mono text-sm">
+                <div>
+                    <div class="font-bold">Como funciona o pagamento?</div>
+                    <div class="text-gray-600">Pagamento único via Pix. Você recebe acesso imediato após confirmação.
+                    </div>
+                </div>
+                <div>
+                    <div class="font-bold">Posso cancelar?</div>
+                    <div class="text-gray-600">O plano é válido por 12 meses. Não há renovação automática.</div>
+                </div>
+                <div>
+                    <div class="font-bold">E se eu já tiver o plano FREE?</div>
+                    <div class="text-gray-600">Você mantém tudo que já tem e ganha acesso ao Tutor IA.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5] p-4 md:p-8'">
+
+<head>
+    <title>Bem-vindo ao PRO! - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-sucesso {
+                background: white;
+                border: 4px solid #22c55e;
+                box-shadow: 8px 8px 0px 0px #22c55e;
+            }
+
+            .confetti {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                overflow: hidden;
+                z-index: -1;
+            }
+
+            .confetti-piece {
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                animation: fall 3s linear forwards;
+            }
+
+            @keyframes fall {
+                0% {
+                    transform: translateY(-10vh) rotate(0deg);
+                    opacity: 1;
+                }
+
+                100% {
+                    transform: translateY(110vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+
+            .btn-start {
+                background: #facc15;
+                color: black;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+                transition: all 0.15s;
+            }
+
+            .btn-start:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px black;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content"
+        class="max-w-xl mx-auto w-full flex flex-col items-center justify-center min-h-[80vh]">
+
+        <!-- Confetti -->
+        <div id="confetti" class="confetti"></div>
+
+        <!-- CARD SUCESSO -->
+        <div class="card-sucesso p-10 text-center">
+
+            <!-- Check Icon -->
+            <div
+                class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-black">
+                <i data-lucide="check" class="w-12 h-12 text-white"></i>
+            </div>
+
+            <h1 class="text-4xl font-black italic tracking-tighter mb-2">BEM-VINDO AO PRO!</h1>
+            <p class="font-mono text-gray-600 mb-6">Seu pagamento foi confirmado com sucesso</p>
+
+            <!-- Info do Plano -->
+            <div class="bg-green-50 border-2 border-green-200 p-4 mb-8 text-left">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="font-black text-green-700">Plano PRO Ativo</div>
+                        <div class="font-mono text-xs text-green-600" th:if="${planoInfo.diasRestantes > 0}">
+                            Válido por <span th:text="${planoInfo.diasRestantes}">365</span> dias
+                        </div>
+                    </div>
+                    <i data-lucide="crown" class="w-8 h-8 text-green-600"></i>
+                </div>
+            </div>
+
+            <!-- O que você ganhou -->
+            <div class="text-left mb-8">
+                <div class="font-black uppercase text-sm mb-3">O que você desbloqueou:</div>
+                <ul class="space-y-2 font-mono text-sm">
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="bot" class="w-5 h-5 text-darcy-yellow"></i>
+                        <strong>Tutor IA Darcy</strong>
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-600">
+                        <i data-lucide="target" class="w-5 h-5 text-gray-400"></i>
+                        Análise personalizada de erros
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-600">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-gray-400"></i>
+                        Desempenho detalhado por matéria
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-600">
+                        <i data-lucide="book-open" class="w-5 h-5 text-gray-400"></i>
+                        Explicações de todas as obras
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Botão -->
+            <a href="/tutor" class="btn-start inline-block px-8 py-4 font-black uppercase text-lg">
+                <i data-lucide="message-square" class="w-5 h-5 inline mr-2"></i>
+                Falar com Darcy
+            </a>
+
+        </div>
+
+        <!-- Voltar -->
+        <a href="/" class="mt-6 font-mono text-xs font-bold uppercase hover:underline">
+            ← Ir para o Dashboard
+        </a>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            // Confetti animation
+            const colors = ['#facc15', '#22c55e', '#3b82f6', '#ef4444', '#8b5cf6'];
+            const confettiContainer = document.getElementById('confetti');
+
+            for (let i = 0; i < 50; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDelay = Math.random() * 2 + 's';
+                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confettiContainer.appendChild(piece);
+            }
+
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>
