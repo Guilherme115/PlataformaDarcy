@@ -49,3 +49,13 @@ python src/processor.py
 - `SecurityConfig.java`: Auth rules.
 - `SubscriptionService.java`: Logic for PRO plans.
 - `SimuladoController.java`: Core logic for exams.
+
+## 🧪 Testing Strategy
+- **Backend (Spring Boot)**:
+  - Framework: **JUnit 5** + **Mockito**.
+  - Integration: `SpringBootTest` with H2 database.
+  - Locations: `src/test/java/...`
+- **Intelligence Engine (Python)**:
+  - Framework: **pytest**.
+  - Locations: `tests/`
+
