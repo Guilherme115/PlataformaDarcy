@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='bg-gray-100 min-h-screen text-black'">
+
+<head>
+    <title th:text="${editando ? 'Editar Post' : 'Criar Publicação'} + ' - Wiki'">Editor - Wiki</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            #editor-content {
+                min-height: 400px;
+                outline: none;
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+
+            #editor-content:focus {
+                background: #fffef0;
+            }
+
+            #editor-content p {
+                margin-bottom: 1rem;
+            }
+
+            #editor-content h2 {
+                font-size: 1.5rem;
+                font-weight: 800;
+                margin: 2rem 0 1rem;
+            }
+
+            #editor-content ul,
+            #editor-content ol {
+                padding-left: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            #editor-content img {
+                max-width: 100%;
+                border: 2px solid black;
+                margin: 1rem 0;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="max-w-4xl mx-auto px-6 py-8">
+            <!-- HEADER -->
+            <div class="flex justify-between items-center mb-8 border-b-4 border-black pb-4">
+                <div>
+                    <a href="/wiki" class="text-gray-500 hover:text-black text-sm font-mono mb-2 inline-block">← Voltar
+                        ao Acervo</a>
+                    <h1 class="text-3xl font-black uppercase"
+                        th:text="${editando ? 'Editar Publicação' : 'Nova Publicação'}">Nova Publicação</h1>
+                </div>
+                <a href="/wiki/meus-posts" class="text-sm font-mono text-gray-500 hover:text-black">Meus Posts</a>
+            </div>
+
+            <form th:action="@{/wiki/salvar}" method="post" class="space-y-6">
+                <input type="hidden" name="id" th:value="${post.id}">
+
+                <!-- TÍTULO -->
+                <div>
+                    <input type="text" name="titulo" th:value="${post.titulo}" required
+                        placeholder="Título da sua publicação..."
+                        class="w-full text-4xl font-black uppercase border-b-4 border-black pb-4 bg-transparent outline-none placeholder:text-gray-300 focus:border-darcy-yellow">
+                </div>
+
+                <!-- METADADOS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white border-4 border-black p-4">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase mb-1">Disciplina</label>
+                        <select name="disciplina" required
+                            class="w-full border-2 border-black p-2 font-bold uppercase text-sm bg-white">
+                            <option value="">Selecione...</option>
+                            <option value="HISTORIA" th:selected="${post.disciplina == 'HISTORIA'}">História</option>
+                            <option value="LITERATURA" th:selected="${post.disciplina == 'LITERATURA'}">Literatura
+                            </option>
+                            <option value="BIOLOGIA" th:selected="${post.disciplina == 'BIOLOGIA'}">Biologia</option>
+                            <option value="FISICA" th:selected="${post.disciplina == 'FISICA'}">Física</option>
+                            <option value="QUIMICA" th:selected="${post.disciplina == 'QUIMICA'}">Química</option>
+                            <option value="MATEMATICA" th:selected="${post.disciplina == 'MATEMATICA'}">Matemática
+                            </option>
+                            <option value="GEOGRAFIA" th:selected="${post.disciplina == 'GEOGRAFIA'}">Geografia</option>
+                            <option value="FILOSOFIA" th:selected="${post.disciplina == 'FILOSOFIA'}">Filosofia</option>
+                            <option value="SOCIOLOGIA" th:selected="${post.disciplina == 'SOCIOLOGIA'}">Sociologia
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase mb-1">Etapa do PAS</label>
+                        <select name="etapa" class="w-full border-2 border-black p-2 font-bold text-sm bg-white">
+                            <option value="">Geral</option>
+                            <option value="1" th:selected="${post.etapa == 1}">PAS 1</option>
+                            <option value="2" th:selected="${post.etapa == 2}">PAS 2</option>
+                            <option value="3" th:selected="${post.etapa == 3}">PAS 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase mb-1">Tipo de Conteúdo</label>
+                        <select name="tipoConteudo" class="w-full border-2 border-black p-2 font-bold text-sm bg-white">
+                            <option th:each="tipo : ${tipos}" th:value="${tipo}"
+                                th:selected="${post.tipoConteudo == tipo}" th:text="${tipo}">ARTIGO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- TÓPICO -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase mb-1">Tópico Específico (opcional)</label>
+                    <input type="text" name="topico" th:value="${post.topico}"
+                        placeholder="Ex: Barroco, Cinemática, Mitose..."
+                        class="w-full border-2 border-black p-3 font-bold uppercase text-sm bg-white">
+                </div>
+
+                <!-- THUMBNAIL -->
+                <div>
+                    <label class="block text-[10px] font-black uppercase mb-1">URL da Imagem de Capa (opcional)</label>
+                    <input type="url" name="thumbnail" th:value="${post.thumbnail}"
+                        placeholder="https://exemplo.com/imagem.jpg"
+                        class="w-full border-2 border-black p-3 font-mono text-sm bg-white">
+                </div>
+
+                <!-- CONTEÚDO -->
+                <div class="bg-white border-4 border-black p-6">
+                    <label class="block text-[10px] font-black uppercase mb-3">Conteúdo</label>
+                    <textarea name="conteudoHtml" id="editor-content"
+                        class="w-full min-h-[400px] resize-none outline-none font-serif"
+                        placeholder="Escreva seu conteúdo aqui... Use HTML básico para formatação."
+                        th:text="${post.conteudoHtml ?: post.conteudo}"></textarea>
+                </div>
+
+                <!-- AÇÕES -->
+                <div class="flex gap-4 justify-end">
+                    <button type="submit" name="rascunho" value="true"
+                        class="px-6 py-3 bg-gray-200 text-black font-black uppercase text-sm border-4 border-black hover:bg-gray-300 transition">
+                        <i data-lucide="save" class="w-4 h-4 inline mr-2"></i> Salvar Rascunho
+                    </button>
+                    <button type="submit" name="rascunho" value="false"
+                        class="px-8 py-3 bg-darcy-yellow text-black font-black uppercase text-sm border-4 border-black hover:bg-black hover:text-darcy-yellow transition shadow-[6px_6px_0px_black]">
+                        <i data-lucide="send" class="w-4 h-4 inline mr-2"></i> Publicar Agora
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>

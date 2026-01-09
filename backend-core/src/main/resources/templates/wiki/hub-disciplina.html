@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='min-h-screen text-black'">
+
+<head>
+    <title th:text="${disciplina} + ' - Acervo Wiki'">Hub Disciplina - Wiki</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            body {
+                background-color: #e5e5e5;
+                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+            }
+
+            .wiki-card {
+                background: #fdfdfd;
+                border: 4px solid black;
+                transition: all 0.2s;
+                overflow: hidden;
+            }
+
+            .wiki-card:hover {
+                transform: translate(-4px, -4px);
+                box-shadow: 8px 8px 0px 0px #facc15;
+            }
+
+            .wiki-card .poster {
+                aspect-ratio: 16/10;
+                background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+                border-bottom: 4px solid black;
+            }
+
+            .badge-tipo {
+                font-size: 9px;
+                padding: 2px 8px;
+                border: 2px solid black;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+
+            .badge-artigo {
+                background: #3b82f6;
+                color: white;
+            }
+
+            .badge-video {
+                background: #dc2626;
+                color: white;
+            }
+
+            .badge-resumo {
+                background: #10b981;
+                color: white;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- HERO BANNER -->
+        <header class="bg-white border-b-4 border-black">
+            <div class="max-w-7xl mx-auto px-6 py-12">
+                <a href="/wiki"
+                    class="text-gray-500 hover:text-black text-sm font-mono mb-4 inline-flex items-center gap-1">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Catálogo
+                </a>
+                <div class="flex items-end justify-between">
+                    <div>
+                        <div class="w-20 h-20 bg-darcy-yellow text-black border-4 border-black flex items-center justify-center font-black text-3xl italic mb-4 shadow-[6px_6px_0px_black]"
+                            th:text="${disciplina?.charAt(0)}">H</div>
+                        <h1 class="text-5xl font-black uppercase tracking-tighter italic" th:text="${disciplina}">
+                            HISTÓRIA</h1>
+                        <p class="text-gray-500 font-mono text-sm mt-2">Explore todo o conteúdo da comunidade sobre este
+                            tema</p>
+                    </div>
+                    <div class="flex gap-4 items-center">
+                        <span
+                            class="text-gray-500 font-mono text-sm flex items-center gap-2 bg-gray-100 px-4 py-2 border-2 border-gray-300">
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                            <span th:text="${#lists.size(todos)} + ' publicações'">0 publicações</span>
+                        </span>
+                        <a href="/wiki/criar"
+                            class="bg-black text-white px-6 py-3 font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0px_#facc15] hover:bg-darcy-yellow hover:text-black transition">
+                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Contribuir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-6 py-10">
+            <!-- FILTER TABS -->
+            <div class="flex gap-4 mb-8 bg-white border-4 border-black p-4">
+                <button
+                    class="bg-darcy-yellow text-black font-bold uppercase text-xs px-4 py-2 border-3 border-black">Todos</button>
+                <a href="/wiki/explorar?tipo=ARTIGO"
+                    class="bg-white text-black font-bold uppercase text-xs px-4 py-2 border-3 border-black hover:bg-blue-100 transition">Artigos</a>
+                <a href="/wiki/explorar?tipo=VIDEO"
+                    class="bg-white text-black font-bold uppercase text-xs px-4 py-2 border-3 border-black hover:bg-red-100 transition">Vídeos</a>
+                <a href="/wiki/explorar?tipo=RESUMO"
+                    class="bg-white text-black font-bold uppercase text-xs px-4 py-2 border-3 border-black hover:bg-green-100 transition">Resumos</a>
+            </div>
+
+            <!-- GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div th:each="post : ${todos}" th:insert="~{wiki/fragments/wiki-card :: card(post=${post})}"></div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(todos)}"
+                class="bg-white border-4 border-dashed border-gray-300 p-16 text-center">
+                <i data-lucide="inbox" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-500">Nenhum conteúdo nesta disciplina</h3>
+                <a href="/wiki/criar"
+                    class="inline-block mt-6 bg-darcy-yellow text-black px-6 py-3 font-black uppercase border-4 border-black shadow-[4px_4px_0px_black]">Seja
+                    o primeiro!</a>
+            </div>
+        </main>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>lucide.createIcons();</script>
+    </th:block>
+</body>
+
+</html>

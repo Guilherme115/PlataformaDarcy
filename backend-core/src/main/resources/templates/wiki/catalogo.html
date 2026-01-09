@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='min-h-screen text-black'">
+
+<head>
+    <title>Acervo Wiki - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            body {
+                background-color: #e5e5e5;
+                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+            }
+
+            .wiki-card {
+                background: #fdfdfd;
+                border: 4px solid black;
+                transition: all 0.2s;
+                overflow: hidden;
+            }
+
+            .wiki-card:hover {
+                transform: translate(-4px, -4px);
+                box-shadow: 8px 8px 0px 0px #facc15;
+            }
+
+            .wiki-card .poster {
+                aspect-ratio: 16/10;
+                background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+                border-bottom: 4px solid black;
+            }
+
+            .carousel-section {
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
+                padding-bottom: 1rem;
+            }
+
+            .carousel-section::-webkit-scrollbar {
+                display: none;
+            }
+
+            .carousel-section>* {
+                scroll-snap-align: start;
+            }
+
+            .badge-tipo {
+                font-size: 9px;
+                padding: 2px 8px;
+                border: 2px solid black;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+
+            .badge-artigo {
+                background: #3b82f6;
+                color: white;
+            }
+
+            .badge-video {
+                background: #dc2626;
+                color: white;
+            }
+
+            .badge-resumo {
+                background: #10b981;
+                color: white;
+            }
+
+            .badge-mapa_mental {
+                background: #8b5cf6;
+                color: white;
+            }
+
+            .badge-podcast {
+                background: #f59e0b;
+                color: black;
+            }
+
+            .section-header {
+                border-bottom: 4px solid black;
+                padding-bottom: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .brutal-btn {
+                background: black;
+                color: white;
+                padding: 0.75rem 1.5rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px #facc15;
+                transition: all 0.2s;
+            }
+
+            .brutal-btn:hover {
+                background: #facc15;
+                color: black;
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .etapa-card {
+                background: white;
+                border: 4px solid black;
+                transition: all 0.2s;
+            }
+
+            .etapa-card:hover {
+                transform: translate(-3px, -3px);
+                box-shadow: 6px 6px 0px 0px black;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- HEADER -->
+        <header class="bg-white border-b-4 border-black">
+            <div class="max-w-7xl mx-auto w-full px-6 py-6 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <a href="/"
+                        class="w-12 h-12 bg-darcy-yellow text-black flex items-center justify-center font-black text-2xl border-3 border-black shadow-[3px_3px_0px_black]">D.</a>
+                    <div>
+                        <div
+                            class="bg-black text-white px-2 py-0.5 text-[9px] font-mono font-bold inline-block mb-1 uppercase">
+                            Comunidade</div>
+                        <h1 class="text-3xl font-black uppercase tracking-tighter italic">Acervo Wiki.</h1>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <form action="/wiki/buscar" method="get" class="flex">
+                        <input type="text" name="q" placeholder="Buscar conteúdo..."
+                            class="bg-white border-4 border-black px-4 py-2 text-sm w-64 outline-none focus:bg-yellow-50 font-medium">
+                        <button
+                            class="bg-black text-white px-4 font-bold border-4 border-black border-l-0 hover:bg-darcy-yellow hover:text-black transition">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                    <a href="/wiki/criar" class="brutal-btn flex items-center gap-2 text-sm">
+                        <i data-lucide="pen-tool" class="w-4 h-4"></i> Contribuir
+                    </a>
+                    <a href="/wiki/favoritos"
+                        class="w-10 h-10 bg-white border-3 border-black flex items-center justify-center hover:bg-darcy-yellow transition"
+                        title="Favoritos">
+                        <i data-lucide="bookmark" class="w-5 h-5"></i>
+                    </a>
+                    <a href="/wiki/meus-posts"
+                        class="w-10 h-10 bg-white border-3 border-black flex items-center justify-center hover:bg-darcy-yellow transition"
+                        title="Meus Posts">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto w-full px-6 py-10">
+
+            <!-- FILTROS RÁPIDOS -->
+            <div class="flex gap-3 mb-10 flex-wrap items-center">
+                <span class="text-xs font-mono font-bold uppercase text-gray-500 mr-2">Filtrar:</span>
+                <a href="/wiki"
+                    class="bg-black text-white px-4 py-2 text-xs font-black uppercase border-3 border-black">Todos</a>
+                <a href="/wiki/explorar?tipo=ARTIGO"
+                    class="bg-white text-black px-4 py-2 text-xs font-bold uppercase border-3 border-black hover:bg-blue-100 hover:border-blue-500 transition">📝
+                    Artigos</a>
+                <a href="/wiki/explorar?tipo=VIDEO"
+                    class="bg-white text-black px-4 py-2 text-xs font-bold uppercase border-3 border-black hover:bg-red-100 hover:border-red-500 transition">🎬
+                    Vídeos</a>
+                <a href="/wiki/explorar?tipo=RESUMO"
+                    class="bg-white text-black px-4 py-2 text-xs font-bold uppercase border-3 border-black hover:bg-green-100 hover:border-green-500 transition">📋
+                    Resumos</a>
+                <div class="flex-1"></div>
+                <div class="flex gap-3 text-xs font-mono font-bold uppercase">
+                    <a href="/wiki/hub/HISTORIA" class="hover:text-darcy-red transition">História</a>
+                    <a href="/wiki/hub/BIOLOGIA" class="hover:text-darcy-red transition">Biologia</a>
+                    <a href="/wiki/hub/LITERATURA" class="hover:text-darcy-red transition">Literatura</a>
+                    <a href="/wiki/hub/FISICA" class="hover:text-darcy-red transition">Física</a>
+                </div>
+            </div>
+
+            <!-- CARROSSEL: POPULARES -->
+            <section class="mb-14">
+                <div class="section-header flex justify-between items-end">
+                    <h2 class="text-2xl font-black uppercase italic flex items-center gap-3">
+                        <span class="w-8 h-8 bg-darcy-yellow border-2 border-black flex items-center justify-center">
+                            <i data-lucide="flame" class="w-5 h-5"></i>
+                        </span>
+                        Populares
+                    </h2>
+                    <a href="/wiki/explorar" class="text-xs font-mono font-bold uppercase hover:text-darcy-red">Ver
+                        todos →</a>
+                </div>
+                <div class="carousel-section flex gap-6">
+                    <div th:each="post : ${populares}" th:insert="~{wiki/fragments/wiki-card :: card(post=${post})}">
+                    </div>
+                    <div th:if="${#lists.isEmpty(populares)}"
+                        class="bg-gray-100 border-4 border-dashed border-gray-300 p-8 w-full text-center">
+                        <p class="text-gray-500 font-bold">Nenhum conteúdo ainda. <a href="/wiki/criar"
+                                class="text-darcy-red underline">Seja o primeiro!</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARROSSEL: RECENTES -->
+            <section class="mb-14">
+                <div class="section-header flex justify-between items-end">
+                    <h2 class="text-2xl font-black uppercase italic flex items-center gap-3">
+                        <span
+                            class="w-8 h-8 bg-blue-400 border-2 border-black flex items-center justify-center text-white">
+                            <i data-lucide="clock" class="w-5 h-5"></i>
+                        </span>
+                        Recém Publicados
+                    </h2>
+                </div>
+                <div class="carousel-section flex gap-6">
+                    <div th:each="post : ${recentes}" th:insert="~{wiki/fragments/wiki-card :: card(post=${post})}">
+                    </div>
+                    <div th:if="${#lists.isEmpty(recentes)}"
+                        class="bg-gray-100 border-4 border-dashed border-gray-300 p-8 w-full text-center">
+                        <p class="text-gray-500 font-bold">Nenhum conteúdo recente.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GRID: POR ETAPA -->
+            <section>
+                <div class="section-header">
+                    <h2 class="text-2xl font-black uppercase italic">Explore por Etapa do PAS</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- PAS 1 -->
+                    <div class="etapa-card p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="w-16 h-16 bg-blue-500 text-white border-4 border-black flex items-center justify-center font-black text-2xl italic shadow-[4px_4px_0px_black]">
+                                1</div>
+                            <span
+                                class="bg-blue-100 text-blue-800 text-[10px] px-2 py-1 font-bold uppercase border-2 border-blue-500">Base</span>
+                        </div>
+                        <h3 class="font-black text-xl uppercase mb-4">PAS 1</h3>
+                        <p class="text-sm text-gray-600 mb-4">Fundamentos e bases do conhecimento.</p>
+                        <ul class="space-y-2 mb-4 border-t-2 border-dashed border-gray-200 pt-4">
+                            <li th:each="post : ${pas1}"
+                                class="flex items-center gap-2 text-sm hover:text-darcy-red transition">
+                                <i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i>
+                                <a th:href="@{/wiki/{id}(id=${post.id})}" th:text="${post.titulo}"
+                                    class="truncate font-medium">Título</a>
+                            </li>
+                        </ul>
+                        <a href="/wiki/explorar?etapa=1"
+                            class="block text-center bg-black text-white py-2 font-bold uppercase text-xs hover:bg-darcy-yellow hover:text-black transition border-2 border-black">Explorar
+                            PAS 1</a>
+                    </div>
+
+                    <!-- PAS 2 -->
+                    <div class="etapa-card p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="w-16 h-16 bg-purple-500 text-white border-4 border-black flex items-center justify-center font-black text-2xl italic shadow-[4px_4px_0px_black]">
+                                2</div>
+                            <span
+                                class="bg-purple-100 text-purple-800 text-[10px] px-2 py-1 font-bold uppercase border-2 border-purple-500">Expansão</span>
+                        </div>
+                        <h3 class="font-black text-xl uppercase mb-4">PAS 2</h3>
+                        <p class="text-sm text-gray-600 mb-4">Aprofundamento e conexões.</p>
+                        <ul class="space-y-2 mb-4 border-t-2 border-dashed border-gray-200 pt-4">
+                            <li th:each="post : ${pas2}"
+                                class="flex items-center gap-2 text-sm hover:text-darcy-red transition">
+                                <i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i>
+                                <a th:href="@{/wiki/{id}(id=${post.id})}" th:text="${post.titulo}"
+                                    class="truncate font-medium">Título</a>
+                            </li>
+                        </ul>
+                        <a href="/wiki/explorar?etapa=2"
+                            class="block text-center bg-black text-white py-2 font-bold uppercase text-xs hover:bg-darcy-yellow hover:text-black transition border-2 border-black">Explorar
+                            PAS 2</a>
+                    </div>
+
+                    <!-- PAS 3 -->
+                    <div class="etapa-card p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="w-16 h-16 bg-red-500 text-white border-4 border-black flex items-center justify-center font-black text-2xl italic shadow-[4px_4px_0px_black]">
+                                3</div>
+                            <span
+                                class="bg-red-100 text-red-800 text-[10px] px-2 py-1 font-bold uppercase border-2 border-red-500">Final</span>
+                        </div>
+                        <h3 class="font-black text-xl uppercase mb-4">PAS 3</h3>
+                        <p class="text-sm text-gray-600 mb-4">Contemporâneo e integração.</p>
+                        <ul class="space-y-2 mb-4 border-t-2 border-dashed border-gray-200 pt-4">
+                            <li th:each="post : ${pas3}"
+                                class="flex items-center gap-2 text-sm hover:text-darcy-red transition">
+                                <i data-lucide="file-text" class="w-4 h-4 text-gray-400"></i>
+                                <a th:href="@{/wiki/{id}(id=${post.id})}" th:text="${post.titulo}"
+                                    class="truncate font-medium">Título</a>
+                            </li>
+                        </ul>
+                        <a href="/wiki/explorar?etapa=3"
+                            class="block text-center bg-black text-white py-2 font-bold uppercase text-xs hover:bg-darcy-yellow hover:text-black transition border-2 border-black">Explorar
+                            PAS 3</a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>

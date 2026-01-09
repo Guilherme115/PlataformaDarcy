@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='bg-gray-100 min-h-screen text-black'">
+
+<head>
+    <title>Meus Posts - Wiki</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="max-w-6xl mx-auto px-6 py-8">
+            <!-- HEADER -->
+            <div class="flex justify-between items-center mb-8 border-b-4 border-black pb-4">
+                <div>
+                    <a href="/wiki" class="text-gray-500 hover:text-black text-sm font-mono mb-2 inline-block">← Voltar
+                        ao Acervo</a>
+                    <h1 class="text-3xl font-black uppercase">Meus Posts</h1>
+                </div>
+                <a href="/wiki/criar"
+                    class="bg-darcy-yellow text-black px-6 py-3 font-black uppercase text-sm border-4 border-black hover:bg-black hover:text-darcy-yellow transition shadow-[6px_6px_0px_black]">
+                    <i data-lucide="plus" class="w-4 h-4 inline mr-2"></i> Criar Novo
+                </a>
+            </div>
+
+            <!-- RASCUNHOS -->
+            <section class="mb-12" th:if="${!#lists.isEmpty(rascunhos)}">
+                <h2 class="text-xl font-black uppercase mb-4 flex items-center gap-2">
+                    <i data-lucide="file-edit" class="w-5 h-5 text-orange-500"></i> Rascunhos
+                </h2>
+                <div class="bg-orange-50 border-4 border-orange-400 p-4">
+                    <table class="w-full">
+                        <thead
+                            class="text-left text-[10px] font-mono uppercase text-gray-500 border-b-2 border-orange-300">
+                            <tr>
+                                <th class="pb-2">Título</th>
+                                <th class="pb-2">Disciplina</th>
+                                <th class="pb-2">Atualizado</th>
+                                <th class="pb-2 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="post : ${rascunhos}" class="border-b border-orange-200">
+                                <td class="py-3 font-bold" th:text="${post.titulo}">Título</td>
+                                <td class="py-3 text-sm" th:text="${post.disciplina}">HISTÓRIA</td>
+                                <td class="py-3 text-sm font-mono text-gray-500"
+                                    th:text="${#temporals.format(post.dataAtualizacao, 'dd/MM/yyyy HH:mm')}">01/01</td>
+                                <td class="py-3 text-right">
+                                    <a th:href="@{/wiki/{id}/editar(id=${post.id})}"
+                                        class="inline-block bg-black text-white px-3 py-1 text-xs font-bold uppercase hover:bg-darcy-yellow hover:text-black transition">Editar</a>
+                                    <form th:action="@{/wiki/{id}/publicar(id=${post.id})}" method="post"
+                                        class="inline">
+                                        <button
+                                            class="bg-green-600 text-white px-3 py-1 text-xs font-bold uppercase hover:bg-green-700 transition">Publicar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PUBLICADOS -->
+            <section>
+                <h2 class="text-xl font-black uppercase mb-4 flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i> Publicados
+                </h2>
+                <div th:if="${!#lists.isEmpty(publicados)}" class="bg-white border-4 border-black">
+                    <table class="w-full">
+                        <thead
+                            class="text-left text-[10px] font-mono uppercase text-gray-500 border-b-2 border-gray-200 bg-gray-50">
+                            <tr>
+                                <th class="p-3">Título</th>
+                                <th class="p-3">Disciplina</th>
+                                <th class="p-3">Tipo</th>
+                                <th class="p-3 text-center">Views</th>
+                                <th class="p-3 text-center">Curtidas</th>
+                                <th class="p-3 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="post : ${publicados}"
+                                class="border-b border-gray-100 hover:bg-yellow-50 transition">
+                                <td class="p-3 font-bold">
+                                    <a th:href="@{/wiki/{id}(id=${post.id})}" th:text="${post.titulo}"
+                                        class="hover:text-darcy-red">Título</a>
+                                </td>
+                                <td class="p-3 text-sm" th:text="${post.disciplina}">HISTÓRIA</td>
+                                <td class="p-3 text-sm">
+                                    <span class="bg-gray-200 px-2 py-0.5 text-[10px] font-bold uppercase"
+                                        th:text="${post.tipoConteudo}">ARTIGO</span>
+                                </td>
+                                <td class="p-3 text-center font-mono text-sm" th:text="${post.visualizacoes}">0</td>
+                                <td class="p-3 text-center font-mono text-sm" th:text="${post.curtidas}">0</td>
+                                <td class="p-3 text-right space-x-2">
+                                    <a th:href="@{/wiki/{id}/editar(id=${post.id})}"
+                                        class="inline-block bg-black text-white px-3 py-1 text-xs font-bold uppercase hover:bg-darcy-yellow hover:text-black transition">Editar</a>
+                                    <form th:action="@{/wiki/{id}/deletar(id=${post.id})}" method="post" class="inline"
+                                        onsubmit="return confirm('Tem certeza que deseja excluir?')">
+                                        <button
+                                            class="bg-red-600 text-white px-3 py-1 text-xs font-bold uppercase hover:bg-red-700 transition">Excluir</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${#lists.isEmpty(publicados)}"
+                    class="bg-gray-50 border-4 border-dashed border-gray-300 p-12 text-center">
+                    <i data-lucide="file-x" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
+                    <p class="text-gray-500 font-bold">Nenhum post publicado ainda</p>
+                    <a href="/wiki/criar"
+                        class="inline-block mt-4 bg-darcy-yellow text-black px-6 py-2 font-black uppercase text-sm border-2 border-black">Criar
+                        Primeiro Post</a>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>lucide.createIcons();</script>
+    </th:block>
+</body>
+
+</html>

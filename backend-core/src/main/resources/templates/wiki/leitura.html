@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='min-h-screen text-black'">
+
+<head>
+    <title th:text="${p.titulo} + ' - Acervo Wiki'">Post - Wiki</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            body {
+                background-color: #e5e5e5;
+                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+            }
+
+            .prose h2 {
+                font-size: 1.5rem;
+                font-weight: 800;
+                margin: 2rem 0 1rem;
+                text-transform: uppercase;
+            }
+
+            .prose p {
+                margin-bottom: 1rem;
+                line-height: 1.8;
+            }
+
+            .prose ul,
+            .prose ol {
+                padding-left: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .prose img {
+                max-width: 100%;
+                border: 4px solid black;
+                margin: 1.5rem 0;
+            }
+
+            .prose blockquote {
+                border-left: 6px solid #facc15;
+                padding-left: 1.5rem;
+                font-style: italic;
+                background: #fffef0;
+                padding: 1rem 1.5rem;
+                margin: 1.5rem 0;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- HEADER BAR -->
+        <div class="bg-white border-b-4 border-black">
+            <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                <a href="/wiki"
+                    class="flex items-center gap-2 text-sm font-bold uppercase hover:text-darcy-red transition">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Acervo
+                </a>
+                <div class="flex gap-2">
+                    <a href="/wiki/favoritos" class="text-gray-500 hover:text-darcy-yellow"><i data-lucide="bookmark"
+                            class="w-5 h-5"></i></a>
+                    <a href="/wiki/criar" class="text-gray-500 hover:text-darcy-yellow"><i data-lucide="plus"
+                            class="w-5 h-5"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-6 py-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+                <!-- MAIN CONTENT -->
+                <article class="lg:col-span-2 bg-white border-4 border-black p-8 shadow-[8px_8px_0px_black]">
+                    <!-- BADGES -->
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span
+                            class="bg-darcy-yellow text-black px-3 py-1 text-[10px] font-black uppercase border-2 border-black"
+                            th:text="${p.disciplina}">HISTÓRIA</span>
+                        <span
+                            class="bg-gray-100 text-gray-700 px-3 py-1 text-[10px] font-bold uppercase border-2 border-gray-300"
+                            th:text="${p.tipoConteudo}">ARTIGO</span>
+                        <span th:if="${p.etapa != null}"
+                            class="bg-black text-white px-3 py-1 text-[10px] font-bold uppercase"
+                            th:text="'PAS ' + ${p.etapa}">PAS 1</span>
+                    </div>
+
+                    <!-- TITLE -->
+                    <h1 class="text-4xl font-black uppercase tracking-tight leading-tight mb-6 border-b-4 border-black pb-6"
+                        th:text="${p.titulo}">Título do Post</h1>
+
+                    <!-- AUTHOR INFO -->
+                    <div class="flex items-center gap-4 mb-8 text-sm">
+                        <div
+                            class="w-10 h-10 bg-darcy-yellow text-black flex items-center justify-center font-black text-lg border-2 border-black">
+                            <span th:text="${p.autor?.nome?.charAt(0) ?: '?'}">A</span>
+                        </div>
+                        <div>
+                            <span class="font-bold" th:text="${p.autor?.nome ?: 'Anônimo'}">Autor</span>
+                            <span class="text-gray-500 font-mono text-xs block"
+                                th:text="${#temporals.format(p.dataCriacao, 'dd/MM/yyyy')}">01/01/2026</span>
+                        </div>
+                        <div class="flex-1"></div>
+                        <div class="flex items-center gap-4 text-gray-500 font-mono text-xs">
+                            <span class="flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4"></i> <span
+                                    th:text="${p.visualizacoes}">0</span></span>
+                            <span class="flex items-center gap-1"><i data-lucide="heart" class="w-4 h-4"></i> <span
+                                    th:text="${p.curtidas}">0</span></span>
+                        </div>
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div class="prose max-w-none">
+                        <div th:if="${p.conteudoHtml != null}" th:utext="${p.conteudoHtml}"></div>
+                        <div th:if="${p.conteudoHtml == null}" th:utext="${p.conteudo}"></div>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="flex gap-4 mt-10 pt-6 border-t-4 border-dashed border-gray-200">
+                        <button th:if="${isFavorito}" hx-post="/wiki/{id}/favoritar"
+                            th:attr="hx-post=@{/wiki/{id}/favoritar(id=${p.id})}" hx-swap="outerHTML"
+                            class="flex items-center gap-2 bg-darcy-yellow text-black px-5 py-3 font-bold border-4 border-black shadow-[4px_4px_0px_black]">
+                            <i data-lucide="bookmark-check" class="w-5 h-5"></i> Salvo
+                        </button>
+                        <button th:unless="${isFavorito}" hx-post="/wiki/{id}/favoritar"
+                            th:attr="hx-post=@{/wiki/{id}/favoritar(id=${p.id})}" hx-swap="outerHTML"
+                            class="flex items-center gap-2 bg-white text-black px-5 py-3 font-bold border-4 border-black hover:bg-darcy-yellow transition shadow-[4px_4px_0px_black]">
+                            <i data-lucide="bookmark" class="w-5 h-5"></i> Salvar
+                        </button>
+
+                        <button hx-post="/wiki/{id}/curtir" th:attr="hx-post=@{/wiki/{id}/curtir(id=${p.id})}"
+                            hx-target="#like-count" hx-swap="innerHTML"
+                            class="flex items-center gap-2 bg-white text-black px-5 py-3 font-bold border-4 border-black hover:bg-red-100 hover:border-red-500 transition">
+                            <i data-lucide="heart" class="w-5 h-5"></i> <span id="like-count"
+                                th:text="${p.curtidas}">0</span>
+                        </button>
+                    </div>
+                </article>
+
+                <!-- SIDEBAR -->
+                <aside class="lg:col-span-1 space-y-6">
+                    <!-- AUTOR INFO -->
+                    <div class="bg-white border-4 border-black p-6">
+                        <h4 class="font-black uppercase text-xs mb-4 text-gray-500 border-b-2 border-dashed pb-2">Sobre
+                            o Autor</h4>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-14 h-14 bg-darcy-yellow text-black flex items-center justify-center font-black text-2xl border-3 border-black">
+                                <span th:text="${p.autor?.nome?.charAt(0) ?: '?'}">A</span>
+                            </div>
+                            <div>
+                                <div class="font-bold text-lg" th:text="${p.autor?.nome ?: 'Anônimo'}">Autor</div>
+                                <div class="text-[10px] font-mono text-gray-500 uppercase">Contribuidor</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RELACIONADOS -->
+                    <div class="bg-white border-4 border-black p-6">
+                        <h4 class="font-black uppercase text-xs mb-4 text-gray-500 border-b-2 border-dashed pb-2">
+                            Relacionados</h4>
+                        <ul class="space-y-4">
+                            <li th:each="rel : ${relacionados}" class="border-b border-gray-100 pb-3">
+                                <a th:href="@{/wiki/{id}(id=${rel.id})}" class="hover:text-darcy-red transition group">
+                                    <span class="block text-sm font-bold line-clamp-2 group-hover:underline"
+                                        th:text="${rel.titulo}">Título</span>
+                                    <span class="text-[10px] text-gray-500 font-mono flex items-center gap-2 mt-1">
+                                        <i data-lucide="eye" class="w-3 h-3"></i> <span
+                                            th:text="${rel.visualizacoes}">0</span>
+                                        <span th:text="${rel.disciplina}">HISTÓRIA</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div th:if="${#lists.isEmpty(relacionados)}" class="text-gray-400 text-sm font-medium">Nenhum
+                            conteúdo relacionado.</div>
+                    </div>
+
+                    <!-- CTA -->
+                    <a href="/wiki/criar"
+                        class="block bg-black text-white p-6 border-4 border-black hover:bg-darcy-yellow hover:text-black transition text-center">
+                        <i data-lucide="pen-tool" class="w-6 h-6 mx-auto mb-2"></i>
+                        <span class="font-black uppercase text-sm">Contribua também!</span>
+                    </a>
+                </aside>
+            </div>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>
