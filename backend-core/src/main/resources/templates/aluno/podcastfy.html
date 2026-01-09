@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5]'">
+
+<head>
+    <title>Podcastfy - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-hub {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            /* Drop Zone */
+            .drop-zone {
+                border: 3px dashed black;
+                background: white;
+                transition: all 0.2s;
+                cursor: pointer;
+            }
+
+            .drop-zone:hover,
+            .drop-zone.drag-over {
+                background: #fffbeb;
+                border-color: #facc15;
+                transform: translate(-2px, -2px);
+                box-shadow: 4px 4px 0px 0px black;
+            }
+
+            .drop-zone.has-file {
+                border-style: solid;
+                background: #ecfdf5;
+                border-color: #22c55e;
+            }
+
+            /* Progress Bar */
+            .progress-container {
+                background: #f5f5f5;
+                border: 2px solid black;
+                overflow: hidden;
+            }
+
+            .progress-bar {
+                background: linear-gradient(90deg, #facc15 0%, #22c55e 100%);
+                height: 100%;
+                transition: width 0.3s ease;
+            }
+
+            /* Audio Player */
+            .audio-player {
+                background: #171717;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .btn-brutal {
+                background: black;
+                color: white;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.3);
+                transition: all 0.15s;
+            }
+
+            .btn-brutal:hover {
+                background: #facc15;
+                color: black;
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.3);
+            }
+
+            .btn-brutal:active {
+                transform: translate(1px, 1px);
+                box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.3);
+            }
+
+            .btn-brutal:disabled {
+                background: #a3a3a3;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Feature Cards */
+            .feature-card {
+                background: white;
+                border: 2px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+                transition: all 0.15s;
+            }
+
+            .feature-card:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            /* Waveform animation */
+            .waveform {
+                display: flex;
+                align-items: center;
+                gap: 3px;
+                height: 40px;
+            }
+
+            .waveform-bar {
+                width: 4px;
+                background: #facc15;
+                border-radius: 2px;
+                animation: wave 1s ease-in-out infinite;
+            }
+
+            .waveform-bar:nth-child(1) {
+                animation-delay: 0s;
+                height: 60%;
+            }
+
+            .waveform-bar:nth-child(2) {
+                animation-delay: 0.1s;
+                height: 80%;
+            }
+
+            .waveform-bar:nth-child(3) {
+                animation-delay: 0.2s;
+                height: 100%;
+            }
+
+            .waveform-bar:nth-child(4) {
+                animation-delay: 0.3s;
+                height: 70%;
+            }
+
+            .waveform-bar:nth-child(5) {
+                animation-delay: 0.4s;
+                height: 90%;
+            }
+
+            .waveform-bar:nth-child(6) {
+                animation-delay: 0.5s;
+                height: 50%;
+            }
+
+            .waveform-bar:nth-child(7) {
+                animation-delay: 0.6s;
+                height: 85%;
+            }
+
+            @keyframes wave {
+
+                0%,
+                100% {
+                    transform: scaleY(0.5);
+                }
+
+                50% {
+                    transform: scaleY(1);
+                }
+            }
+
+            /* Status indicator */
+            .status-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                animation: pulse-dot 2s infinite;
+            }
+
+            .status-dot.online {
+                background: #22c55e;
+            }
+
+            .status-dot.offline {
+                background: #ef4444;
+            }
+
+            @keyframes pulse-dot {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.5;
+                }
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="flex-1 flex flex-col p-4 md:p-8">
+
+        <!-- HEADER -->
+        <header
+            class="max-w-5xl mx-auto w-full mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <div class="flex items-end gap-4">
+                <div
+                    class="w-16 h-16 bg-darcy-yellow border-4 border-black flex items-center justify-center shadow-hard shrink-0">
+                    <span class="font-serif font-black text-4xl text-black italic">D.</span>
+                </div>
+                <div>
+                    <div
+                        class="bg-black text-white px-2 py-0.5 text-[10px] font-mono font-bold inline-flex items-center gap-2 mb-1 uppercase tracking-wide">
+                        <i data-lucide="headphones" class="w-3 h-3"></i>
+                        Gerador de Podcasts com IA
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black italic tracking-tighter leading-[0.9]">PODCASTFY.</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Status do Serviço -->
+                <div class="flex items-center gap-2 bg-white border-2 border-black px-3 py-2 shadow-hard-sm">
+                    <div class="status-dot" th:classappend="${servicoOnline} ? 'online' : 'offline'"></div>
+                    <span class="font-mono text-[10px] uppercase font-bold"
+                        th:text="${servicoOnline} ? 'Serviço Online' : 'Serviço Offline'">Status</span>
+                </div>
+                <a href="/" class="font-mono text-xs font-bold uppercase hover:underline flex items-center gap-1">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+                </a>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="max-w-5xl mx-auto w-full flex-1">
+
+            <!-- Intro Section -->
+            <div class="card-hub p-6 mb-8">
+                <div class="flex flex-col md:flex-row gap-6 items-center">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-black uppercase mb-3">Transforme PDFs em Podcasts</h2>
+                        <p class="font-mono text-sm text-gray-600 mb-4">
+                            Faça upload de um PDF de uma obra literária ou material de estudo e nossa IA irá
+                            transformá-lo em um podcast educativo com dois apresentadores discutindo o conteúdo.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <span
+                                class="bg-darcy-yellow px-3 py-1 font-mono text-xs font-bold uppercase border-2 border-black">
+                                <i data-lucide="zap" class="w-3 h-3 inline"></i> Geração com IA
+                            </span>
+                            <span
+                                class="bg-white px-3 py-1 font-mono text-xs font-bold uppercase border-2 border-black">
+                                <i data-lucide="globe" class="w-3 h-3 inline"></i> Português BR
+                            </span>
+                            <span
+                                class="bg-white px-3 py-1 font-mono text-xs font-bold uppercase border-2 border-black">
+                                <i data-lucide="clock" class="w-3 h-3 inline"></i> ~5 min por geração
+                            </span>
+                        </div>
+                    </div>
+                    <div class="waveform">
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid: Upload + Player -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+
+                <!-- Upload Area -->
+                <div class="card-hub p-6">
+                    <h3 class="font-black uppercase text-sm mb-4 flex items-center gap-2">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        Upload do PDF
+                    </h3>
+
+                    <form id="upload-form" enctype="multipart/form-data">
+                        <!-- Drop Zone -->
+                        <div id="drop-zone" class="drop-zone p-8 text-center mb-4">
+                            <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-gray-400"></i>
+                            <p id="drop-text" class="font-mono text-sm text-gray-600 mb-2">
+                                Arraste um arquivo PDF aqui ou clique para selecionar
+                            </p>
+                            <p class="font-mono text-[10px] text-gray-400">Máximo: 50MB • Até 30 páginas recomendado</p>
+                            <input type="file" id="file-input" name="arquivo" accept=".pdf" class="hidden">
+                        </div>
+
+                        <!-- File Info -->
+                        <div id="file-info" class="hidden bg-gray-50 border-2 border-black p-3 mb-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="file-check" class="w-5 h-5 text-green-600"></i>
+                                    <div>
+                                        <p id="file-name" class="font-mono text-sm font-bold">arquivo.pdf</p>
+                                        <p id="file-size" class="font-mono text-[10px] text-gray-500">0 KB</p>
+                                    </div>
+                                </div>
+                                <button type="button" id="clear-file" class="text-red-600 hover:text-red-800">
+                                    <i data-lucide="x" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress -->
+                        <div id="progress-section" class="hidden mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-mono text-xs font-bold uppercase">Gerando podcast...</span>
+                                <span id="progress-text" class="font-mono text-xs">0%</span>
+                            </div>
+                            <div class="progress-container h-4">
+                                <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <p id="progress-status" class="font-mono text-[10px] text-gray-500 mt-2">
+                                Processando PDF...
+                            </p>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="submit-btn"
+                            class="btn-brutal w-full py-4 font-black uppercase text-sm" disabled>
+                            <i data-lucide="radio" class="w-4 h-4 inline mr-2"></i>
+                            Gerar Podcast
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Audio Player -->
+                <div class="card-hub p-6">
+                    <h3 class="font-black uppercase text-sm mb-4 flex items-center gap-2">
+                        <i data-lucide="headphones" class="w-4 h-4"></i>
+                        Player
+                    </h3>
+
+                    <!-- Empty State -->
+                    <div id="player-empty" class="text-center py-12 border-2 border-dashed border-gray-300 bg-gray-50">
+                        <i data-lucide="radio" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p class="font-mono text-sm text-gray-400">Nenhum podcast gerado ainda</p>
+                        <p class="font-mono text-[10px] text-gray-400 mt-1">
+                            Faça upload de um PDF para começar
+                        </p>
+                    </div>
+
+                    <!-- Audio Player (hidden initially) -->
+                    <div id="player-container" class="hidden">
+                        <div class="audio-player p-6">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-16 h-16 bg-darcy-yellow flex items-center justify-center">
+                                    <i data-lucide="headphones" class="w-8 h-8 text-black"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p id="podcast-title" class="text-white font-bold text-sm">Podcast Gerado</p>
+                                    <p class="text-gray-400 font-mono text-[10px]">Criado com Podcastfy AI</p>
+                                </div>
+                            </div>
+
+                            <audio id="audio-player" controls class="w-full mb-4"
+                                style="filter: invert(1) hue-rotate(180deg);">
+                                Seu navegador não suporta o elemento de áudio.
+                            </audio>
+
+                            <div class="flex gap-3">
+                                <a id="download-btn" href="#" download
+                                    class="btn-brutal flex-1 py-2 text-center text-xs font-bold uppercase">
+                                    <i data-lucide="download" class="w-3 h-3 inline mr-1"></i> Baixar MP3
+                                </a>
+                                <button id="new-podcast-btn"
+                                    class="btn-brutal flex-1 py-2 text-xs font-bold uppercase bg-white !text-black">
+                                    <i data-lucide="plus" class="w-3 h-3 inline mr-1"></i> Novo Podcast
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="feature-card p-5">
+                    <div class="w-10 h-10 bg-darcy-yellow border-2 border-black flex items-center justify-center mb-3">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-black uppercase text-sm mb-2">Obras do PAS</h4>
+                    <p class="font-mono text-[10px] text-gray-600">
+                        Perfeito para estudar as obras literárias do Programa de Avaliação Seriada da UnB.
+                    </p>
+                </div>
+                <div class="feature-card p-5">
+                    <div class="w-10 h-10 bg-purple-100 border-2 border-black flex items-center justify-center mb-3">
+                        <i data-lucide="users" class="w-5 h-5 text-purple-600"></i>
+                    </div>
+                    <h4 class="font-black uppercase text-sm mb-2">Dois Apresentadores</h4>
+                    <p class="font-mono text-[10px] text-gray-600">
+                        Formato de conversa entre professor e aluno para melhor compreensão.
+                    </p>
+                </div>
+                <div class="feature-card p-5">
+                    <div class="w-10 h-10 bg-green-100 border-2 border-black flex items-center justify-center mb-3">
+                        <i data-lucide="download" class="w-5 h-5 text-green-600"></i>
+                    </div>
+                    <h4 class="font-black uppercase text-sm mb-2">Ouça Offline</h4>
+                    <p class="font-mono text-[10px] text-gray-600">
+                        Baixe o podcast em MP3 e estude no ônibus, academia ou onde preferir.
+                    </p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            // Elements
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+            const dropText = document.getElementById('drop-text');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const fileSize = document.getElementById('file-size');
+            const clearFileBtn = document.getElementById('clear-file');
+            const submitBtn = document.getElementById('submit-btn');
+            const uploadForm = document.getElementById('upload-form');
+            const progressSection = document.getElementById('progress-section');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const progressStatus = document.getElementById('progress-status');
+            const playerEmpty = document.getElementById('player-empty');
+            const playerContainer = document.getElementById('player-container');
+            const audioPlayer = document.getElementById('audio-player');
+            const downloadBtn = document.getElementById('download-btn');
+            const newPodcastBtn = document.getElementById('new-podcast-btn');
+            const podcastTitle = document.getElementById('podcast-title');
+
+            let selectedFile = null;
+
+            // Format file size
+            function formatSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+
+            // Handle file selection
+            function handleFile(file) {
+                if (!file) return;
+
+                if (!file.name.toLowerCase().endsWith('.pdf')) {
+                    alert('⚠️ Apenas arquivos PDF são aceitos!');
+                    return;
+                }
+
+                if (file.size > 50 * 1024 * 1024) {
+                    alert('⚠️ Arquivo muito grande! Máximo: 50MB');
+                    return;
+                }
+
+                selectedFile = file;
+                dropZone.classList.add('has-file');
+                fileInfo.classList.remove('hidden');
+                fileName.textContent = file.name;
+                fileSize.textContent = formatSize(file.size);
+                submitBtn.disabled = false;
+            }
+
+            // Clear file
+            function clearFile() {
+                selectedFile = null;
+                fileInput.value = '';
+                dropZone.classList.remove('has-file');
+                fileInfo.classList.add('hidden');
+                submitBtn.disabled = true;
+            }
+
+            // Drop zone events
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                handleFile(file);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleFile(e.target.files[0]);
+            });
+
+            clearFileBtn.addEventListener('click', clearFile);
+
+            // Form submission
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (!selectedFile) return;
+
+                // Show progress
+                submitBtn.disabled = true;
+                progressSection.classList.remove('hidden');
+
+                // Simulate progress (actual API doesn't stream progress)
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 90) progress = 90;
+                    progressBar.style.width = progress + '%';
+                    progressText.textContent = Math.round(progress) + '%';
+
+                    // Update status messages
+                    if (progress < 20) progressStatus.textContent = 'Processando PDF...';
+                    else if (progress < 40) progressStatus.textContent = 'Extraindo texto...';
+                    else if (progress < 60) progressStatus.textContent = 'Gerando roteiro com IA...';
+                    else if (progress < 80) progressStatus.textContent = 'Sintetizando áudio...';
+                    else progressStatus.textContent = 'Finalizando podcast...';
+                }, 500);
+
+                try {
+                    const formData = new FormData();
+                    formData.append('arquivo', selectedFile);
+
+                    const response = await fetch('/podcastfy/gerar', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    clearInterval(progressInterval);
+
+                    if (response.ok) {
+                        // Get audio blob
+                        const audioBlob = await response.blob();
+                        const audioUrl = URL.createObjectURL(audioBlob);
+
+                        // Complete progress
+                        progressBar.style.width = '100%';
+                        progressText.textContent = '100%';
+                        progressStatus.textContent = 'Podcast gerado com sucesso!';
+
+                        // Show player
+                        setTimeout(() => {
+                            progressSection.classList.add('hidden');
+                            playerEmpty.classList.add('hidden');
+                            playerContainer.classList.remove('hidden');
+
+                            audioPlayer.src = audioUrl;
+                            downloadBtn.href = audioUrl;
+                            downloadBtn.download = 'podcast_' + selectedFile.name.replace('.pdf', '.mp3');
+                            podcastTitle.textContent = selectedFile.name.replace('.pdf', '');
+                        }, 500);
+
+                    } else {
+                        const error = await response.text();
+                        throw new Error(error);
+                    }
+
+                } catch (error) {
+                    clearInterval(progressInterval);
+                    progressSection.classList.add('hidden');
+                    submitBtn.disabled = false;
+                    alert('❌ Erro ao gerar podcast: ' + error.message);
+                }
+            });
+
+            // New podcast button
+            newPodcastBtn.addEventListener('click', () => {
+                clearFile();
+                playerContainer.classList.add('hidden');
+                playerEmpty.classList.remove('hidden');
+                progressBar.style.width = '0%';
+            });
+
+            // Initialize icons
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>
