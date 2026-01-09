@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gerenciador de Feed - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'sans': ['Inter', 'sans-serif'], 'mono': ['JetBrains Mono', 'monospace'] },
+                    colors: { 'darcy-yellow': '#fbbf24' },
+                    boxShadow: { 'hard': '6px 6px 0px 0px black' }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-8 font-sans text-black min-h-screen">
+
+<div class="flex justify-between items-end mb-6 border-b-4 border-black pb-4">
+    <div>
+        <h1 class="text-3xl font-black uppercase italic">Feed de Avisos</h1>
+        <p class="text-xs font-mono font-bold text-gray-500">Gerencie os comunicados da plataforma</p>
+    </div>
+    <a href="/admin/dashboard" class="bg-black text-white px-4 py-2 font-bold text-xs uppercase hover:bg-gray-800 transition shadow-[2px_2px_0px_gray]">
+        <i data-lucide="arrow-left" class="w-3 h-3 inline mr-1"></i> Voltar
+    </a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <div class="lg:col-span-1">
+        <div class="bg-white border-4 border-black shadow-[6px_6px_0px_black] sticky top-8">
+            <div class="bg-darcy-yellow text-black p-3 font-mono font-bold border-b-4 border-black flex items-center gap-2">
+                <i data-lucide="plus-square" class="w-5 h-5"></i> NOVO AVISO
+            </div>
+
+            <form action="/admin/transmissoes/salvar" method="post" class="p-5 flex flex-col gap-4">
+                <div>
+                    <label class="block text-[10px] font-black uppercase mb-1">Título</label>
+                    <input type="text" name="titulo" required class="w-full border-2 border-black p-2 font-bold text-sm uppercase focus:bg-yellow-50 outline-none placeholder:text-gray-300">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase mb-1">Mensagem</label>
+                    <textarea name="mensagem" rows="5" required class="w-full border-2 border-black p-2 font-mono text-xs focus:bg-yellow-50 outline-none resize-none placeholder:text-gray-300"></textarea>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase mb-1">Tipo de Aviso</label>
+                    <select name="tipo" class="w-full border-2 border-black p-2 text-xs font-bold uppercase bg-white cursor-pointer">
+                        <option value="INFO">ℹ️ Informativo (Padrão)</option>
+                        <option value="ALERTA">🚨 Urgente / Importante</option>
+                        <option value="EVENTO">📅 Evento / Cronograma</option>
+                    </select>
+                </div>
+
+                <label class="flex items-center gap-3 cursor-pointer border-2 border-black p-2 hover:bg-gray-50 bg-gray-100">
+                    <input type="checkbox" name="ativo" checked class="w-5 h-5 accent-black">
+                    <span class="text-xs font-bold uppercase">Publicar Imediatamente</span>
+                </label>
+
+                <button type="submit" class="bg-black text-white py-3 font-black text-xs uppercase tracking-widest hover:bg-gray-800 transition shadow-[4px_4px_0px_gray] hover:shadow-none translate-y-0 hover:translate-y-[2px] border-2 border-transparent">
+                    POSTAR NO FEED
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="lg:col-span-2">
+        <div class="bg-white border-4 border-black shadow-[6px_6px_0px_black] min-h-[400px]">
+            <div class="bg-black text-white p-3 font-mono font-bold border-b-4 border-black flex justify-between items-center">
+                <span>HISTÓRICO DO FEED</span>
+                <span class="text-[10px] bg-white text-black px-2 py-0.5 font-black" th:text="${comunicados.size()} + ' ITENS'">0 ITENS</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-100 border-b-2 border-black text-[10px] font-black uppercase text-gray-500">
+                    <tr>
+                        <th class="p-3">Data</th>
+                        <th class="p-3">Conteúdo</th>
+                        <th class="p-3 text-center">Visibilidade</th>
+                        <th class="p-3 text-center">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody class="text-xs font-mono">
+                    <tr th:each="c : ${comunicados}" class="border-b border-gray-200 hover:bg-yellow-50 transition group">
+                        <td class="p-3 text-gray-500 font-bold" th:text="${#temporals.format(c.dataEnvio, 'dd/MM HH:mm')}">12/12</td>
+
+                        <td class="p-3 max-w-sm">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-black text-black uppercase text-sm" th:text="${c.titulo}">TITULO</span>
+                                <span th:if="${c.tipo == 'ALERTA'}" class="text-[9px] bg-red-100 text-red-600 border border-red-600 px-1 font-bold">URGENTE</span>
+                            </div>
+                            <div class="text-gray-600 whitespace-pre-line" th:text="${c.mensagem}">msg...</div>
+                        </td>
+
+                        <td class="p-3 text-center align-middle">
+                            <div th:fragment="botao-status" th:id="'status-' + ${c.id}">
+                                <button class="px-3 py-1 font-bold border-2 border-black uppercase text-[9px] transition hover:scale-105 w-20 shadow-[2px_2px_0px_black]"
+                                        th:classappend="${c.ativo} ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400'"
+                                        th:attr="hx-post=@{/admin/transmissoes/{id}/toggle(id=${c.id})}"
+                                        hx-target="'#status-' + ${c.id}"
+                                        hx-swap="outerHTML">
+                                    <span th:text="${c.ativo} ? 'NO AR' : 'OFF'">STATUS</span>
+                                </button>
+                            </div>
+                        </td>
+
+                        <td class="p-3 text-center align-middle">
+                            <form th:action="@{/admin/transmissoes/{id}/excluir(id=${c.id})}" method="post" onsubmit="return confirm('Apagar este aviso permanentemente?')">
+                                <button class="text-black hover:text-red-600 transition p-2 hover:bg-red-50 rounded">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:if="${#lists.isEmpty(comunicados)}" class="p-8 text-center text-gray-400 font-mono text-xs">
+                    NENHUM AVISO REGISTRADO NO SISTEMA.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

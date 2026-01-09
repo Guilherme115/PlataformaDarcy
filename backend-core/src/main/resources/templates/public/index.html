@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/base}"
+      th:with="CONTENT_TITLE='A Universidade Necessária'">
+
+<head>
+    <th:block layout:fragment="head-extras">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            'headline': ['"Playfair Display"', 'serif'],
+                            'tech': ['"JetBrains Mono"', 'monospace'],
+                            'sans': ['"Inter"', 'sans-serif'],
+                        },
+                        colors: {
+                            'darcy-yellow': '#facc15',
+                            'darcy-red': '#dc2626',
+                            'darcy-black': '#0a0a0a',
+                            'paper': '#fdfdfd',
+                        },
+                        boxShadow: {
+                            'brutal': '6px 6px 0px 0px rgba(0,0,0,1)',
+                            'brutal-lg': '12px 12px 0px 0px rgba(0,0,0,1)',
+                        }
+                    }
+                }
+            }
+        </script>
+
+        <style>
+            /* --- SOBRESCRITA PARA LANDING PAGE --- */
+            body {
+                background-color: #e5e5e5 !important;
+                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png") !important;
+                background-size: auto !important;
+                color: #0a0a0a;
+                overflow-x: hidden;
+            }
+
+            .font-headline { font-family: 'Playfair Display', serif; }
+
+            /* Animação Marquee */
+            .marquee-container {
+                overflow: hidden;
+                white-space: nowrap;
+                background: #0a0a0a;
+                color: #fdfdfd;
+                padding: 12px 0;
+                border-top: 4px solid #0a0a0a;
+                border-bottom: 4px solid #0a0a0a;
+            }
+            .marquee-content {
+                display: inline-block;
+                animation: marquee 25s linear infinite;
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+            @keyframes marquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+
+            /* Botão Estilo Assinatura Darcy */
+            .btn-cta {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                padding: 1.2rem 2.5rem;
+                background: #0a0a0a;
+                color: #fdfdfd;
+                font-family: 'JetBrains Mono', monospace;
+                font-weight: 800;
+                text-transform: uppercase;
+                border: 3px solid #0a0a0a;
+                transition: all 0.2s;
+                box-shadow: 6px 6px 0px 0px #facc15;
+            }
+            .btn-cta:hover {
+                background: #facc15;
+                color: #0a0a0a;
+                transform: translate(-2px, -2px);
+                box-shadow: 10px 10px 0px 0px #0a0a0a;
+            }
+
+            .card-feature {
+                background: #fdfdfd;
+                border: 4px solid #0a0a0a;
+                padding: 2.5rem;
+                transition: all 0.2s;
+            }
+            .card-feature:hover {
+                transform: translate(-4px, -4px);
+                box-shadow: 8px 8px 0px 0px #facc15;
+            }
+
+            .card-price {
+                background: #fdfdfd;
+                border: 4px solid #0a0a0a;
+                padding: 3rem;
+                transition: all 0.2s;
+            }
+            .card-price.featured {
+                background: #0a0a0a;
+                color: white;
+                box-shadow: 12px 12px 0px 0px #facc15;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body class="bg-white">
+
+<main layout:fragment="content" class="flex flex-col w-full">
+
+    <nav class="fixed top-0 left-0 w-full z-50 bg-[#fdfdfd] border-b-4 border-black px-6 py-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-darcy-yellow border-2 border-black flex items-center justify-center font-headline font-black text-2xl text-black">D.</div>
+            <span class="font-black uppercase tracking-tighter text-xl hidden md:block text-black">Plataforma Darcy</span>
+        </div>
+
+        <div class="flex gap-4 text-xs font-bold font-mono text-black items-center">
+            <a href="#manifesto" class="hover:underline hidden lg:block">Filosofia</a>
+            <a href="#pricing" class="hover:underline hidden lg:block text-darcy-red">Planos</a>
+
+            <div class="h-6 w-px bg-black hidden lg:block mx-2"></div>
+
+            <div sec:authorize="!isAuthenticated()" class="flex gap-3">
+                <a href="/login" class="px-4 py-2 border-2 border-black hover:bg-black hover:text-white transition uppercase">Login</a>
+                <a href="/register" class="px-4 py-2 bg-black text-white border-2 border-black hover:bg-darcy-yellow hover:text-black transition uppercase">Criar Conta</a>
+            </div>
+
+            <div sec:authorize="isAuthenticated()" class="flex gap-3">
+                <a href="/aluno/home" class="px-4 py-2 bg-darcy-yellow border-2 border-black font-black uppercase shadow-hard-sm">Meu Painel →</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="min-h-screen flex flex-col justify-center pt-24 border-b-4 border-black relative bg-white overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none"
+             style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 50px 50px;">
+        </div>
+
+        <div class="max-w-7xl mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+            <div class="order-2 lg:order-1">
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="bg-darcy-yellow border-2 border-black px-3 py-1 text-[10px] font-black uppercase -rotate-1">Inteligência UnB</span>
+                    <span class="bg-black text-white border-2 border-black px-3 py-1 text-[10px] font-black uppercase rotate-1">Plano Elite R$ 19,90</span>
+                </div>
+
+                <h1 class="font-headline text-6xl md:text-[100px] font-black uppercase italic leading-[0.8] tracking-tighter mb-10 text-black">
+                    Estudar é<br>um ato de <span class="bg-black text-white px-3 not-italic inline-block transform rotate-1">Resistência.</span>
+                </h1>
+
+                <p class="font-sans text-xl text-gray-800 leading-relaxed mb-12 border-l-8 border-darcy-yellow pl-6 max-w-lg font-medium">
+                    Hackeamos o código do vestibular. Dados reais, táticas cruas e a tecnologia que a elite usa, agora nas suas mãos.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <a href="/register" class="btn-cta text-white">Ocupar Minha Vaga <i data-lucide="arrow-right-circle" class="w-6 h-6"></i></a>
+                    <a href="#manifesto" class="flex items-center justify-center gap-2 font-black uppercase text-xs hover:underline text-black">
+                        <i data-lucide="scroll-text" class="w-5 h-5"></i> Ler o Manifesto
+                    </a>
+                </div>
+            </div>
+
+            <div class="order-1 lg:order-2 relative h-[450px] lg:h-[650px] border-4 border-black bg-gray-200 overflow-hidden shadow-brutal-lg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Darcy_Ribeiro.jpg"
+                     class="w-full h-full object-cover object-top grayscale contrast-150 mix-blend-multiply opacity-90 transition duration-700 hover:scale-105"
+                     alt="Darcy Ribeiro">
+                <div class="absolute bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t-4 border-black p-6">
+                    <p class="font-headline font-black italic text-2xl text-black leading-tight">
+                        "O fracasso da educação no Brasil não é uma crise; é um projeto."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            DADOS REAIS • ACERVO ABERTO • INTELIGÊNCIA TÁTICA • SEM FIRULAS • DADOS REAIS • ACERVO ABERTO • INTELIGÊNCIA TÁTICA • SEM FIRULAS •
+            DADOS REAIS • ACERVO ABERTO • INTELIGÊNCIA TÁTICA • SEM FIRULAS • DADOS REAIS • ACERVO ABERTO • INTELIGÊNCIA TÁTICA • SEM FIRULAS •
+        </div>
+    </div>
+
+    <section id="manifesto" class="py-32 px-6 bg-white border-b-4 border-black text-black">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="font-tech text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-4">A Nossa Filosofia</h2>
+                <h3 class="font-headline text-5xl md:text-7xl font-black uppercase italic tracking-tighter">Nós somos o <span class="text-darcy-red underline decoration-8">Erro</span> no Sistema.</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 font-medium text-lg leading-relaxed text-justify">
+                <p>Acreditamos que o conhecimento não deve ter catraca. Enquanto a educação for tratada como mercadoria de luxo, a universidade pública será um privilégio hereditário. Nós recusamos essa lógica.</p>
+                <p>A Plataforma Darcy foi construída para nivelar o campo de batalha. Hackeamos 15 anos de provas do Cebraspe para te dar a vantagem tática que antes só o dinheiro comprava.</p>
+            </div>
+
+            <blockquote class="mt-16 p-8 bg-gray-100 border-l-[12px] border-black font-black text-2xl italic leading-tight">
+                "Se você tem a coragem de estudar, nós temos o mapa da mina. Sem promessas vazias, apenas dados."
+            </blockquote>
+        </div>
+    </section>
+
+    <section class="py-32 px-6 bg-[#f0f0f0] border-b-4 border-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-16 border-b-4 border-black pb-8">
+                <h2 class="font-headline text-5xl font-black uppercase text-black italic">O Arsenal</h2>
+                <span class="font-mono text-[10px] font-bold uppercase text-gray-500 hidden md:block">Engenharia Reversa Aplicada</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card-feature group">
+                    <div class="w-14 h-14 border-4 border-black flex items-center justify-center mb-8 bg-darcy-yellow shadow-hard-sm group-hover:bg-black group-hover:text-white transition">
+                        <i data-lucide="crosshair" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-headline text-2xl font-black uppercase mb-4 text-black">Simulados Reais</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed font-medium">Gere simulados baseados no peso real das matérias do PAS. Otimização pura.</p>
+                </div>
+
+                <div class="card-feature group">
+                    <div class="w-14 h-14 border-4 border-black flex items-center justify-center mb-8 bg-white shadow-hard-sm group-hover:bg-darcy-red group-hover:text-white transition">
+                        <i data-lucide="skull" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-headline text-2xl font-black uppercase mb-4 text-black">Protocolo de Expurgo</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed font-medium">O sistema identifica seus pontos cegos e te obriga a confrontá-los até a perfeição.</p>
+                </div>
+
+                <div class="card-feature group bg-darcy-black text-white">
+                    <div class="w-14 h-14 border-4 border-white flex items-center justify-center mb-8 bg-white text-black">
+                        <i data-lucide="brain-circuit" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-headline text-2xl font-black uppercase mb-4 text-darcy-yellow">Tutor Inteligente</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-medium">IA treinada em toda a matriz de obras do PAS UnB disponível 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-32 px-6 bg-white border-b-4 border-black text-black">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="font-headline text-6xl font-black uppercase tracking-tighter">Investimento</h2>
+                <p class="font-mono text-xs font-bold text-gray-500 mt-4">Cobrimos servidores, não lucros de acionistas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
+                <div class="card-price group">
+                    <div class="flex justify-between items-start mb-10">
+                        <h3 class="font-black text-3xl">CALANGO</h3>
+                        <span class="bg-gray-100 border border-black px-2 py-1 text-[10px] font-bold">LIVRE</span>
+                    </div>
+                    <div class="mb-10">
+                        <span class="text-6xl font-black font-headline italic">R$ 0</span>
+                        <span class="font-mono text-xs text-gray-400">/sempre</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 font-bold text-sm">
+                        <li class="flex gap-3 items-center"><i data-lucide="check" class="w-5 h-5 text-green-600"></i> Acervo de Questões</li>
+                        <li class="flex gap-3 items-center"><i data-lucide="check" class="w-5 h-5 text-green-600"></i> Wiki Colaborativa</li>
+                        <li class="flex gap-3 items-center opacity-30"><i data-lucide="x" class="w-5 h-5 text-red-600"></i> IA Tática</li>
+                    </ul>
+                    <a href="/register" class="block text-center border-4 border-black py-4 font-black uppercase hover:bg-black hover:text-white transition">Começar Agora</a>
+                </div>
+
+                <div class="card-price featured">
+                    <div class="flex justify-between items-start mb-10">
+                        <h3 class="font-black text-3xl">ELITE DARCY</h3>
+                        <span class="bg-darcy-yellow text-black border border-black px-2 py-1 text-[10px] font-bold">COMPLETO</span>
+                    </div>
+                    <div class="mb-10">
+                        <span class="text-7xl font-black font-headline italic text-darcy-yellow">R$ 19,90</span>
+                        <span class="font-mono text-xs text-gray-500">/mês</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 font-bold text-sm">
+                        <li class="flex gap-3 items-center"><i data-lucide="zap" class="w-5 h-5 text-darcy-yellow"></i> IA Preditiva PAS UnB</li>
+                        <li class="flex gap-3 items-center"><i data-lucide="zap" class="w-5 h-5 text-darcy-yellow"></i> Telemetria de Erros</li>
+                        <li class="flex gap-3 items-center"><i data-lucide="zap" class="w-5 h-5 text-darcy-yellow"></i> Prioridade de Processamento</li>
+                    </ul>
+                    <a href="/checkout/premium" class="block text-center bg-darcy-yellow text-black py-4 font-black uppercase hover:bg-white transition border-2 border-transparent">Assinar Elite</a>
+                </div>
+            </div>
+
+            <div class="mt-16 p-8 border-4 border-black border-dashed bg-gray-50 flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1">
+                    <h4 class="font-black text-xl mb-2 uppercase italic">A Grana tá Curta?</h4>
+                    <p class="text-sm font-medium text-gray-600">Acreditamos na solidariedade radical. Se você não pode pagar, ofereça uma permuta: ajude a moderar a Wiki ou transcrever questões e nós liberamos seu acesso.</p>
+                </div>
+                <a href="https://wa.me/suporte" class="btn-cta bg-green-600 text-white shadow-none hover:bg-green-700">Tentar Permuta</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-darcy-black text-white py-20 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="flex flex-col items-center md:items-start">
+                <a href="/cms" class="w-14 h-14 bg-white text-black flex items-center justify-center font-headline font-black text-3xl mb-6 hover:bg-darcy-red hover:text-white transition">D.</a>
+                <p class="font-mono text-[10px] text-gray-500 tracking-widest uppercase">Brasília - DF // Criado por estudantes.</p>
+            </div>
+
+            <div class="text-center md:text-right">
+                <p class="font-headline font-black italic text-xl mb-4 text-darcy-yellow">Plataforma Darcy 2026</p>
+                <div class="flex gap-6 font-mono text-[10px] uppercase font-bold justify-center md:justify-end">
+                    <a href="#" class="hover:text-darcy-yellow">Código Aberto</a>
+                    <a href="#" class="hover:text-darcy-yellow">Manifesto</a>
+                    <a href="#" class="hover:text-darcy-yellow">Apoie o Projeto</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</main>
+
+<th:block layout:fragment="page-scripts">
+    <script>
+        lucide.createIcons();
+        // Efeito suave de scroll para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</th:block>
+
+</body>
+</html>

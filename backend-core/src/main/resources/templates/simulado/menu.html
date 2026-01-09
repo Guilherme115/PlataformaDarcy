@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}"
+      th:with="bodyClass='flex flex-col min-h-screen text-black font-serif p-8 bg-[#e5e5e5]'">
+
+<head>
+  <title>Central de Treino - Darcy</title>
+
+  <th:block layout:fragment="head-extras">
+    <style>
+      /* Mantendo o background específico caso o base mude */
+      body {
+          background-color: #e5e5e5;
+          background-image: radial-gradient(#a3a3a3 1px, transparent 1px);
+          background-size: 20px 20px;
+      }
+
+      .card-menu {
+          transition: all 0.2s;
+          border: 3px solid black;
+          box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+      }
+      .card-menu:hover {
+          transform: translate(-2px, -2px);
+          box-shadow: 10px 10px 0px 0px rgba(0,0,0,1);
+      }
+      .card-menu:active {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+      }
+
+      .badge-tag {
+          background: black;
+          color: white;
+          padding: 2px 6px;
+          font-size: 0.6rem;
+          font-weight: bold;
+          text-transform: uppercase;
+          border: 1px solid black;
+      }
+    </style>
+  </th:block>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+  <header class="max-w-7xl mx-auto w-full mb-10 border-b-4 border-black pb-6 flex justify-between items-end">
+    <div>
+      <div class="bg-yellow-400 text-black px-2 py-1 text-[10px] font-mono font-bold inline-block mb-2 uppercase border border-black">Área de Combate</div>
+      <h1 class="text-5xl font-black italic tracking-tighter leading-none mb-1">
+        MODOS DE<br>TREINO.
+      </h1>
+    </div>
+
+    <a href="/" class="text-xs font-mono font-bold uppercase hover:underline flex items-center gap-2 border-2 border-transparent hover:border-black px-3 py-1 transition">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar à Base
+    </a>
+  </header>
+
+  <main class="max-w-7xl mx-auto w-full">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+
+      <a href="/simulado/personalizado" class="card-menu bg-white p-8 relative flex flex-col justify-between h-80 group">
+        <div class="absolute top-4 right-4">
+          <span class="badge-tag">Foco</span>
+        </div>
+
+        <div>
+          <div class="w-12 h-12 bg-black text-white flex items-center justify-center mb-6 border-2 border-black group-hover:bg-yellow-400 group-hover:text-black transition">
+            <i data-lucide="sliders" class="w-6 h-6"></i>
+          </div>
+          <h2 class="text-3xl font-black uppercase mb-3 italic leading-tight">Lista<br>Personalizada</h2>
+          <p class="font-mono text-xs text-gray-500">
+            Monte uma bateria cirúrgica filtrando por Matéria e Tópico. Ideal para atacar fraquezas.
+          </p>
+        </div>
+
+        <div class="w-full border-t-2 border-black pt-4 flex justify-between items-center mt-4">
+          <span class="text-xs font-black uppercase group-hover:underline">Configurar</span>
+          <i data-lucide="arrow-right" class="w-5 h-5 transform group-hover:translate-x-1 transition"></i>
+        </div>
+      </a>
+
+      <a href="/simulado/oficiais" class="card-menu bg-yellow-400 p-8 relative flex flex-col justify-between h-80 group">
+        <div class="absolute top-4 right-4">
+          <span class="badge-tag bg-black text-yellow-400 border-black animate-pulse">NOVO</span>
+        </div>
+
+        <div>
+          <div class="w-12 h-12 bg-white text-black flex items-center justify-center mb-6 border-2 border-black group-hover:bg-black group-hover:text-white transition">
+            <i data-lucide="sparkles" class="w-6 h-6"></i>
+          </div>
+          <h2 class="text-3xl font-black uppercase mb-3 italic leading-tight">Simulados<br>Inéditos</h2>
+          <p class="font-mono text-xs text-black font-bold">
+            Provas geradas por I.A. seguindo rigorosamente a Matriz do PAS. Questões nunca vistas antes.
+          </p>
+        </div>
+
+        <div class="w-full border-t-2 border-black pt-4 flex justify-between items-center mt-4">
+          <span class="text-xs font-black uppercase group-hover:underline">Acessar Provas</span>
+          <i data-lucide="zap" class="w-5 h-5 transform group-hover:translate-x-1 transition"></i>
+        </div>
+      </a>
+
+      <a href="/simulado/arquivo" class="card-menu bg-[#111] text-white p-8 relative flex flex-col justify-between h-80 group">
+        <div class="absolute top-4 right-4">
+          <span class="badge-tag bg-white text-black border-white">2010-2024</span>
+        </div>
+
+        <div>
+          <div class="w-12 h-12 border-2 border-white flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-black transition">
+            <i data-lucide="archive" class="w-6 h-6"></i>
+          </div>
+          <h2 class="text-3xl font-black uppercase mb-3 italic leading-tight">Acervo<br>Histórico</h2>
+          <p class="font-mono text-xs text-gray-400">
+            Simule a experiência real realizando as provas anteriores do PAS na íntegra (PDFs originais).
+          </p>
+        </div>
+
+        <div class="w-full border-t-2 border-gray-700 pt-4 flex justify-between items-center mt-4">
+          <span class="text-xs font-black uppercase group-hover:underline text-gray-300 group-hover:text-white">Abrir Arquivo</span>
+          <i data-lucide="folder-open" class="w-5 h-5 transform group-hover:translate-x-1 transition text-gray-300 group-hover:text-white"></i>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="border-t-4 border-black pt-8">
+      <h3 class="font-black uppercase text-sm mb-6 flex items-center gap-2">
+        <i data-lucide="history" class="w-4 h-4"></i> Simulados em Andamento
+      </h3>
+
+      <div th:if="${simuladosEmAberto.isEmpty()}" class="p-6 border-2 border-dashed border-gray-400 text-center bg-gray-50/50">
+        <p class="font-mono text-xs text-gray-500 font-bold uppercase">Nenhum simulado pendente.</p>
+        <p class="font-mono text-[10px] text-gray-400 mt-1">Selecione um modo acima para começar.</p>
+      </div>
+
+      <div th:if="${!simuladosEmAberto.isEmpty()}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div th:each="s : ${simuladosEmAberto}" class="bg-white border-2 border-black p-4 flex justify-between items-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] hover:shadow-[4px_4px_0px_0px_black] hover:-translate-y-1 transition group">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              <span class="font-black text-sm uppercase tracking-tight" th:text="${s.titulo}">Simulado #10</span>
+            </div>
+            <span class="text-[10px] font-mono text-gray-500 bg-gray-100 px-1 border border-gray-200"
+                  th:text="'Iniciado em: ' + ${#temporals.format(s.dataInicio, 'dd/MM HH:mm')}">Data</span>
+          </div>
+
+          <a th:href="@{'/simulado/' + ${s.id}}" class="bg-black text-white px-4 py-2 text-[10px] font-black uppercase hover:bg-yellow-400 hover:text-black transition flex items-center gap-2">
+            Continuar <i data-lucide="play" class="w-3 h-3"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

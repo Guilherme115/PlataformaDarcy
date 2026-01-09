@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE - Plataforma Darcy">Darcy</title>
+
+    <meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&family=Merriweather:ital,wght@0,300;0,900;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                        'serif': ['Merriweather', 'serif']
+                    },
+                    colors: {
+                        'darcy-yellow': '#fbbf24',
+                        'darcy-red': '#dc2626',
+                        'darcy-purple': '#7e22ce',
+                        'darcy-black': '#111'
+                    },
+                    boxShadow: {
+                        'hard': '6px 6px 0px 0px black',
+                        'hard-sm': '3px 3px 0px 0px black'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #e5e5e5;
+            /* Padrão de pontilhados (Dot Grid) */
+            background-image: radial-gradient(#a3a3a3 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* Estilos HTMX */
+        .htmx-indicator { display: none; }
+        .htmx-request .htmx-indicator { display: flex; }
+
+        /* Utilitários Brutalistas */
+        .btn-action {
+            border: 2px solid black; font-weight: 800; text-transform: uppercase;
+            font-size: 0.65rem; padding: 4px 12px; transition: all 0.1s;
+            background: white; color: black; cursor: pointer;
+        }
+        .btn-action:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0px black; }
+        .btn-action:active { transform: translate(0, 0); box-shadow: 0 0 0 black; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-black overflow-x-hidden">
+
+<div th:replace="~{layout/loader :: global-loader}"></div>
+
+<div layout:fragment="content" class="flex-1 w-full"></div>
+
+<div id="modal-container" class="relative z-[100]"></div>
+
+<script>
+    lucide.createIcons();
+    // Recarrega ícones após trocas do HTMX
+    document.body.addEventListener('htmx:afterSwap', () => lucide.createIcons());
+
+    // Configura CSRF para chamadas AJAX do HTMX
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]');
+        const csrfToken = document.querySelector('meta[name="_csrf"]');
+        if (csrfHeader && csrfToken) {
+            event.detail.headers[csrfHeader.getAttribute('content')] = csrfToken.getAttribute('content');
+        }
+    });
+
+    function fecharModal() { document.getElementById('modal-container').innerHTML = ''; }
+</script>
+</body>
+</html>
