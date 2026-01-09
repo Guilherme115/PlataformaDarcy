@@ -36,3 +36,6 @@ intelligence-engine/output_images/*
 .env
 postgres_data/
 mysql_data/
+
+# --- SCRIPTS LOCAIS ---
+iniciar_apresentacao.bat
