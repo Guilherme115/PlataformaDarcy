@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5] p-4 md:p-8'">
+
+<head>
+    <title>Novo Post - Comunidade</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-form {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .input-brutal {
+                border: 2px solid black;
+                padding: 12px 16px;
+                width: 100%;
+                font-family: inherit;
+            }
+
+            .input-brutal:focus {
+                outline: none;
+                box-shadow: 4px 4px 0px 0px black;
+                transform: translate(-2px, -2px);
+            }
+
+            .btn-submit {
+                background: black;
+                color: white;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.3);
+                padding: 12px 24px;
+                font-weight: 800;
+                text-transform: uppercase;
+                transition: all 0.15s;
+                cursor: pointer;
+            }
+
+            .btn-submit:hover {
+                background: #facc15;
+                color: black;
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.3);
+            }
+
+            .cat-btn {
+                border: 2px solid black;
+                padding: 12px 20px;
+                cursor: pointer;
+                transition: all 0.15s;
+                text-align: center;
+                background: white;
+            }
+
+            .cat-btn:hover {
+                background: #f5f5f5;
+            }
+
+            .cat-btn.selected {
+                background: black;
+                color: white;
+            }
+
+            .cat-btn.pas1.selected {
+                background: #3b82f6;
+                border-color: #3b82f6;
+            }
+
+            .cat-btn.pas2.selected {
+                background: #22c55e;
+                border-color: #22c55e;
+            }
+
+            .cat-btn.pas3.selected {
+                background: #f97316;
+                border-color: #f97316;
+            }
+
+            .cat-btn.intervalo.selected {
+                background: #8b5cf6;
+                border-color: #8b5cf6;
+            }
+
+            .error-msg {
+                color: #dc2626;
+                font-size: 11px;
+                font-family: monospace;
+                margin-top: 4px;
+                display: none;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="max-w-2xl mx-auto w-full">
+
+        <!-- HEADER -->
+        <div class="mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-black italic tracking-tighter">NOVO POST</h1>
+                <p class="font-mono text-xs text-gray-500">Compartilhe com a comunidade</p>
+            </div>
+            <a href="/comunidade" class="font-mono text-xs font-bold uppercase hover:underline flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Cancelar
+            </a>
+        </div>
+
+        <!-- FORM -->
+        <form id="postForm" th:action="@{/comunidade/novo}" method="post" class="card-form p-6">
+
+            <!-- Categoria -->
+            <div class="mb-6">
+                <label class="font-bold text-sm uppercase mb-3 block">Categoria *</label>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2" id="categorias">
+                    <label th:each="cat : ${categorias}" th:classappend="${cat.name().toLowerCase().replace('_', '')}"
+                        th:data-cat="${cat.name()}" class="cat-btn" onclick="selectCategory(this)">
+                        <input type="radio" name="categoria" th:value="${cat.name()}" class="hidden">
+                        <span th:text="${cat.nome}">PAS 1</span>
+                    </label>
+                </div>
+                <p id="cat-error" class="error-msg">⚠️ Selecione uma categoria</p>
+            </div>
+
+            <!-- Título -->
+            <div class="mb-4">
+                <label class="font-bold text-sm uppercase mb-2 block">Título *</label>
+                <input type="text" name="titulo" id="titulo" class="input-brutal" placeholder="Um título chamativo..."
+                    maxlength="200" required>
+                <p id="titulo-error" class="error-msg">⚠️ Digite um título</p>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="mb-4">
+                <label class="font-bold text-sm uppercase mb-2 block">Conteúdo *</label>
+                <textarea name="conteudo" id="conteudo" rows="8" class="input-brutal resize-none"
+                    placeholder="Escreva seu post aqui..." required></textarea>
+                <p id="conteudo-error" class="error-msg">⚠️ Digite o conteúdo</p>
+            </div>
+
+            <!-- Tags -->
+            <div class="mb-6">
+                <label class="font-bold text-sm uppercase mb-2 block">
+                    Tags <span class="font-normal text-gray-500">(opcional)</span>
+                </label>
+                <input type="text" name="tags" class="input-brutal" placeholder="Ex: FISICA, QUIMICA, DUVIDA">
+                <p class="text-[10px] font-mono text-gray-500 mt-1">Separe por vírgula</p>
+            </div>
+
+            <!-- Submit -->
+            <div class="flex justify-end gap-4">
+                <a href="/comunidade" class="font-mono text-sm font-bold uppercase px-4 py-3 hover:underline">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i data-lucide="send" class="w-4 h-4 inline mr-2"></i>
+                    Publicar
+                </button>
+            </div>
+
+        </form>
+
+        <!-- DICAS -->
+        <div class="mt-6 bg-white border-2 border-dashed border-gray-300 p-4">
+            <h3 class="font-bold text-sm mb-2">💡 Dicas para um bom post:</h3>
+            <ul class="font-mono text-xs text-gray-600 space-y-1">
+                <li>• Use um título claro e objetivo</li>
+                <li>• Escolha a categoria certa (PAS 1, 2, 3 ou Intervalo)</li>
+                <li>• Seja específico na sua dúvida ou contribuição</li>
+                <li>• Use o Intervalo para memes e off-topic</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            let selectedCategory = null;
+
+            function selectCategory(label) {
+                // Remove selected from all
+                document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('selected'));
+                // Add selected to clicked
+                label.classList.add('selected');
+                // Check the radio
+                label.querySelector('input').checked = true;
+                selectedCategory = label.dataset.cat;
+                // Hide error
+                document.getElementById('cat-error').style.display = 'none';
+            }
+
+            document.getElementById('postForm').addEventListener('submit', function (e) {
+                let valid = true;
+
+                // Check categoria
+                if (!selectedCategory) {
+                    document.getElementById('cat-error').style.display = 'block';
+                    valid = false;
+                }
+
+                // Check titulo
+                if (!document.getElementById('titulo').value.trim()) {
+                    document.getElementById('titulo-error').style.display = 'block';
+                    valid = false;
+                } else {
+                    document.getElementById('titulo-error').style.display = 'none';
+                }
+
+                // Check conteudo
+                if (!document.getElementById('conteudo').value.trim()) {
+                    document.getElementById('conteudo-error').style.display = 'block';
+                    valid = false;
+                } else {
+                    document.getElementById('conteudo-error').style.display = 'none';
+                }
+
+                if (!valid) {
+                    e.preventDefault();
+                }
+            });
+
+            // Initialize Lucide
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>

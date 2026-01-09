@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5] p-4 md:p-8'">
+
+<head>
+    <title>Comunidade - Plataforma Darcy</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-post {
+                background: white;
+                border: 2px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+                transition: all 0.15s;
+            }
+
+            .card-post:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .tab-btn {
+                border: 2px solid black;
+                background: white;
+                padding: 8px 16px;
+                font-weight: 800;
+                font-size: 12px;
+                text-transform: uppercase;
+                transition: all 0.15s;
+            }
+
+            .tab-btn:hover {
+                background: #f5f5f5;
+            }
+
+            .tab-btn.active {
+                background: black;
+                color: white;
+            }
+
+            .tab-btn.pas1.active {
+                background: #3b82f6;
+                border-color: #3b82f6;
+            }
+
+            .tab-btn.pas2.active {
+                background: #22c55e;
+                border-color: #22c55e;
+            }
+
+            .tab-btn.pas3.active {
+                background: #f97316;
+                border-color: #f97316;
+            }
+
+            .tab-btn.intervalo.active {
+                background: #8b5cf6;
+                border-color: #8b5cf6;
+            }
+
+            .badge-cat {
+                font-size: 10px;
+                padding: 2px 8px;
+                font-weight: 800;
+                text-transform: uppercase;
+                font-family: monospace;
+            }
+
+            .badge-pas1 {
+                background: #dbeafe;
+                color: #1d4ed8;
+                border: 1px solid #93c5fd;
+            }
+
+            .badge-pas2 {
+                background: #dcfce7;
+                color: #166534;
+                border: 1px solid #86efac;
+            }
+
+            .badge-pas3 {
+                background: #ffedd5;
+                color: #c2410c;
+                border: 1px solid #fdba74;
+            }
+
+            .badge-intervalo {
+                background: #f3e8ff;
+                color: #7c3aed;
+                border: 1px solid #c4b5fd;
+            }
+
+            .btn-novo {
+                background: #facc15;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+                transition: all 0.15s;
+            }
+
+            .btn-novo:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px black;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="max-w-4xl mx-auto w-full">
+
+        <!-- HEADER -->
+        <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <div class="flex items-end gap-4">
+                <div
+                    class="w-14 h-14 bg-purple-600 border-4 border-black flex items-center justify-center shadow-hard shrink-0">
+                    <i data-lucide="users" class="w-7 h-7 text-white"></i>
+                </div>
+                <div>
+                    <div
+                        class="bg-black text-white px-2 py-0.5 text-[10px] font-mono font-bold inline-block mb-1 uppercase tracking-wide">
+                        Rede Social
+                    </div>
+                    <h1 class="text-4xl font-black italic tracking-tighter leading-[0.9]">COMUNIDADE.</h1>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <a href="/comunidade/novo"
+                    class="btn-novo px-4 py-2 font-bold text-sm uppercase flex items-center gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Novo Post
+                </a>
+                <a href="/" class="font-mono text-xs font-bold uppercase hover:underline flex items-center gap-1 px-4">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+                </a>
+            </div>
+        </div>
+
+        <!-- TABS DE CATEGORIA -->
+        <div class="mb-6 flex flex-wrap gap-2">
+            <a href="/comunidade"
+                th:classappend="${categoriaAtual == null && (trending ?: false) == false} ? 'active' : ''"
+                class="tab-btn">
+                Todos
+            </a>
+            <a th:each="cat : ${categorias}"
+                th:href="@{/comunidade/c/{c}(c=${cat.name().toLowerCase().replace('_', '-')})}" th:text="${cat.nome}"
+                th:classappend="${categoriaAtual == cat} ? 'active ' + ${cat.name().toLowerCase().replace('_', '')} : ${cat.name().toLowerCase().replace('_', '')}"
+                class="tab-btn">
+                Categoria
+            </a>
+            <a href="/comunidade/trending" th:classappend="${trending ?: false} ? 'active' : ''" class="tab-btn">
+                🔥 Trending
+            </a>
+        </div>
+
+        <!-- BUSCA -->
+        <form th:action="@{/comunidade}" method="get" class="mb-6">
+            <div class="flex gap-2">
+                <input type="text" name="q" th:value="${termoBusca}" placeholder="Buscar posts..."
+                    class="flex-1 bg-white border-2 border-black px-4 py-2 font-mono text-sm shadow-hard-sm">
+                <button type="submit"
+                    class="bg-black text-white px-4 py-2 font-bold text-sm uppercase border-2 border-black">
+                    Buscar
+                </button>
+            </div>
+        </form>
+
+        <!-- LISTA DE POSTS -->
+        <div class="space-y-4">
+            <div th:if="${posts.isEmpty()}" class="text-center py-12 text-gray-500 font-mono">
+                <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                <p>Nenhum post encontrado.</p>
+                <a href="/comunidade/novo" class="text-purple-600 hover:underline">Seja o primeiro a postar!</a>
+            </div>
+
+            <a th:each="post : ${posts}" th:href="@{/comunidade/post/{id}(id=${post.id})}" class="card-post block p-4">
+                <div class="flex gap-4">
+                    <!-- Avatar -->
+                    <div
+                        class="w-10 h-10 bg-gray-200 border-2 border-black flex items-center justify-center font-bold text-sm shrink-0">
+                        <span th:text="${#strings.substring(post.autor.nome, 0, 2).toUpperCase()}">AB</span>
+                    </div>
+
+                    <!-- Conteúdo -->
+                    <div class="flex-1 min-w-0">
+                        <!-- Meta -->
+                        <div class="flex items-center gap-2 mb-1 flex-wrap">
+                            <span class="badge-cat"
+                                th:classappend="'badge-' + ${post.categoria.name().toLowerCase().replace('_', '')}"
+                                th:text="${post.categoria.nome}">PAS 1</span>
+                            <span class="text-[10px] font-mono text-gray-500">
+                                por <strong th:text="${post.autor.nome}">Autor</strong>
+                                • <span th:text="${#temporals.format(post.criadoEm, 'dd/MM HH:mm')}">data</span>
+                            </span>
+                        </div>
+
+                        <!-- Título -->
+                        <h3 class="font-black text-lg leading-tight mb-1 truncate" th:text="${post.titulo}">Título</h3>
+
+                        <!-- Preview -->
+                        <p class="text-sm text-gray-600 line-clamp-2"
+                            th:text="${#strings.abbreviate(post.conteudo, 150)}">Conteúdo...</p>
+
+                        <!-- Stats -->
+                        <div class="flex items-center gap-4 mt-2 text-xs font-mono text-gray-500">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="heart" class="w-4 h-4"></i>
+                                <span th:text="${post.likes}">0</span>
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                <span th:text="${post.totalComentarios}">0</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- PAGINAÇÃO -->
+        <div th:if="${posts.totalPages > 1}" class="mt-8 flex justify-center gap-2">
+            <a th:if="${posts.hasPrevious()}" th:href="@{${#httpServletRequest.requestURI}(page=${posts.number - 1})}"
+                class="tab-btn">← Anterior</a>
+            <span class="font-mono text-sm px-4 py-2">
+                Página <span th:text="${posts.number + 1}">1</span> de <span th:text="${posts.totalPages}">1</span>
+            </span>
+            <a th:if="${posts.hasNext()}" th:href="@{${#httpServletRequest.requestURI}(page=${posts.number + 1})}"
+                class="tab-btn">Próxima →</a>
+        </div>
+
+    </div>
+</body>
+
+</html>

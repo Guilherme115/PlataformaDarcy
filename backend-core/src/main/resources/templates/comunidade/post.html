@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#e5e5e5] p-4 md:p-8'">
+
+<head>
+    <title th:text="${post.titulo} + ' - Comunidade'">Post - Comunidade</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .card-main {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .card-comment {
+                background: white;
+                border: 2px solid #e5e5e5;
+            }
+
+            .badge-cat {
+                font-size: 10px;
+                padding: 2px 8px;
+                font-weight: 800;
+                text-transform: uppercase;
+                font-family: monospace;
+            }
+
+            .badge-pas_1 {
+                background: #dbeafe;
+                color: #1d4ed8;
+            }
+
+            .badge-pas_2 {
+                background: #dcfce7;
+                color: #166534;
+            }
+
+            .badge-pas_3 {
+                background: #ffedd5;
+                color: #c2410c;
+            }
+
+            .badge-intervalo {
+                background: #f3e8ff;
+                color: #7c3aed;
+            }
+
+            .btn-like {
+                border: 2px solid #e5e5e5;
+                padding: 8px 16px;
+                transition: all 0.15s;
+            }
+
+            .btn-like:hover {
+                border-color: #ef4444;
+            }
+
+            .btn-like.liked {
+                background: #fef2f2;
+                border-color: #ef4444;
+                color: #ef4444;
+            }
+
+            .btn-action {
+                background: black;
+                color: white;
+                border: 2px solid black;
+                padding: 8px 16px;
+                font-weight: 700;
+                transition: all 0.15s;
+            }
+
+            .btn-action:hover {
+                background: #facc15;
+                color: black;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="max-w-3xl mx-auto w-full">
+
+        <!-- VOLTAR -->
+        <div class="mb-6">
+            <a href="/comunidade" class="font-mono text-xs font-bold uppercase hover:underline flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Feed
+            </a>
+        </div>
+
+        <!-- POST PRINCIPAL -->
+        <article class="card-main p-6 mb-6">
+            <!-- Meta -->
+            <div class="flex items-center gap-3 mb-4">
+                <div
+                    class="w-12 h-12 bg-gray-200 border-2 border-black flex items-center justify-center font-bold shrink-0">
+                    <span th:text="${#strings.substring(post.autor.nome, 0, 2).toUpperCase()}">AB</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="badge-cat" th:classappend="'badge-' + ${post.categoria.name().toLowerCase()}"
+                            th:text="${post.categoria.nome}">PAS 1</span>
+                        <span class="font-bold" th:text="${post.autor.nome}">Autor</span>
+                    </div>
+                    <div class="text-[10px] font-mono text-gray-500">
+                        <span th:text="${#temporals.format(post.criadoEm, 'dd/MM/yyyy HH:mm')}">data</span>
+                        <span th:if="${post.editadoEm != null}" class="text-orange-500">(editado)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Título -->
+            <h1 class="text-2xl font-black mb-4" th:text="${post.titulo}">Título do Post</h1>
+
+            <!-- Conteúdo -->
+            <div class="prose max-w-none mb-6 whitespace-pre-wrap" th:text="${post.conteudo}">
+                Conteúdo do post...
+            </div>
+
+            <!-- Tags -->
+            <div th:if="${post.tags != null && !post.tags.isEmpty()}" class="mb-4">
+                <span th:each="tag : ${#strings.arraySplit(post.tags, ',')}"
+                    class="inline-block bg-gray-100 text-gray-600 text-xs font-mono px-2 py-1 mr-1 mb-1"
+                    th:text="${tag.trim()}">TAG</span>
+            </div>
+
+            <!-- Ações -->
+            <div class="flex items-center gap-4 pt-4 border-t-2 border-gray-100">
+                <button id="btn-like" th:classappend="${curtiu} ? 'liked' : ''" th:data-post-id="${post.id}"
+                    class="btn-like flex items-center gap-2 font-bold text-sm">
+                    <i data-lucide="heart" class="w-5 h-5" th:classappend="${curtiu} ? 'fill-current' : ''"></i>
+                    <span id="like-count" th:text="${post.likes}">0</span>
+                </button>
+
+                <span class="flex items-center gap-2 text-gray-500 text-sm">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    <span th:text="${#lists.size(comentarios)}">0</span> comentários
+                </span>
+
+                <!-- Editar/Deletar (apenas autor) -->
+                <div th:if="${post.autor.id == usuario.id}" class="ml-auto flex gap-2">
+                    <form th:action="@{/comunidade/post/{id}/deletar(id=${post.id})}" method="post"
+                        onsubmit="return confirm('Tem certeza que deseja deletar?')">
+                        <button type="submit" class="text-red-600 text-xs font-bold uppercase hover:underline">
+                            Deletar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </article>
+
+        <!-- FORM COMENTAR -->
+        <div class="bg-white border-2 border-black p-4 mb-6 shadow-hard-sm">
+            <h3 class="font-bold mb-3">Adicionar Comentário</h3>
+            <form th:action="@{/comunidade/post/{id}/comentar(id=${post.id})}" method="post">
+                <textarea name="conteudo" rows="3" required placeholder="Escreva seu comentário..."
+                    class="w-full border-2 border-gray-200 p-3 font-mono text-sm resize-none mb-3"></textarea>
+                <button type="submit" class="btn-action text-sm uppercase">
+                    <i data-lucide="send" class="w-4 h-4 inline mr-1"></i> Comentar
+                </button>
+            </form>
+        </div>
+
+        <!-- LISTA DE COMENTÁRIOS -->
+        <div class="space-y-3">
+            <h3 class="font-black uppercase text-sm text-gray-500 mb-4">
+                <span th:text="${#lists.size(comentarios)}">0</span> Comentários
+            </h3>
+
+            <div th:if="${#lists.isEmpty(comentarios)}" class="text-center py-8 text-gray-400 font-mono text-sm">
+                Nenhum comentário ainda. Seja o primeiro!
+            </div>
+
+            <div th:each="com : ${comentarios}" class="card-comment p-4">
+                <div class="flex gap-3">
+                    <!-- Avatar -->
+                    <div
+                        class="w-8 h-8 bg-gray-100 border border-gray-300 flex items-center justify-center font-bold text-xs shrink-0">
+                        <span th:text="${#strings.substring(com.autor.nome, 0, 2).toUpperCase()}">AB</span>
+                    </div>
+
+                    <!-- Conteúdo -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="font-bold text-sm" th:text="${com.autor.nome}">Autor</span>
+                            <span class="text-[10px] font-mono text-gray-400"
+                                th:text="${#temporals.format(com.criadoEm, 'dd/MM HH:mm')}">data</span>
+                        </div>
+                        <p class="text-sm whitespace-pre-wrap" th:text="${com.conteudo}">Comentário...</p>
+
+                        <!-- Ações -->
+                        <div class="flex items-center gap-4 mt-2">
+                            <span class="text-xs text-gray-400 flex items-center gap-1">
+                                <i data-lucide="heart" class="w-3 h-3"></i>
+                                <span th:text="${com.likes}">0</span>
+                            </span>
+
+                            <form th:if="${com.autor.id == usuario.id}"
+                                th:action="@{/comunidade/comentario/{id}/deletar(id=${com.id})}" method="post">
+                                <input type="hidden" name="postId" th:value="${post.id}">
+                                <button type="submit" class="text-red-500 text-xs hover:underline">Deletar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            // Like AJAX
+            document.getElementById('btn-like')?.addEventListener('click', async function () {
+                const postId = this.dataset.postId;
+                const response = await fetch(`/comunidade/post/${postId}/like`, { method: 'POST' });
+                const data = await response.json();
+
+                document.getElementById('like-count').textContent = data.likes;
+                this.classList.toggle('liked', data.curtiu);
+            });
+
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>
