@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#f5f5f5]', showNav=false">
+
+<head>
+    <title>Central de Simulados Oficiais</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- HEADER -->
+        <div class="bg-white border-b-4 border-black p-6 mb-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h1 class="text-3xl font-black uppercase tracking-tight flex items-center gap-3">
+                            <i data-lucide="cpu" class="w-8 h-8"></i>
+                            Central de Simulados Oficiais
+                        </h1>
+                        <p class="text-xs font-mono text-gray-600 mt-1">Gestão completa dos simulados gerados via I.A.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- KPIs -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-yellow-400 border-3 border-black p-4 shadow-hard">
+                        <div class="text-xs font-bold uppercase mb-1">Total Gerados</div>
+                        <div class="text-4xl font-black" th:text="${totalSimulados}">0</div>
+                    </div>
+                    <div class="bg-green-400 border-3 border-black p-4 shadow-hard">
+                        <div class="text-xs font-bold uppercase mb-1">Ativos</div>
+                        <div class="text-4xl font-black" th:text="${simuladosAtivos}">0</div>
+                    </div>
+                    <div class="bg-blue-400 border-3 border-black p-4 shadow-hard">
+                        <div class="text-xs font-bold uppercase mb-1">Total Acessos</div>
+                        <div class="text-4xl font-black" th:text="${totalAcessos}">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6">
+
+            <!-- FLASH MESSAGES -->
+            <div th:if="${sucesso}"
+                class="mb-4 bg-green-100 border-2 border-green-600 p-4 font-mono text-sm font-bold text-green-800">
+                <i data-lucide="check-circle" class="w-4 h-4 inline mr-2"></i>
+                <span th:text="${sucesso}"></span>
+            </div>
+            <div th:if="${erro}"
+                class="mb-4 bg-red-100 border-2 border-red-600 p-4 font-mono text-sm font-bold text-red-800">
+                <i data-lucide="alert-triangle" class="w-4 h-4 inline mr-2"></i>
+                <span th:text="${erro}"></span>
+            </div>
+
+            <!-- GERADOR DE NOVOS SIMULADOS -->
+            <div class="bg-black text-white border-3 border-black p-6 mb-6 shadow-hard">
+                <h2 class="text-xl font-black uppercase mb-4 flex items-center gap-2">
+                    <i data-lucide="zap" class="w-5 h-5 text-yellow-400"></i>
+                    Gerar Novo Simulado
+                </h2>
+                <form action="/admin/simulados-oficiais/gerar" method="post" class="flex gap-4">
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold uppercase mb-2">Etapa do PAS</label>
+                        <select name="etapa"
+                            class="w-full bg-white text-black border-2 border-black p-3 font-bold text-sm">
+                            <option value="1">PAS 1 (Primeira Etapa)</option>
+                            <option value="2">PAS 2 (Segunda Etapa)</option>
+                            <option value="3">PAS 3 (Terceira Etapa)</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-xs font-bold uppercase mb-2">Senha de Admin</label>
+                        <input type="password" name="senha" placeholder="••••" required
+                            class="w-full bg-white text-black border-2 border-black p-3 font-mono text-sm">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit"
+                            class="bg-yellow-400 text-black px-8 py-3 font-black uppercase border-2 border-black hover:bg-yellow-300 transition flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-4 h-4"></i>
+                            GERAR
+                        </button>
+                    </div>
+                </form>
+                <p class="text-xs font-mono text-gray-400 mt-3">⚠️ O processo de geração pode levar alguns minutos.</p>
+            </div>
+
+            <!-- LISTAGEM DE SIMULADOS -->
+            <div class="bg-white border-3 border-black shadow-hard">
+                <div class="bg-black text-white p-4 border-b-3 border-black">
+                    <h2 class="text-lg font-black uppercase">Simulados Gerados</h2>
+                </div>
+
+                <div th:if="${#lists.isEmpty(simulados)}" class="p-12 text-center text-gray-500">
+                    <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                    <p class="font-mono text-sm">Nenhum simulado oficial gerado ainda.</p>
+                </div>
+
+                <table th:unless="${#lists.isEmpty(simulados)}" class="w-full">
+                    <thead class="bg-gray-100 border-b-2 border-black">
+                        <tr>
+                            <th class="p-3 text-left text-xs font-black uppercase">ID</th>
+                            <th class="p-3 text-left text-xs font-black uppercase">Título</th>
+                            <th class="p-3 text-left text-xs font-black uppercase">Etapa</th>
+                            <th class="p-3 text-left text-xs font-black uppercase">Itens</th>
+                            <th class="p-3 text-left text-xs font-black uppercase">Acessos</th>
+                            <th class="p-3 text-left text-xs font-black uppercase">Status</th>
+                            <th class="p-3 text-left text-xs font-black uppercase">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${simulados}" class="border-b border-gray-200 hover:bg-gray-50">
+                            <td class="p-3 font-mono text-xs" th:text="${s.id}">1</td>
+                            <td class="p-3">
+                                <div class="font-bold text-sm" th:text="${s.titulo}">Título</div>
+                                <div class="text-xs text-gray-500 font-mono" th:if="${s.dataUltimoAcesso}"
+                                    th:text="'Último acesso: ' + ${#temporals.format(s.dataUltimoAcesso, 'dd/MM/yyyy HH:mm')}">
+                                </div>
+                            </td>
+                            <td class="p-3">
+                                <span class="bg-yellow-400 text-black px-2 py-1 text-xs font-bold border border-black"
+                                    th:text="'PAS ' + ${s.etapa}">PAS 1</span>
+                            </td>
+                            <td class="p-3 font-mono text-sm" th:text="${#lists.size(s.questoes)}">0</td>
+                            <td class="p-3 font-mono text-sm font-bold"
+                                th:text="${s.contadorAcessos != null ? s.contadorAcessos : 0}">0</td>
+                            <td class="p-3">
+                                <span th:if="${s.ativo}"
+                                    class="bg-green-500 text-white px-2 py-1 text-xs font-bold uppercase">ATIVO</span>
+                                <span th:unless="${s.ativo}"
+                                    class="bg-red-500 text-white px-2 py-1 text-xs font-bold uppercase">INATIVO</span>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex gap-2">
+                                    <!-- Toggle Status -->
+                                    <form th:action="@{/admin/simulados-oficiais/{id}/toggle-status(id=${s.id})}"
+                                        method="post" class="inline">
+                                        <button type="submit"
+                                            th:classappend="${s.ativo} ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'"
+                                            class="text-white px-3 py-1 text-xs font-bold border-2 border-black transition">
+                                            <span th:text="${s.ativo} ? 'DESATIVAR' : 'ATIVAR'"></span>
+                                        </button>
+                                    </form>
+                                    <!-- Visualizar -->
+                                    <a th:href="@{/simulado/oficiais}" target="_blank"
+                                        class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-xs font-bold border-2 border-black transition">
+                                        VER
+                                    </a>
+                                    <!-- Excluir -->
+                                    <form th:action="@{/admin/simulados-oficiais/{id}/excluir(id=${s.id})}"
+                                        method="post" class="inline"
+                                        onsubmit="return confirm('Tem certeza que deseja excluir este simulado?')">
+                                        <button type="submit"
+                                            class="bg-red-700 hover:bg-red-800 text-white px-3 py-1 text-xs font-bold border-2 border-black transition">
+                                            EXCLUIR
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

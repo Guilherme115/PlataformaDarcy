@@ -19,11 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class ImageService {
 
-    @Value("${app.images.path}")
+    @Value("${app.images.path:./output_images}")
     private String rootPath;
 
-    @Autowired private ImagemQuestaoRepository imgRepo;
-    @Autowired private QuestaoRepository questaoRepo;
+    @Autowired
+    private ImagemQuestaoRepository imgRepo;
+    @Autowired
+    private QuestaoRepository questaoRepo;
 
     public void excluirImagem(Long id) {
         imgRepo.deleteById(id);
@@ -59,7 +61,8 @@ public class ImageService {
             String[] todosArquivos = diretorio.list();
             if (todosArquivos != null) {
                 System.out.println("   👉 Arquivos ignorados (extensão errada?):");
-                for (String f : todosArquivos) System.out.println("      - " + f);
+                for (String f : todosArquivos)
+                    System.out.println("      - " + f);
             }
             return Collections.emptyList();
         }
@@ -83,17 +86,19 @@ public class ImageService {
     }
 
     public void uploadImagemComTag(Long questaoId, MultipartFile file, String tag) throws IOException {
-        if (file.isEmpty()) return;
+        if (file.isEmpty())
+            return;
 
         Questao questao = questaoRepo.findById(questaoId).orElseThrow();
         String originalName = file.getOriginalFilename();
         String extensao = originalName != null && originalName.contains(".")
-                ? originalName.substring(originalName.lastIndexOf(".")) : ".png";
+                ? originalName.substring(originalName.lastIndexOf("."))
+                : ".png";
 
         String nomeArquivo = "upload_" + tag + "_" + System.currentTimeMillis() + extensao;
 
         String subPasta = "";
-        if(questao.getProva() != null) {
+        if (questao.getProva() != null) {
             subPasta = questao.getProva().getAno() + "_" + questao.getProva().getEtapa();
         } else {
             subPasta = "uploads_gerais";

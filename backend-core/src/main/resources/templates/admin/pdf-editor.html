@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif p-8 bg-[#e5e5e5]'">
+
+<head>
+    <title>Editor de PDF - Admin</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .page-card {
+                background: white;
+                border: 2px solid #e5e5e5;
+                transition: all 0.2s;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .page-card:hover {
+                border-color: black;
+                box-shadow: 4px 4px 0px 0px black;
+                transform: translate(-2px, -2px);
+            }
+
+            .page-card.selected {
+                border-color: #fbbf24;
+                box-shadow: 4px 4px 0px 0px #fbbf24;
+            }
+
+            .page-number {
+                position: absolute;
+                top: 8px;
+                left: 8px;
+                background: black;
+                color: white;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 10px;
+                font-weight: bold;
+                padding: 2px 6px;
+            }
+
+            .action-btn {
+                background: black;
+                color: white;
+                border: 2px solid black;
+                padding: 8px 16px;
+                font-weight: bold;
+                font-size: 12px;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .action-btn:hover {
+                background: #fbbf24;
+                color: black;
+            }
+
+            .action-btn.danger:hover {
+                background: #dc2626;
+                color: white;
+            }
+
+            .toolbar {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+                padding: 16px;
+            }
+
+            .loading-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
+
+            .loading-overlay.active {
+                display: flex;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="text-center text-white">
+                <i data-lucide="loader-2" class="w-16 h-16 animate-spin mb-4"></i>
+                <p class="font-mono text-sm font-bold uppercase">Processando PDF...</p>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="max-w-7xl mx-auto w-full mb-8 border-b-4 border-black pb-6 flex justify-between items-end">
+            <div>
+                <div
+                    class="bg-darcy-yellow text-black px-2 py-1 text-[10px] font-mono font-bold inline-block mb-2 uppercase border border-black">
+                    Editor de PDF
+                </div>
+                <h1 class="text-4xl font-black italic tracking-tighter leading-none mb-1" th:text="${pdf.filename}">
+                    arquivo.pdf
+                </h1>
+                <p class="font-mono text-xs text-gray-500 mt-2">
+                    <span th:text="${pdf.page_count}">0</span> páginas •
+                    <span th:text="${#numbers.formatDecimal(pdf.size_bytes / 1024.0 / 1024.0, 1, 2)}">0</span> MB
+                </p>
+            </div>
+
+            <a th:href="@{/admin/pdfs}"
+                class="text-xs font-mono font-bold uppercase hover:underline flex items-center gap-2 border-2 border-black px-3 py-2 bg-white hover:bg-black hover:text-white transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+            </a>
+        </header>
+
+        <main class="max-w-7xl mx-auto w-full">
+
+            <!-- Toolbar -->
+            <div class="toolbar mb-8 flex flex-wrap gap-4 items-center">
+                <span class="font-mono text-xs text-gray-500 uppercase">Edição:</span>
+
+                <!-- Dropdown Inserir -->
+                <div class="relative group">
+                    <button class="action-btn">
+                        <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Inserir ▾
+                    </button>
+                    <div
+                        class="absolute hidden group-hover:block bg-white border-2 border-black shadow-lg z-10 min-w-[180px]">
+                        <button onclick="insertBlankPage()"
+                            class="w-full text-left px-4 py-2 text-xs font-bold uppercase hover:bg-yellow-200 flex items-center gap-2">
+                            <i data-lucide="file" class="w-4 h-4"></i> Página em Branco
+                        </button>
+                        <button onclick="abrirModalInserirPdf()"
+                            class="w-full text-left px-4 py-2 text-xs font-bold uppercase hover:bg-yellow-200 flex items-center gap-2">
+                            <i data-lucide="copy" class="w-4 h-4"></i> De Outro PDF
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="deleteSelectedPage()" class="action-btn danger" id="btn-delete" disabled>
+                    <i data-lucide="trash-2" class="w-4 h-4 inline mr-1"></i> Excluir
+                </button>
+
+                <button onclick="abrirModalReconstruir()" class="action-btn" id="btn-reconstruct"
+                    style="background: #9333ea;" disabled>
+                    <i data-lucide="wrench" class="w-4 h-4 inline mr-1"></i> Reconstruir Página
+                </button>
+
+                <div class="border-l-2 border-black h-8 mx-2"></div>
+
+                <form th:action="@{'/admin/pdfs/' + ${pdf.filename} + '/process'}" method="post"
+                    onsubmit="return confirmarProcessamento();">
+                    <button type="submit" class="action-btn" style="background: #16a34a;">
+                        <i data-lucide="database" class="w-4 h-4 inline mr-1"></i>
+                        PROCESSAR → BANCO
+                    </button>
+                </form>
+
+                <div class="ml-auto flex items-center gap-2">
+                    <span class="font-mono text-xs text-gray-500">Selecionada:</span>
+                    <span id="selected-page" class="font-mono text-sm font-bold bg-black text-darcy-yellow px-2 py-1">
+                        Nenhuma
+                    </span>
+                </div>
+            </div>
+
+            <!-- Alerta de erro -->
+            <div th:if="${param.error}" class="mb-6 bg-red-100 border-2 border-red-600 p-4">
+                <p class="font-mono text-sm text-red-800">
+                    ⚠️ <strong>Erro:</strong> <span th:text="${param.error}">Mensagem</span>
+                </p>
+            </div>
+
+            <!-- Grid de Páginas -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="pages-grid">
+                <div th:each="preview : ${previews.previews}" class="page-card p-2" th:data-page="${preview.page}"
+                    onclick="selectPage(this)">
+
+                    <span class="page-number" th:text="${preview.page}">1</span>
+                    <img th:src="${preview.base64}" alt="Página" class="w-full h-auto border border-gray-200">
+                </div>
+            </div>
+
+            <!-- Instruções -->
+            <div class="mt-12 p-6 border-2 border-dashed border-gray-300 bg-gray-50">
+                <h3 class="font-bold uppercase text-sm mb-4 flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4"></i> Instruções
+                </h3>
+                <ul class="font-mono text-xs text-gray-600 space-y-2">
+                    <li>• <strong>Clique</strong> em uma página para selecioná-la</li>
+                    <li>• <strong>Inserir Branco</strong> adiciona uma página em branco ANTES da selecionada</li>
+                    <li>• <strong>Excluir</strong> remove a página selecionada permanentemente</li>
+                    <li>• As alterações são salvas automaticamente no PDF original</li>
+                </ul>
+            </div>
+
+        </main>
+
+        <!-- Modal Inserir de Outro PDF -->
+        <div id="modal-inserir-pdf" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50"
+            onclick="if(event.target===this)fecharModalInserirPdf()">
+            <div class="bg-white border-4 border-black p-6 w-full max-w-md shadow-hard">
+                <h3 class="font-black text-lg uppercase mb-4 flex items-center gap-2">
+                    <i data-lucide="copy" class="w-5 h-5"></i> Inserir de Outro PDF
+                </h3>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="font-mono text-xs uppercase font-bold">PDF Fonte:</label>
+                        <select id="source-pdf" class="w-full border-2 border-black p-2 font-mono text-sm mt-1">
+                            <option value="">Carregando PDFs...</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="font-mono text-xs uppercase font-bold">Número da Página:</label>
+                        <input type="number" id="source-page" min="1" value="1"
+                            class="w-full border-2 border-black p-2 font-mono text-sm mt-1">
+                    </div>
+
+                    <div>
+                        <label class="font-mono text-xs uppercase font-bold">Inserir ANTES da Página:</label>
+                        <input type="number" id="target-position" min="1" value="1"
+                            class="w-full border-2 border-black p-2 font-mono text-sm mt-1">
+                    </div>
+                </div>
+
+                <div class="flex gap-2 mt-6">
+                    <button onclick="inserirDeOutroPdf()"
+                        class="flex-1 bg-black text-white py-2 font-bold uppercase hover:bg-yellow-400 hover:text-black transition">
+                        Inserir
+                    </button>
+                    <button onclick="fecharModalInserirPdf()"
+                        class="flex-1 border-2 border-black py-2 font-bold uppercase hover:bg-gray-100 transition">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Reconstruir Página -->
+        <div id="modal-reconstruir" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50"
+            onclick="if(event.target===this)fecharModalReconstruir()">
+            <div class="bg-white border-4 border-black p-6 w-full max-w-4xl shadow-hard max-h-[90vh] overflow-y-auto">
+                <h3 class="font-black text-lg uppercase mb-4 flex items-center gap-2">
+                    <i data-lucide="wrench" class="w-5 h-5"></i> Reconstruir Página
+                    <span id="reconstruct-page-num" class="ml-2 bg-purple-600 text-white px-2 py-1 text-sm">1</span>
+                </h3>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- Coluna Esquerda: Preview da página original -->
+                    <div>
+                        <label class="font-mono text-xs uppercase font-bold block mb-2">Página Original
+                            (Referência):</label>
+                        <div class="border-2 border-gray-300 bg-gray-100 p-2 max-h-[400px] overflow-auto">
+                            <img id="preview-original" src="" alt="Preview" class="w-full">
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita: Formulário -->
+                    <div class="space-y-4">
+                        <!-- Texto Base -->
+                        <div>
+                            <label class="font-mono text-xs uppercase font-bold">Texto Base (Contexto):</label>
+                            <textarea id="reconstruct-texto-base" rows="3"
+                                placeholder="Cole aqui o texto de apoio/contexto do bloco (opcional)"
+                                class="w-full border-2 border-black p-2 font-mono text-sm mt-1 resize-y"></textarea>
+                        </div>
+
+                        <!-- Questões -->
+                        <div>
+                            <label class="font-mono text-xs uppercase font-bold flex items-center justify-between">
+                                Questões:
+                                <button onclick="addQuestaoReconstruct()"
+                                    class="bg-black text-white px-2 py-1 text-xs uppercase hover:bg-purple-600">
+                                    + Adicionar Questão
+                                </button>
+                            </label>
+                            <div id="questoes-container" class="space-y-3 mt-2 max-h-[250px] overflow-y-auto">
+                                <!-- Questões serão adicionadas aqui dinamicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 mt-6 pt-4 border-t-2 border-black">
+                    <button onclick="enviarReconstrucao()"
+                        class="flex-1 bg-purple-600 text-white py-3 font-bold uppercase hover:bg-purple-700 transition flex items-center justify-center gap-2">
+                        <i data-lucide="check" class="w-5 h-5"></i> Reconstruir Página
+                    </button>
+                    <button onclick="fecharModalReconstruir()"
+                        class="flex-1 border-2 border-black py-3 font-bold uppercase hover:bg-gray-100 transition">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script th:inline="javascript">
+            const filename = /*[[${pdf.filename}]]*/ '';
+            let selectedPage = null;
+
+            function selectPage(element) {
+                // Remove seleção anterior
+                document.querySelectorAll('.page-card').forEach(el => el.classList.remove('selected'));
+
+                // Seleciona novo
+                element.classList.add('selected');
+                selectedPage = parseInt(element.dataset.page);
+
+                // Atualiza UI
+                document.getElementById('selected-page').textContent = 'Página ' + selectedPage;
+                document.getElementById('btn-delete').disabled = false;
+                document.getElementById('btn-reconstruct').disabled = false;
+            }
+
+            function showLoading() {
+                document.getElementById('loading-overlay').classList.add('active');
+            }
+
+            function hideLoading() {
+                document.getElementById('loading-overlay').classList.remove('active');
+            }
+
+            async function insertBlankPage() {
+                const position = selectedPage || 1;
+
+                if (!confirm('Inserir página em branco antes da página ' + position + '?')) {
+                    return;
+                }
+
+                showLoading();
+
+                try {
+                    const response = await fetch('/admin/pdfs/' + filename + '/pages', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'insert_blank',
+                            page_number: position
+                        })
+                    });
+
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        const data = await response.json();
+                        alert('Erro: ' + (data.error || 'Falha ao inserir página'));
+                        hideLoading();
+                    }
+                } catch (e) {
+                    alert('Erro de conexão: ' + e.message);
+                    hideLoading();
+                }
+            }
+
+            async function deleteSelectedPage() {
+                if (!selectedPage) {
+                    alert('Selecione uma página primeiro');
+                    return;
+                }
+
+                if (!confirm('Excluir permanentemente a página ' + selectedPage + '? Esta ação não pode ser desfeita.')) {
+                    return;
+                }
+
+                showLoading();
+
+                try {
+                    const response = await fetch('/admin/pdfs/' + filename + '/pages', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'delete',
+                            page_number: selectedPage
+                        })
+                    });
+
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        const data = await response.json();
+                        alert('Erro: ' + (data.error || 'Falha ao excluir página'));
+                        hideLoading();
+                    }
+                } catch (e) {
+                    alert('Erro de conexão: ' + e.message);
+                    hideLoading();
+                }
+            }
+
+            function confirmarProcessamento() {
+                const nome = filename;
+                // Tenta extrair etapa e ano do nome
+                const match = nome.toLowerCase().match(/pas[_-]?(\d)[_-].*?(\d{4})/);
+
+                if (!match) {
+                    alert('⚠️ Nome de arquivo inválido!\n\nUse o formato: pas-X-prova-AAAA.pdf\nExemplo: pas-2-prova-2007.pdf');
+                    return false;
+                }
+
+                const etapa = match[1];
+                const ano = match[2];
+
+                const confirmado = confirm(
+                    '🚀 PROCESSAR PDF → BANCO DE DADOS\n\n' +
+                    '📄 Arquivo: ' + nome + '\n' +
+                    '📋 Etapa: PAS ' + etapa + '\n' +
+                    '📅 Ano: ' + ano + '\n\n' +
+                    'Este processo irá:\n' +
+                    '1. Extrair todos os blocos e questões\n' +
+                    '2. Salvar no banco de dados\n' +
+                    '3. Redirecionar para o CMS\n\n' +
+                    'Certifique-se de ter editado o PDF corretamente!\n\n' +
+                    'Continuar?'
+                );
+
+                if (confirmado) {
+                    showLoading();
+                }
+                return confirmado;
+            }
+
+            // ==================== MODAL INSERIR DE OUTRO PDF ====================
+            async function abrirModalInserirPdf() {
+                const modal = document.getElementById('modal-inserir-pdf');
+                const select = document.getElementById('source-pdf');
+                const targetInput = document.getElementById('target-position');
+
+                // Preenche posição com página selecionada ou 1
+                targetInput.value = selectedPage || 1;
+
+                // Carrega lista de PDFs
+                select.innerHTML = '<option value="">Carregando...</option>';
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                try {
+                    const resp = await fetch('/admin/pdfs/listar-json');
+                    const pdfs = await resp.json();
+
+                    select.innerHTML = '<option value="">Selecione um PDF...</option>';
+                    pdfs.forEach(pdf => {
+                        if (pdf.filename !== filename) { // Não mostra o próprio PDF
+                            select.innerHTML += `<option value="${pdf.filename}" data-pages="${pdf.page_count}">${pdf.filename} (${pdf.page_count} págs)</option>`;
+                        }
+                    });
+                } catch (e) {
+                    select.innerHTML = '<option value="">Erro ao carregar PDFs</option>';
+                }
+
+                // Reinicializa ícones
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+
+            function fecharModalInserirPdf() {
+                const modal = document.getElementById('modal-inserir-pdf');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+
+            async function inserirDeOutroPdf() {
+                const sourcePdf = document.getElementById('source-pdf').value;
+                const sourcePage = parseInt(document.getElementById('source-page').value);
+                const targetPosition = parseInt(document.getElementById('target-position').value);
+
+                if (!sourcePdf) {
+                    alert('Selecione um PDF fonte!');
+                    return;
+                }
+
+                if (!sourcePage || sourcePage < 1) {
+                    alert('Número de página inválido!');
+                    return;
+                }
+
+                fecharModalInserirPdf();
+                showLoading();
+
+                try {
+                    const response = await fetch('/admin/pdfs/' + filename + '/pages', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'insert_from_pdf',
+                            page_number: targetPosition,
+                            source_pdf: sourcePdf,
+                            source_page: sourcePage
+                        })
+                    });
+
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        const data = await response.json();
+                        alert('Erro: ' + (data.error || 'Falha ao inserir página'));
+                        hideLoading();
+                    }
+                } catch (e) {
+                    alert('Erro de conexão: ' + e.message);
+                    hideLoading();
+                }
+            }
+
+            // ==================== MODAL RECONSTRUIR PÁGINA ====================
+            let questaoCounter = 0;
+
+            function abrirModalReconstruir() {
+                if (!selectedPage) {
+                    alert('Selecione uma página primeiro!');
+                    return;
+                }
+
+                const modal = document.getElementById('modal-reconstruir');
+                document.getElementById('reconstruct-page-num').textContent = selectedPage;
+                document.getElementById('reconstruct-texto-base').value = '';
+                document.getElementById('questoes-container').innerHTML = '';
+                questaoCounter = 0;
+
+                // Carrega preview da página selecionada
+                const pageCards = document.querySelectorAll('.page-card');
+                pageCards.forEach(card => {
+                    if (parseInt(card.dataset.page) === selectedPage) {
+                        const img = card.querySelector('img');
+                        document.getElementById('preview-original').src = img.src;
+                    }
+                });
+
+                // Adiciona primeira questão automaticamente
+                addQuestaoReconstruct();
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+
+            function fecharModalReconstruir() {
+                const modal = document.getElementById('modal-reconstruir');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+
+            function addQuestaoReconstruct() {
+                questaoCounter++;
+                const container = document.getElementById('questoes-container');
+
+                const questaoHtml = `
+                    <div class="questao-item border-2 border-gray-300 p-3 bg-gray-50" data-questao-id="${questaoCounter}">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="font-bold text-sm">Questão</span>
+                            <input type="number" class="questao-numero w-16 border-2 border-black px-2 py-1 text-sm font-mono" 
+                                   value="${questaoCounter}" min="1" placeholder="Nº">
+                            <button onclick="removeQuestaoReconstruct(${questaoCounter})" 
+                                    class="ml-auto text-red-600 hover:bg-red-100 px-2 py-1 text-xs font-bold">
+                                ✕ Remover
+                            </button>
+                        </div>
+                        <textarea class="questao-texto w-full border-2 border-black p-2 text-sm resize-y" rows="3"
+                                  placeholder="Cole aqui o texto do enunciado da questão..."></textarea>
+                        <div class="mt-2">
+                            <label class="text-xs text-gray-500">Imagem (opcional):</label>
+                            <input type="file" class="questao-imagem text-xs mt-1" accept="image/*" 
+                                   onchange="handleImageSelect(this, ${questaoCounter})">
+                            <img class="questao-img-preview mt-2 max-h-24 hidden" data-preview-id="${questaoCounter}">
+                        </div>
+                    </div>
+                `;
+
+                container.insertAdjacentHTML('beforeend', questaoHtml);
+            }
+
+            function removeQuestaoReconstruct(id) {
+                const item = document.querySelector(`.questao-item[data-questao-id="${id}"]`);
+                if (item) item.remove();
+            }
+
+            function handleImageSelect(input, id) {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const preview = document.querySelector(`img[data-preview-id="${id}"]`);
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                        preview.dataset.base64 = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            async function enviarReconstrucao() {
+                const textoBase = document.getElementById('reconstruct-texto-base').value.trim();
+                const questoesItems = document.querySelectorAll('.questao-item');
+
+                if (questoesItems.length === 0) {
+                    alert('Adicione pelo menos uma questão!');
+                    return;
+                }
+
+                const questoes = [];
+                for (const item of questoesItems) {
+                    const numero = parseInt(item.querySelector('.questao-numero').value);
+                    const texto = item.querySelector('.questao-texto').value.trim();
+                    const imgPreview = item.querySelector('.questao-img-preview');
+                    const imagemBase64 = imgPreview.dataset.base64 || null;
+
+                    if (!numero || !texto) {
+                        alert('Preencha o número e texto de todas as questões!');
+                        return;
+                    }
+
+                    questoes.push({ numero, texto, imagem_base64: imagemBase64 });
+                }
+
+                if (!confirm(`Reconstruir página ${selectedPage} com ${questoes.length} questão(ões)?`)) {
+                    return;
+                }
+
+                fecharModalReconstruir();
+                showLoading();
+
+                try {
+                    const response = await fetch('/admin/pdfs/' + filename + '/reconstruct', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            page_number: selectedPage,
+                            texto_base: textoBase || null,
+                            questoes: questoes
+                        })
+                    });
+
+                    if (response.ok) {
+                        alert('✅ Página reconstruída com sucesso!');
+                        location.reload();
+                    } else {
+                        const data = await response.json();
+                        alert('Erro: ' + (data.error || 'Falha ao reconstruir página'));
+                        hideLoading();
+                    }
+                } catch (e) {
+                    alert('Erro de conexão: ' + e.message);
+                    hideLoading();
+                }
+            }
+        </script>
+    </th:block>
+
+</body>
+
+</html>

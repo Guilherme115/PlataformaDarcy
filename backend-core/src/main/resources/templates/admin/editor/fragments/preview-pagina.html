@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <!-- Fragment: Preview da Página A4 -->
+    <div th:fragment="preview-pagina" class="page-a4"
+        th:classappend="'layout-' + ${pagina.layout.name().toLowerCase()}">
+
+        <!-- Crop Marks -->
+        <div class="crop-mark tl"></div>
+        <div class="crop-mark tr"></div>
+        <div class="crop-mark bl"></div>
+        <div class="crop-mark br"></div>
+
+        <!-- LAYOUT COVER (Capa) -->
+        <div th:if="${pagina.layout.name() == 'COVER'}" class="h-full w-full border-[6px] border-black p-8 relative">
+            <div class="absolute top-0 left-0 w-4 h-4 bg-black"></div>
+            <div class="absolute top-0 right-0 w-4 h-4 bg-black"></div>
+            <div class="absolute bottom-0 left-0 w-4 h-4 bg-black"></div>
+            <div class="absolute bottom-0 right-0 w-4 h-4 bg-black"></div>
+
+            <!-- Injeção de HTML do usuário -->
+            <div class="h-full flex flex-col justify-between" th:utext="${pagina.htmlContent}"></div>
+        </div>
+
+        <!-- LAYOUT STANDARD ou TOC -->
+        <div th:if="${pagina.layout.name() != 'COVER'}">
+
+            <!-- Cabeçalho Automático (Para páginas padrão) -->
+            <div th:if="${pagina.layout.name() == 'STANDARD'}" class="mb-8 border-b-4 border-black pb-4">
+                <span
+                    class="font-mono text-xs font-black uppercase tracking-widest block mb-2 bg-black text-white w-fit px-2 py-1"
+                    th:text="${pagina.modulo}">MÓDULO 01</span>
+                <h1 class="text-4xl leading-none mt-2 font-sans font-black uppercase tracking-tight"
+                    th:text="${pagina.titulo}">TÍTULO DA PÁGINA</h1>
+            </div>
+
+            <!-- Cabeçalho Automático (Para Sumário) -->
+            <div th:if="${pagina.layout.name() == 'TOC'}" class="mb-12 border-b-[6px] border-black pb-6 text-center">
+                <h1 class="text-6xl font-sans font-black uppercase tracking-widest">Índice</h1>
+            </div>
+
+            <!-- Grid de 2 colunas (apenas para STANDARD) -->
+            <div th:if="${pagina.layout.name() == 'STANDARD'}" class="grid grid-cols-[1fr_60mm] gap-[10mm]">
+
+                <!-- Coluna Principal - Conteúdo HTML -->
+                <div class="flex-1" th:utext="${pagina.htmlContent}"></div>
+
+                <!-- Coluna Lateral - Notas Marginais -->
+                <div class="flex flex-col pt-24 h-full">
+                    <!-- Notas marginais (se houver) -->
+                    <div th:if="${pagina.notasMarginais != null and !pagina.notasMarginais.isEmpty()}"
+                        th:each="nota : ${pagina.notasMarginais}"
+                        class="font-mono text-[8.5pt] text-gray-800 border-t-[3px] border-black pt-2 mb-6 leading-tight">
+                        <strong class="block uppercase mb-2 w-fit text-[9px] bg-[#fbbf24] border border-black px-1"
+                            th:text="${nota.titulo}">Nota do Editor</strong>
+                        <span th:text="${nota.conteudo}">Conteúdo da nota...</span>
+                    </div>
+
+                    <!-- Área de anotações padrão -->
+                    <div class="flex-1 border-l-4 border-dotted border-gray-400 pl-2 relative min-h-[150px] mt-4">
+                        <span
+                            class="text-[9px] font-mono text-gray-400 rotate-90 origin-top-left absolute top-0 left-4 uppercase font-bold tracking-widest whitespace-nowrap">
+                            Área de Anotações Táticas
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo para TOC (sem coluna lateral) -->
+            <div th:if="${pagina.layout.name() == 'TOC'}" class="flex-1" th:utext="${pagina.htmlContent}"></div>
+
+        </div>
+
+        <!-- Rodapé Automático (exceto para COVER) -->
+        <div th:if="${pagina.layout.name() != 'COVER'}"
+            class="absolute bottom-[15mm] left-[20mm] right-[20mm] border-t-2 border-black pt-2 flex justify-between font-mono text-[9pt] font-bold">
+            <span class="uppercase tracking-widest text-black">
+                Plataforma Darcy • <span th:text="${pagina.modulo}">Módulo</span>
+            </span>
+            <span class="font-black bg-black text-white px-2">
+                PÁGINA <span th:text="${#numbers.formatInteger(pagina.numeroPagina, 2)}">01</span>
+            </span>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

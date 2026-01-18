@@ -3,6 +3,7 @@ package com.example.PlataformaDarcy.controller;
 import com.example.PlataformaDarcy.model.Usuario;
 import com.example.PlataformaDarcy.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,13 +16,16 @@ import java.util.Map;
  * Tutor IA 2.0 - Controller totalmente conectado à Plataforma.
  */
 @Controller
-@RequestMapping("/tutor")
+@RequestMapping("/aluno/tutor")
+@org.springframework.security.access.prepost.PreAuthorize("hasRole('PRO')")
 public class TutorController {
 
     @Autowired
     private TutorService tutorService;
     @Autowired
     private ContextService contextService;
+    @Autowired
+    private PerfilService perfilService;
 
     // ==================== PÁGINA PRINCIPAL ====================
 
@@ -171,5 +175,26 @@ public class TutorController {
     @ResponseBody
     public Map<String, Object> getContexto(@AuthenticationPrincipal Usuario usuario) {
         return tutorService.getDadosContexto(usuario);
+    }
+
+    // ==================== MUDANÇA DE ETAPA ====================
+
+    /**
+     * Troca rápida de etapa do PAS via AJAX.
+     */
+    @PostMapping("/mudar-etapa")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> mudarEtapa(
+            @AuthenticationPrincipal Usuario usuario,
+            @RequestParam Integer etapa) {
+        try {
+            if (etapa < 1 || etapa > 3) {
+                return ResponseEntity.badRequest().body(Map.of("ok", false, "erro", "Etapa inválida"));
+            }
+            perfilService.atualizarPerfil(usuario.getId(), usuario.getNome(), usuario.getRegiao(), etapa);
+            return ResponseEntity.ok(Map.of("ok", true, "etapa", etapa));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("ok", false, "erro", e.getMessage()));
+        }
     }
 }

@@ -17,7 +17,8 @@ import java.util.Map;
  * Usa IA para encontrar materiais de estudo na internet.
  */
 @Controller
-@RequestMapping("/pdf-search")
+@RequestMapping("/aluno/pdf-search")
+@org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ESTUDANTE', 'PRO', 'ADMIN')")
 public class PdfSearchController {
 
     @Autowired

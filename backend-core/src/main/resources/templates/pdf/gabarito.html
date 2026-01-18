@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Gabarito - PAS</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
+            color: #000;
+            font-size: 10pt;
+            line-height: 1.3;
+        }
+
+        .header {
+            border: 3px solid #f59e0b;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #fffbeb;
+            box-shadow: 4px 4px 0 #f59e0b;
+        }
+
+        .header h1 {
+            font-size: 18pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-family: 'Arial Black', sans-serif;
+            color: #b45309;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 9pt;
+            font-weight: bold;
+            color: #92400e;
+        }
+
+        .info-grid {
+            display: flex;
+            gap: 15px;
+            font-size: 8pt;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .gabarito-lista {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .gabarito-item {
+            display: flex;
+            gap: 15px;
+            padding: 5px;
+            margin-bottom: 3px;
+            border-bottom: 1px dashed #fbbf24;
+        }
+
+        .questao-num {
+            font-size: 10pt;
+            font-weight: 900;
+            min-width: 35px;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .resposta {
+            font-size: 11pt;
+            font-weight: 900;
+            min-width: 30px;
+            color: #b45309;
+            background: #fff;
+            padding: 2px 8px;
+            border: 2px solid #f59e0b;
+        }
+
+        .materia {
+            font-size: 7pt;
+            color: #92400e;
+            flex: 1;
+        }
+
+        .legenda {
+            border: 2px solid #f59e0b;
+            background: #fff;
+            padding: 10px;
+            margin-top: 15px;
+        }
+
+        .legenda h3 {
+            font-size: 9pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: #b45309;
+        }
+
+        .legenda p {
+            font-size: 7pt;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px solid #f59e0b;
+            text-align: center;
+            font-size: 8pt;
+            color: #92400e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📋 GABARITO OFICIAL</h1>
+        <p th:text="${titulo}">Lista PAS 1</p>
+        <div class="info-grid">
+            <div><strong>PAS:</strong> <span th:text="${etapa}">1</span></div>
+            <div><strong>Questões:</strong> <span th:text="${quantidade}">20</span></div>
+            <div><strong>Data:</strong> <span th:text="${data}">16/01/2026</span></div>
+        </div>
+    </div>
+
+    <div class="gabarito-lista">
+        <div th:each="q, iterStat : ${questoes}" class="gabarito-item">
+            <div class="questao-num">Q.<span th:text="(iterStat.index + 1)">01</span></div>
+            <div class="resposta">
+                <span th:if="${q.tipo.name() == 'C'}" th:text="${q.gabarito}">B</span>
+                <span th:if="${q.tipo.name() == 'A'}" th:text="${q.gabarito}">C</span>
+                <span th:if="${q.tipo.name() == 'B' or q.tipo.name() == 'D'}" th:text="${q.gabarito}">42</span>
+            </div>
+            <div class="materia" th:if="${q.tags != null}" th:text="${q.tags}">BIOLOGIA - GENÉTICA</div>
+        </div>
+    </div>
+
+    <div class="legenda">
+        <h3>📊 Legenda dos Tipos de Questão</h3>
+        <p>
+            <strong>Tipo A:</strong> Certo (C) ou Errado (E)<br />
+            <strong>Tipo B/D:</strong> Resposta Numérica (valor exato)<br />
+            <strong>Tipo C:</strong> Múltipla Escolha (A, B, C ou D)
+        </p>
+    </div>
+
+    <div class="footer">
+        <p><strong>PLATAFORMA DARCY</strong> | Preparatório PAS/UnB</p>
+        <p>@plataformadarcy | (61) 99999-9999</p>
+    </div>
+
+</body>
+
+</html>

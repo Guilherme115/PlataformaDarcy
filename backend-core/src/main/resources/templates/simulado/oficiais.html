@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif p-8 bg-[#e5e5e5]'">
+
+<head>
+    <title>Simulados Inéditos - Darcy</title>
+
+    <th:block layout:fragment="head-extras">
+        <style>
+            /* Estilo dos Radios de Idioma */
+            .lang-radio:checked+span {
+                background-color: black;
+                color: white;
+                border-color: black;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <header class="max-w-7xl mx-auto w-full mb-8 border-b-4 border-black pb-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div
+                    class="w-10 h-10 bg-yellow-400 border-2 border-black text-black font-black flex items-center justify-center text-xl">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold uppercase tracking-widest leading-none">Simulados Inéditos</h1>
+                    <p class="font-mono text-[10px] text-gray-600 uppercase">Gerados artificialmente pelo Motor Darcy
+                    </p>
+                </div>
+            </div>
+            <a href="/simulado" class="text-xs font-mono font-bold uppercase hover:underline">← Voltar</a>
+        </header>
+
+        <main class="max-w-7xl mx-auto w-full">
+
+            <div class="mb-8 border-b border-black pb-4 flex justify-between items-end">
+                <div>
+                    <h2 class="text-3xl font-black italic mb-1">PROVAS DISPONÍVEIS</h2>
+                    <p class="font-mono text-xs text-gray-600">Estas provas foram criadas seguindo a matriz exata de
+                        cada etapa.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div th:each="p : ${provas}"
+                    class="bg-white border-2 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative group hover:-translate-y-1 transition-all flex flex-col justify-between">
+                    <div>
+                        <span
+                            class="absolute top-4 right-4 bg-yellow-400 border border-black text-black text-[9px] font-bold px-2 py-1 uppercase animate-pulse">Inédito</span>
+
+                        <div class="mb-4">
+                            <span class="font-black text-4xl" th:text="'PAS ' + ${p.etapa}">PAS 1</span>
+                            <p class="font-mono text-[10px] text-gray-500 uppercase tracking-widest"
+                                th:text="${p.titulo}">Título da Prova</p>
+                        </div>
+
+                        <div class="flex gap-2 mb-6">
+                            <div
+                                class="bg-gray-100 border border-black px-2 py-1 text-[9px] font-mono font-bold uppercase">
+                                <span th:text="${#lists.size(p.questoes)}">0</span> Itens
+                            </div>
+                            <div
+                                class="bg-gray-100 border border-black px-2 py-1 text-[9px] font-mono font-bold uppercase">
+                                Ano <span th:text="${p.ano}">2025</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/simulado/gerar-prova-completa/{id}(id=${p.id})}" method="post"
+                        class="w-full mt-auto">
+
+                        <div class="mb-4">
+                            <p class="text-[10px] font-bold uppercase mb-2">Língua Estrangeira:</p>
+                            <div class="flex gap-2">
+                                <label class="cursor-pointer flex-1">
+                                    <input type="radio" name="idioma" value="INGLES" class="hidden lang-radio" checked>
+                                    <span
+                                        class="block border border-black text-center text-[10px] font-bold py-1 transition hover:bg-gray-100">ING</span>
+                                </label>
+                                <label class="cursor-pointer flex-1">
+                                    <input type="radio" name="idioma" value="ESPANHOL" class="hidden lang-radio">
+                                    <span
+                                        class="block border border-black text-center text-[10px] font-bold py-1 transition hover:bg-gray-100">ESP</span>
+                                </label>
+                                <label class="cursor-pointer flex-1">
+                                    <input type="radio" name="idioma" value="FRANCES" class="hidden lang-radio">
+                                    <span
+                                        class="block border border-black text-center text-[10px] font-bold py-1 transition hover:bg-gray-100">FRA</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-black text-white py-3 text-xs font-bold uppercase border-2 border-black hover:bg-yellow-400 hover:text-black transition flex items-center justify-center gap-2">
+                            <i data-lucide="play" class="w-3 h-3 fill-current"></i> INICIAR SIMULADO
+                        </button>
+
+                        <p class="text-[9px] text-center mt-2 text-gray-400 font-mono">Modo Prova: Tempo cronometrado.
+                        </p>
+                    </form>
+                </div>
+
+                <div th:if="${provas.isEmpty()}"
+                    class="col-span-3 text-center py-20 opacity-50 border-2 border-dashed border-black bg-gray-50">
+                    <i data-lucide="bot" class="w-12 h-12 mx-auto mb-4"></i>
+                    <p class="font-mono text-sm font-bold">Nenhum simulado inédito gerado ainda.</p>
+                    <p class="text-xs mt-2">Acesse o painel do Admin para gerar novas provas via I.A.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>

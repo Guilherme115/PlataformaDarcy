@@ -8,7 +8,8 @@ import java.util.List;
 @Table(name = "provas")
 @Data
 public class Prova {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Integer ano;
@@ -22,19 +23,22 @@ public class Prova {
     @Column(length = 50)
     private String origem;
 
-    // --- CORREÇÃO AQUI ---
-    // Adicionamos o campo que o Dashboard está pedindo
-    @Transient
-    private Boolean ativo = true; // Coloquei = true para as provas já nascerem ativas
-    // ---------------------
+    // Campos para gestão de Simulados Oficiais
+    private Boolean ativo = true;
+
+    @Column(name = "contador_acessos")
+    private Integer contadorAcessos = 0;
+
+    @Column(name = "data_ultimo_acesso")
+    private java.time.LocalDateTime dataUltimoAcesso;
 
     @OneToMany(mappedBy = "prova", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Questao> questoes;
 
     public String getTituloDisplay() {
-        if (titulo != null) return titulo;
+        if (titulo != null)
+            return titulo;
         return "Prova de " + ano + " (PDF)";
-
 
     }
 }

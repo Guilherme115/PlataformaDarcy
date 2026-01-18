@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/base}">
+
+<head>
+    <title>Minhas Listas Impressas | Plataforma Darcy</title>
+</head>
+
+<body>
+    <div layout:fragment="content" class="min-h-screen bg-gray-50 py-8 px-4">
+        <div class="max-w-6xl mx-auto">
+
+            <!-- HEADER -->
+            <div class="mb-8 border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_#000]">
+                <h1 class="text-3xl font-black uppercase mb-2">📄 Minhas Listas Impressas</h1>
+                <p class="text-sm text-gray-600 font-mono">Todas as listas que você gerou para impressão</p>
+
+                <div class="mt-4 flex gap-4 items-center">
+                    <span class="text-xs font-bold uppercase">Total:</span>
+                    <span class="bg-yellow-400 border-2 border-black px-3 py-1 font-black text-lg"
+                        th:text="${totalListas}">0</span>
+                </div>
+            </div>
+
+            <!-- FILTROS -->
+            <div class="mb-6 border-2 border-black bg-white p-4 shadow-[4px_4px_0px_0px_#000]">
+                <div class="flex gap-2">
+                    <a th:href="@{/simulado/minhas-listas(etapa=0)}"
+                        th:classappend="${etapaFiltro == 0} ? 'bg-yellow-400 border-black' : 'bg-white border-gray-300'"
+                        class="px-4 py-2 border-2 font-bold text-xs uppercase hover:bg-yellow-300 transition">
+                        TODAS
+                    </a>
+                    <a th:href="@{/simulado/minhas-listas(etapa=1)}"
+                        th:classappend="${etapaFiltro == 1} ? 'bg-yellow-400 border-black' : 'bg-white border-gray-300'"
+                        class="px-4 py-2 border-2 font-bold text-xs uppercase hover:bg-yellow-300 transition">
+                        PAS 1
+                    </a>
+                    <a th:href="@{/simulado/minhas-listas(etapa=2)}"
+                        th:classappend="${etapaFiltro == 2} ? 'bg-yellow-400 border-black' : 'bg-white border-gray-300'"
+                        class="px-4 py-2 border-2 font-bold text-xs uppercase hover:bg-yellow-300 transition">
+                        PAS 2
+                    </a>
+                    <a th:href="@{/simulado/minhas-listas(etapa=3)}"
+                        th:classappend="${etapaFiltro == 3} ? 'bg-yellow-400 border-black' : 'bg-white border-gray-300'"
+                        class="px-4 py-2 border-2 font-bold text-xs uppercase hover:bg-yellow-300 transition">
+                        PAS 3
+                    </a>
+                </div>
+            </div>
+
+            <!-- LISTA -->
+            <div class="space-y-4">
+                <div th:if="${listas.isEmpty()}" class="border-2 border-gray-300 bg-white p-8 text-center">
+                    <p class="text-gray-500 font-mono text-sm">Nenhuma lista encontrada.</p>
+                    <a href="/simulado/personalizado"
+                        class="mt-4 inline-block bg-yellow-400 border-2 border-black px-6 py-2 font-black uppercase text-xs hover:bg-yellow-300">
+                        CRIAR PRIMEIRA LISTA
+                    </a>
+                </div>
+
+                <div th:each="lista : ${listas}"
+                    class="border-3 border-black bg-white p-6 shadow-[6px_6px_0px_0px_#000] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_#000] transition-all">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-black text-lg uppercase" th:text="${lista.titulo}">Lista PAS 1</h3>
+                            <p class="text-xs font-mono text-gray-600 mt-1">
+                                <span th:text="${#temporals.format(lista.geradoEm, 'dd/MM/yyyy HH:mm')}">16/01/2026
+                                    18:30</span>
+                            </p>
+                        </div>
+                        <div class="bg-black text-white px-3 py-1 font-black text-sm">
+                            PAS <span th:text="${lista.etapa}">1</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-4 text-xs font-mono">
+                        <div class="border-l-4 border-yellow-400 pl-2">
+                            <div class="text-gray-500 uppercase font-bold">Questões</div>
+                            <div class="font-black text-lg" th:text="${lista.quantidadeQuestoes}">20</div>
+                        </div>
+                        <div class="border-l-4 border-blue-400 pl-2">
+                            <div class="text-gray-500 uppercase font-bold">Matérias</div>
+                            <div class="text-sm" th:text="${lista.materias}">Biologia, Física</div>
+                        </div>
+                        <div class="border-l-4 border-purple-400 pl-2">
+                            <div class="text-gray-500 uppercase font-bold">Tópicos</div>
+                            <div class="text-sm" th:text="${lista.topicos}">Genética</div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <a th:href="@{/simulado/baixar-prova/{id}(id=${lista.id})}"
+                            class="flex-1 bg-white border-2 border-black px-4 py-2 font-black text-xs uppercase text-center hover:bg-gray-100 transition flex items-center justify-center gap-2">
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                            BAIXAR PROVA
+                        </a>
+                        <a th:href="@{/simulado/gabarito/{id}(id=${lista.id})}"
+                            class="flex-1 bg-yellow-400 border-2 border-black px-4 py-2 font-black text-xs uppercase text-center hover:bg-yellow-300 transition flex items-center justify-center gap-2">
+                            <i data-lucide="key" class="w-4 h-4"></i>
+                            BAIXAR GABARITO
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            lucide.createIcons();
+        </script>
+    </th:block>
+</body>
+
+</html>

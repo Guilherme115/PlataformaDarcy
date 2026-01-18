@@ -20,29 +20,59 @@ public class SubscriptionService {
     @Autowired
     private EfiService efiService;
 
-    // Preços dos planos
-    public static final double PRECO_PRO_NORMAL = 59.00;
-    public static final double PRECO_PRO_PROMO = 19.90;
-    public static final int DURACAO_MESES = 12;
+    // === PREÇOS DOS PLANOS (PROMOÇÃO DE LANÇAMENTO) ===
+
+    // Plano ESTUDANTE (R$ 29,90 normal, R$ 24,90 promo)
+    public static final double PRECO_ESTUDANTE_NORMAL = 29.90;
+    public static final double PRECO_ESTUDANTE_PROMO = 24.90;
+
+    // Plano PRO/PREMIUM (R$ 79,90 normal, R$ 59,90 promo)
+    public static final double PRECO_PRO_NORMAL = 79.90;
+    public static final double PRECO_PRO_PROMO = 59.90;
+
+    public static final int DURACAO_MESES = 1; // Mudado para mensal (não anual)
 
     /**
-     * Inicia processo de assinatura PRO.
+     * Inicia processo de assinatura ESTUDANTE.
      */
-    public EfiService.CobrancaPix iniciarAssinatura(Usuario usuario) {
-        String descricao = "Plataforma Darcy PRO - 12 meses";
+    public EfiService.CobrancaPix iniciarAssinaturaEstudante(Usuario usuario) {
+        String descricao = "Plataforma Darcy ESTUDANTE - Mensal";
+        return efiService.criarCobrancaPix(PRECO_ESTUDANTE_PROMO, descricao, usuario.getId());
+    }
+
+    /**
+     * Inicia processo de assinatura PRO/PREMIUM.
+     */
+    public EfiService.CobrancaPix iniciarAssinaturaPro(Usuario usuario) {
+        String descricao = "Plataforma Darcy PREMIUM - Mensal";
         return efiService.criarCobrancaPix(PRECO_PRO_PROMO, descricao, usuario.getId());
     }
 
     /**
-     * Ativa plano PRO para o usuário.
+     * Ativa plano ESTUDANTE para o usuário.
+     */
+    @Transactional
+    public void ativarPlanoEstudante(Usuario usuario, int duracaoMeses) {
+        usuario.setPlano(TipoPlano.ESTUDANTE);
+        usuario.setDataExpiracaoPlano(LocalDateTime.now().plusMonths(duracaoMeses));
+        usuarioRepo.save(usuario);
+        usuarioRepo.flush();
+
+        System.out.println("🎉 Plano ESTUDANTE ativado para: " + usuario.getEmail() +
+                " até " + usuario.getDataExpiracaoPlano());
+    }
+
+    /**
+     * Ativa plano PRO/PREMIUM para o usuário.
      */
     @Transactional
     public void ativarPlanoPro(Usuario usuario, int duracaoMeses) {
         usuario.setPlano(TipoPlano.PRO);
         usuario.setDataExpiracaoPlano(LocalDateTime.now().plusMonths(duracaoMeses));
         usuarioRepo.save(usuario);
+        usuarioRepo.flush();
 
-        System.out.println("🎉 Plano PRO ativado para: " + usuario.getEmail() +
+        System.out.println("🎉 Plano PREMIUM ativado para: " + usuario.getEmail() +
                 " até " + usuario.getDataExpiracaoPlano());
     }
 

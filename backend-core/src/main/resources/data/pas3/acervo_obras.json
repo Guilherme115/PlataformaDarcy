@@ -1,0 +1,731 @@
+[
+    {
+        "id": "aud_eclipse_sobral",
+        "titulo": "Eclipse de Sobral: O Dia em que o Brasil Ajudou a Confirmar a Teoria da Relatividade de Einstein (BBC)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Documentário sobre a expedição científica de 1919 em Sobral (CE) que comprovou a Teoria da Relatividade Geral de Einstein. Conecta-se com Física Moderna (relatividade, curvatura do espaço-tempo) e História da Ciência.",
+        "tags": [
+            "AUDIOVISUAL",
+            "FISICA",
+            "HISTORIA",
+            "RELATIVIDADE"
+        ]
+    },
+    {
+        "id": "aud_algoritmo_google",
+        "titulo": "Como Funciona o Algoritmo Matemático do Google (Daniel Nunes)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo explicando o PageRank e a matemática por trás dos motores de busca. Conecta-se com Matemática (matrizes, sistemas lineares, álgebra linear) e tecnologia contemporânea.",
+        "tags": [
+            "AUDIOVISUAL",
+            "MATEMATICA",
+            "MATRIZES",
+            "TECNOLOGIA"
+        ]
+    },
+    {
+        "id": "aud_gps_albert",
+        "titulo": "A Mágica do GPS: Professor Albert e a Ciência da Natureza",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo explicando o funcionamento do GPS e a aplicação da Relatividade no cotidiano. Demonstra como satélites precisam corrigir efeitos relativísticos para manter precisão. Conecta-se com Física Moderna.",
+        "tags": [
+            "AUDIOVISUAL",
+            "FISICA",
+            "RELATIVIDADE",
+            "TECNOLOGIA"
+        ]
+    },
+    {
+        "id": "aud_numeros_complexos",
+        "titulo": "A (Verdadeira) Origem dos Números Complexos (Tem Ciência - Daniel Nunes)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo sobre a história e aplicações dos números complexos. Aborda a resolução de equações cúbicas e a representação geométrica no plano de Argand-Gauss. Conecta-se com Matemática (Números Complexos).",
+        "tags": [
+            "AUDIOVISUAL",
+            "MATEMATICA",
+            "COMPLEXOS",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "aud_barra68",
+        "titulo": "Barra 68: Sem Perder a Ternura (Vladimir Carvalho, 2001)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Documentário sobre a invasão da Universidade de Brasília pela ditadura militar em 1968. Fundamental para estudar História do Brasil (Ditadura Militar, AI-5) e o movimento estudantil.",
+        "tags": [
+            "AUDIOVISUAL",
+            "HISTORIA",
+            "BRASIL",
+            "DITADURA"
+        ]
+    },
+    {
+        "id": "aud_unicef_criancas",
+        "titulo": "UNICEF: Algumas Histórias Nunca Foram Feitas para Crianças (ONU Brasil)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo sobre direitos das crianças e violações de direitos humanos. Conecta-se com Sociologia (direitos humanos, infância), Geografia (desigualdade global) e Filosofia (ética).",
+        "tags": [
+            "AUDIOVISUAL",
+            "SOCIOLOGIA",
+            "FILOSOFIA",
+            "DIREITOS"
+        ]
+    },
+    {
+        "id": "aud_mulamba",
+        "titulo": "Mulamba (Virgínia Ferrante, 2017)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Clipe/documentário da banda Mulamba que aborda questões de gênero e empoderamento feminino na música. Conecta-se com Sociologia (gênero, feminismo) e cultura contemporânea brasileira.",
+        "tags": [
+            "AUDIOVISUAL",
+            "SOCIOLOGIA",
+            "CULTURA",
+            "GENERO"
+        ]
+    },
+    {
+        "id": "aud_racismo_ambiental",
+        "titulo": "Racismo Ambiental: Entenda Essa Luta (Canal Preto)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo sobre como populações negras e periféricas são mais afetadas por problemas ambientais. Conecta-se com Geografia (meio ambiente, urbanização), Sociologia (racismo estrutural) e ecologia política.",
+        "tags": [
+            "AUDIOVISUAL",
+            "GEOGRAFIA",
+            "SOCIOLOGIA",
+            "MEIO_AMBIENTE"
+        ]
+    },
+    {
+        "id": "tea_black_tie",
+        "titulo": "Eles Não Usam Black-Tie (Gianfrancesco Guarnieri, 1955)",
+        "tipo": "TEATRO",
+        "url_midia": "",
+        "texto_contexto": "Peça teatral marco do teatro brasileiro moderno. Aborda conflitos de classe, movimento operário e greves nas fábricas de São Paulo. Conecta-se com Modernismo teatral, Sociologia (trabalho) e História do Brasil.",
+        "tags": [
+            "TEATRO",
+            "LITERATURA",
+            "SOCIOLOGIA",
+            "HISTORIA",
+            "MODERNISMO"
+        ]
+    },
+    {
+        "id": "tea_vestido_noiva",
+        "titulo": "Vestido de Noiva (Nelson Rodrigues, 1943)",
+        "tipo": "TEATRO",
+        "url_midia": "",
+        "texto_contexto": "Peça que revolucionou o teatro brasileiro com estrutura em três planos (realidade, memória, alucinação). Marco do teatro moderno brasileiro. Conecta-se com Modernismo e psicanálise.",
+        "tags": [
+            "TEATRO",
+            "LITERATURA",
+            "MODERNISMO",
+            "PSICOLOGIA"
+        ]
+    },
+    {
+        "id": "mus_caravanas",
+        "titulo": "Caravanas (Chico Buarque)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Música que critica a segregação socioespacial nas cidades brasileiras, retratando o encontro entre periferias e bairros nobres. Conecta-se com Geografia Urbana, Sociologia (desigualdade) e Literatura contemporânea.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "GEOGRAFIA",
+            "URBANIZACAO"
+        ]
+    },
+    {
+        "id": "mus_negro_drama",
+        "titulo": "Negro Drama (Racionais MC's)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Rap fundamental sobre a experiência negra e periférica no Brasil. Aborda racismo, violência policial e resistência cultural. Conecta-se com Sociologia (racismo estrutural, identidade), Literatura contemporânea e História.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "HISTORIA",
+            "LITERATURA"
+        ]
+    },
+    {
+        "id": "mus_sagracao_primavera",
+        "titulo": "Sagração da Primavera (Stravinsky - versão Pina Bausch)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Obra revolucionária do início do século XX que rompeu com padrões musicais e coreográficos tradicionais. Representa a Vanguarda Europeia na música e dança. Conecta-se com Modernismo e História da Arte.",
+        "tags": [
+            "MUSICAL",
+            "HISTORIA",
+            "VANGUARDAS",
+            "MODERNISMO"
+        ]
+    },
+    {
+        "id": "mus_perfume_dela",
+        "titulo": "Perfume Dela (Martinha do Coco)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Música de coco de roda, manifestação cultural do Nordeste brasileiro. Representa a cultura popular tradicional e a resistência de tradições afro-brasileiras. Conecta-se com Sociologia e Geografia Regional.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "GEOGRAFIA",
+            "CULTURA"
+        ]
+    },
+    {
+        "id": "mus_girl_rio",
+        "titulo": "Girl from Rio (Anitta)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Pop brasileiro contemporâneo que dialoga com a imagem internacional do Brasil. Faz referência à Garota de Ipanema (Bossa Nova) enquanto apresenta uma nova estética. Conecta-se com globalização cultural e indústria fonográfica.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "CULTURA",
+            "GLOBALIZACAO"
+        ]
+    },
+    {
+        "id": "mus_meu_guri",
+        "titulo": "Meu Guri (Chico Buarque - versão Elza Soares)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Música que narra a trajetória de um jovem da periferia no crime, pela perspectiva da mãe. Critica a desigualdade social e a criminalização da pobreza. Conecta-se com Sociologia e Literatura.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "LITERATURA"
+        ]
+    },
+    {
+        "id": "mus_ilumina_mundo",
+        "titulo": "Ilumina o Mundo (Detonautas)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Rock brasileiro com temática de esperança e transformação social. Representa o rock nacional dos anos 2000 e a música como instrumento de conscientização.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "CULTURA"
+        ]
+    },
+    {
+        "id": "lit_nao_morrer",
+        "titulo": "A Gente Combinamos de Não Morrer (Conceição Evaristo)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Conto de Conceição Evaristo sobre resistência e memória afro-brasileira. Representa a literatura contemporânea brasileira e a escrevivência. Conecta-se com Sociologia (racismo, identidade) e História.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "SOCIOLOGIA",
+            "AFROBRASILEIRA"
+        ]
+    },
+    {
+        "id": "lit_desenredo",
+        "titulo": "Desenredo (Guimarães Rosa)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Conto de Guimarães Rosa que explora linguagem e inventividade narrativa. Representa o Modernismo brasileiro de terceira geração com experimentação linguística e renovação do conto.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "CONTO"
+        ]
+    },
+    {
+        "id": "lit_lacos_familia",
+        "titulo": "Laços de Família (Clarice Lispector)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Coletânea de contos de Clarice Lispector que explora a subjetividade feminina e as epifanias do cotidiano. Representa o Modernismo brasileiro de terceira geração com fluxo de consciência.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "CONTO",
+            "PSICOLOGIA"
+        ]
+    },
+    {
+        "id": "lit_elegia_1938",
+        "titulo": "Elegia 1938 (Carlos Drummond de Andrade)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema de Drummond sobre a angústia do indivíduo diante do mundo moderno e da iminência da Segunda Guerra. Representa a fase social do poeta e o Modernismo brasileiro.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "POESIA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "lit_medico_rural",
+        "titulo": "Um Médico Rural (Franz Kafka)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Conto kafkiano com atmosfera absurda e angustiante. Representa a literatura expressionista europeia e as vanguardas do início do século XX. Conecta-se com Filosofia (existencialismo).",
+        "tags": [
+            "LITERATURA",
+            "VANGUARDAS",
+            "CONTO",
+            "FILOSOFIA",
+            "LINGUAS"
+        ]
+    },
+    {
+        "id": "lit_proxima_aldeia",
+        "titulo": "A Próxima Aldeia (Franz Kafka)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Microconto de Kafka sobre a brevidade da vida e a impossibilidade de realizar projetos. Representa a literatura moderna europeia e o absurdo existencial.",
+        "tags": [
+            "LITERATURA",
+            "VANGUARDAS",
+            "CONTO",
+            "FILOSOFIA",
+            "LINGUAS"
+        ]
+    },
+    {
+        "id": "lit_reinvencao",
+        "titulo": "Reinvenção (Cecília Meireles)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema de Cecília Meireles sobre a renovação pessoal e a passagem do tempo. Representa o Modernismo brasileiro de segunda geração com lirismo e espiritualidade.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_lagrima",
+        "titulo": "A Lágrima (Augusto dos Anjos)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema pré-modernista de Augusto dos Anjos com vocabulário científico e pessimismo cósmico. Representa a transição para o Modernismo com temática filosófica e biológica.",
+        "tags": [
+            "LITERATURA",
+            "PREMODERNISMO",
+            "POESIA",
+            "FILOSOFIA"
+        ]
+    },
+    {
+        "id": "lit_evocacao_recife",
+        "titulo": "Evocação do Recife: Memória, Escravidão e História (Manuel Bandeira)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema de Manuel Bandeira que evoca memórias da infância em Recife. Representa o Modernismo brasileiro de primeira geração com verso livre e linguagem coloquial.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "POESIA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "lit_quinze",
+        "titulo": "O Quinze (Raquel de Queiroz)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Romance regionalista sobre a seca de 1915 no Ceará. Representa o Modernismo brasileiro de segunda geração (Romance de 30) com crítica social e temática nordestina.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "ROMANCE",
+            "GEOGRAFIA"
+        ]
+    },
+    {
+        "id": "lit_casamento",
+        "titulo": "Casamento (Adélia Prado)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema de Adélia Prado sobre o cotidiano e a espiritualidade. Representa a literatura contemporânea brasileira com temática feminina e religiosa.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_ensinamento",
+        "titulo": "Ensinamento (Adélia Prado)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema que valoriza a aprendizagem através da experiência de vida. Representa a poesia contemporânea brasileira com linguagem acessível e sabedoria popular.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_quintal",
+        "titulo": "Quintal (Meimei Bastos)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema contemporâneo que explora memória e infância. Representa a nova geração de poetas brasileiros com sensibilidade e cotidiano.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_lavar_pratos",
+        "titulo": "Não Vou Mais Lavar os Pratos (Cristiane Sobral)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema de resistência feminina negra que recusa o papel subserviente. Representa a literatura afro-brasileira contemporânea e o feminismo negro.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "POESIA",
+            "AFROBRASILEIRA",
+            "SOCIOLOGIA"
+        ]
+    },
+    {
+        "id": "lit_chorar",
+        "titulo": "Instruções para Chorar (Júlio Cortázar)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Texto surrealista do escritor argentino que dá instruções para ações cotidianas. Representa a literatura latino-americana contemporânea e o realismo mágico.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "CONTO",
+            "LINGUAS"
+        ]
+    },
+    {
+        "id": "lit_recomeco",
+        "titulo": "Recomeço (s.m.) (Aka Poeta)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema contemporâneo em formato de verbete de dicionário. Representa a poesia contemporânea brasileira com experimentação formal e temática existencial.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_rodofernalia",
+        "titulo": "Rodofernália (Nicolas Behr)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poesia marginal de Nicolas Behr sobre Brasília. Representa a poesia marginal brasileira dos anos 70/80 com ironia e crítica à cidade planejada.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "POESIA",
+            "GEOGRAFIA"
+        ]
+    },
+    {
+        "id": "lit_tecendo_manha",
+        "titulo": "Tecendo a Manhã (João Cabral de Melo Neto)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema de João Cabral sobre construção coletiva e trabalho conjunto. Representa a poesia de terceira geração modernista com linguagem objetiva e metáfora construtivista.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_nao_matem",
+        "titulo": "Não as Matem (Lima Barreto)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Crônica de Lima Barreto contra o feminicídio. Representa a literatura pré-modernista com crítica social e defesa das mulheres. Texto precursor do debate sobre violência de gênero.",
+        "tags": [
+            "LITERATURA",
+            "PREMODERNISMO",
+            "CRONICA",
+            "SOCIOLOGIA"
+        ]
+    },
+    {
+        "id": "lit_linguagem_humana",
+        "titulo": "Qual o Segredo da Linguagem Humana? (Eduardo Sklarz)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Texto de divulgação científica sobre a origem e características da linguagem humana. Conecta-se com Linguística, Biologia (evolução) e Filosofia (linguagem e pensamento).",
+        "tags": [
+            "LITERATURA",
+            "CIENCIA",
+            "TEXTO",
+            "BIOLOGIA"
+        ]
+    },
+    {
+        "id": "lit_poemas_colonizacao",
+        "titulo": "Poemas da Colonização (Oswald de Andrade)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poemas de Oswald de Andrade com crítica à colonização e visão antropofágica da cultura brasileira. Representa o Modernismo de primeira geração e a Semana de 22.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "POESIA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "txt_anemia_falciforme",
+        "titulo": "Anemia Falciforme foi Invisibilizada pelo Racismo (Agência Brasil)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem sobre a negligência histórica com a anemia falciforme, doença que afeta principalmente a população negra. Conecta-se com Biologia (Genética), Sociologia (racismo na saúde) e políticas públicas.",
+        "tags": [
+            "TEXTO",
+            "BIOLOGIA",
+            "GENETICA",
+            "SOCIOLOGIA"
+        ]
+    },
+    {
+        "id": "txt_galvani_volta",
+        "titulo": "Galvani e Volta, um Embate Elétrico (Ciência Hoje)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto sobre a história da eletricidade e o debate entre Galvani e Volta. Conecta-se com Física (Eletrodinâmica), Química (Eletroquímica) e História da Ciência.",
+        "tags": [
+            "TEXTO",
+            "FISICA",
+            "QUIMICA",
+            "ELETRICIDADE",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "txt_eletricos_etanol",
+        "titulo": "Elétricos Movidos a Etanol (Pesquisa Fapesp)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem sobre tecnologia de células de combustível movidas a etanol. Conecta-se com Química (reações de oxirredução, combustíveis), Física (conversão de energia) e sustentabilidade.",
+        "tags": [
+            "TEXTO",
+            "QUIMICA",
+            "FISICA",
+            "ELETROQUIMICA",
+            "TECNOLOGIA"
+        ]
+    },
+    {
+        "id": "txt_despertar_robos",
+        "titulo": "O Despertar dos Robôs (Revista Darcy)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto sobre inteligência artificial e robótica. Conecta-se com Física (eletrônica), Matemática (algoritmos) e Filosofia (ética da IA, o que é consciência).",
+        "tags": [
+            "TEXTO",
+            "FISICA",
+            "MATEMATICA",
+            "FILOSOFIA",
+            "TECNOLOGIA"
+        ]
+    },
+    {
+        "id": "txt_radiacao_humanidade",
+        "titulo": "Como a Descoberta da Radiação Mudou o Futuro da Humanidade (BBC)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem sobre a história da radioatividade, desde Becquerel e os Curie até aplicações modernas. Conecta-se com Química (Radioatividade), Física (nuclear) e História da Ciência.",
+        "tags": [
+            "TEXTO",
+            "QUIMICA",
+            "FISICA",
+            "RADIOATIVIDADE",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "txt_biotecnologia_amazonia",
+        "titulo": "A Importância da Biotecnologia para o Desenvolvimento da Amazônia (CNN Brasil)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto sobre o potencial biotecnológico da biodiversidade amazônica. Conecta-se com Biologia (Biotecnologia, Genética), Geografia (Amazônia) e Química (bioeconomia).",
+        "tags": [
+            "TEXTO",
+            "BIOLOGIA",
+            "BIOTECNOLOGIA",
+            "GEOGRAFIA"
+        ]
+    },
+    {
+        "id": "txt_cupuacu_indigenas",
+        "titulo": "Cupuaçu só Surgiu com a Domesticação de Fruto por Indígenas (Jornal da USP)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem sobre a origem do cupuaçu e a contribuição indígena para a domesticação de espécies. Conecta-se com Biologia (evolução, domesticação), História (povos indígenas) e Botânica.",
+        "tags": [
+            "TEXTO",
+            "BIOLOGIA",
+            "HISTORIA",
+            "BOTANICA"
+        ]
+    },
+    {
+        "id": "txt_circuitos_sistemas",
+        "titulo": "Uma Abordagem de Circuitos Elétricos Utilizando Sistemas Lineares (UFPR)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Artigo científico aplicando álgebra linear a circuitos elétricos. Conecta-se com Matemática (Sistemas Lineares, Matrizes) e Física (Eletrodinâmica, Leis de Kirchhoff).",
+        "tags": [
+            "TEXTO",
+            "MATEMATICA",
+            "FISICA",
+            "SISTEMAS",
+            "ELETRICIDADE"
+        ]
+    },
+    {
+        "id": "txt_necropolitica",
+        "titulo": "Necropolítica (Achille Mbembe)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Ensaio filosófico sobre o poder de estado sobre a vida e a morte. Conecta-se com Filosofia (biopolítica, poder), Sociologia (violência de estado) e Geografia (territórios de exclusão).",
+        "tags": [
+            "TEXTO",
+            "FILOSOFIA",
+            "SOCIOLOGIA",
+            "POLITICA"
+        ]
+    },
+    {
+        "id": "txt_epistemicidio",
+        "titulo": "Epistemicídio (Sueli Carneiro)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Tese de doutorado que cunhou o termo epistemicídio para descrever a destruição de saberes não-europeus. Conecta-se com Filosofia (epistemologia), Sociologia (racismo) e História.",
+        "tags": [
+            "TEXTO",
+            "FILOSOFIA",
+            "SOCIOLOGIA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "txt_sociedade_cansaco",
+        "titulo": "Sociedade do Cansaço (Byung-Chul Han)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Ensaio filosófico sobre a autoexploração no capitalismo contemporâneo. Conecta-se com Filosofia (contemporânea), Sociologia (trabalho, neoliberalismo) e Psicologia.",
+        "tags": [
+            "TEXTO",
+            "FILOSOFIA",
+            "SOCIOLOGIA",
+            "CONTEMPORANEO"
+        ]
+    },
+    {
+        "id": "vis_morte_kollwitz",
+        "titulo": "Morte (Käthe Kollwitz, 1897)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Litografia expressionista sobre a morte e o sofrimento humano. Representa o Expressionismo alemão e as vanguardas europeias do início do século XX. Conecta-se com História e Filosofia.",
+        "tags": [
+            "VISUAL",
+            "VANGUARDAS",
+            "HISTORIA",
+            "FILOSOFIA"
+        ]
+    },
+    {
+        "id": "vis_palacio_capanema",
+        "titulo": "Complexo Arquitetônico do Palácio Capanema (Rio de Janeiro)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Edifício modernista projetado por equipe liderada por Lucio Costa e Oscar Niemeyer, com consultoria de Le Corbusier. Marco da arquitetura modernista brasileira e patrimônio histórico.",
+        "tags": [
+            "VISUAL",
+            "HISTORIA",
+            "MODERNISMO",
+            "ARQUITETURA"
+        ]
+    },
+    {
+        "id": "vis_ciclos_economicos",
+        "titulo": "Ciclos Econômicos (Cândido Portinari) - Palácio Capanema",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Painéis de Portinari retratando os ciclos econômicos brasileiros (pau-brasil, cana, ouro, café). Representam o Modernismo brasileiro e a arte engajada socialmente. Conecta-se com História do Brasil.",
+        "tags": [
+            "VISUAL",
+            "HISTORIA",
+            "MODERNISMO",
+            "BRASIL",
+            "ECONOMIA"
+        ]
+    },
+    {
+        "id": "vis_transfiguracao",
+        "titulo": "Transfiguração (Olivier de Sagazan, 2011)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Performance artística contemporânea que explora a transformação do corpo e da identidade. Representa a arte contemporânea com questionamento sobre humanidade e animalidade.",
+        "tags": [
+            "VISUAL",
+            "CONTEMPORANEA",
+            "FILOSOFIA",
+            "PERFORMANCE"
+        ]
+    },
+    {
+        "id": "vis_sikka_magnum",
+        "titulo": "Sikka Magnum (Daniel Canogar, 2013)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Instalação artística digital usando LEDs e tecnologia. Representa a arte contemporânea e a relação entre arte e tecnologia. Conecta-se com Física (eletricidade, luz) e cultura digital.",
+        "tags": [
+            "VISUAL",
+            "CONTEMPORANEA",
+            "TECNOLOGIA",
+            "FISICA"
+        ]
+    },
+    {
+        "id": "vis_vacina_kobra",
+        "titulo": "Vacina COVID-19 (Eduardo Kobra, 2021)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Mural de Kobra homenageando a ciência e a vacinação durante a pandemia. Representa a arte urbana contemporânea brasileira. Conecta-se com Biologia (imunologia), História contemporânea e saúde pública.",
+        "tags": [
+            "VISUAL",
+            "CONTEMPORANEA",
+            "BIOLOGIA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "vis_einstein_kobra",
+        "titulo": "Genial Andar de Bike - Tributo a Einstein (Eduardo Kobra, 2016)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Mural de Kobra retratando Einstein de bicicleta. Representa a arte urbana contemporânea e homenageia a Física Moderna. Conecta-se com Física (Relatividade) e cultura pop-científica.",
+        "tags": [
+            "VISUAL",
+            "CONTEMPORANEA",
+            "FISICA",
+            "ARTE_URBANA"
+        ]
+    }
+]

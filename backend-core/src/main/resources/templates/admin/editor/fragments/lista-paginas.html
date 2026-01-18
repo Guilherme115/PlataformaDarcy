@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <!-- Fragment: Lista de Páginas (Sidebar) -->
+    <div th:fragment="lista-paginas" id="lista-paginas" class="flex-1 overflow-y-auto p-2">
+        <div th:each="p : ${paginas}" th:classappend="${novaPaginaId != null and p.id == novaPaginaId} ? 'active' : ''"
+            class="page-card" hx-get="@{/admin/editor/pagina/{id}(id=${p.id})}" hx-target="#editor-area"
+            hx-swap="outerHTML">
+            <div class="flex justify-between items-center mb-1">
+                <span class="text-[10px] uppercase tracking-widest opacity-70" th:text="${p.layout}">STANDARD</span>
+                <span class="text-[10px] bg-black/20 px-1 rounded">Pág <span th:text="${p.numeroPagina}">1</span></span>
+            </div>
+            <div class="truncate text-sm" th:text="${p.titulo}">Título da Página</div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(paginas)}" class="text-center py-8 text-gray-500">
+            <i data-lucide="file-text" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+            <p class="text-xs font-mono">Nenhuma página criada</p>
+        </div>
+    </div>
+
+    <!-- Fragment: Editor de Página -->
+    <div th:fragment="editor-pagina" id="editor-area" class="flex-1 relative bg-[#0d0d0d]">
+        <span class="absolute top-0 right-4 bg-[#fbbf24] text-black text-[9px] font-bold px-2 py-1 rounded-b z-10">HTML
+            EDIT</span>
+        <textarea id="html-editor" th:text="${paginaAtiva?.htmlContent}"></textarea>
+    </div>
+
+</body>
+
+</html>

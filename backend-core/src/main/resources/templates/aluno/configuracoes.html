@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='bg-[#f5f5f5] font-sans text-black min-h-screen'">
+
+<head>
+    <title>Configurações - Plataforma Darcy</title>
+</head>
+
+<body>
+    <div layout:fragment="content" class="max-w-4xl mx-auto p-8">
+
+        <!-- Header -->
+        <div class="mb-10 flex items-center gap-4">
+            <div
+                class="w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_black]">
+                <i data-lucide="settings" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <h1 class="text-4xl font-black uppercase italic tracking-tighter">Configurações</h1>
+                <p class="font-mono text-sm font-bold text-gray-500 uppercase tracking-widest">Gerencie sua conta e
+                    privacidade</p>
+            </div>
+        </div>
+
+        <!-- ALERTS -->
+        <div th:if="${sucesso}"
+            class="mb-8 p-4 bg-green-100 border-l-4 border-green-600 text-green-800 font-bold font-mono text-sm uppercase shadow-sm">
+            <i data-lucide="check-circle" class="w-4 h-4 inline mr-2"></i> <span th:text="${sucesso}"></span>
+        </div>
+        <div th:if="${erro}"
+            class="mb-8 p-4 bg-red-100 border-l-4 border-red-600 text-red-800 font-bold font-mono text-sm uppercase shadow-sm">
+            <i data-lucide="alert-triangle" class="w-4 h-4 inline mr-2"></i> <span th:text="${erro}"></span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- COLUMN 1: Basic Info -->
+            <div class="space-y-8">
+                <!-- CARD: Dados Pessoais -->
+                <div class="bg-white border-4 border-black shadow-[8px_8px_0px_black] p-6 relative">
+                    <div
+                        class="absolute -top-4 -right-4 bg-[#fbbf24] border-2 border-black px-3 py-1 font-black text-xs uppercase tracking-widest shadow-[2px_2px_0px_black]">
+                        Perfil
+                    </div>
+
+                    <h2 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
+                        <i data-lucide="user" class="w-5 h-5"></i> Dados Cadastrais
+                    </h2>
+
+                    <form action="/configuracoes/perfil" method="post" class="space-y-4">
+                        <div>
+                            <label class="block font-mono text-[10px] font-bold uppercase tracking-widest mb-1">Nome
+                                Completo</label>
+                            <input type="text" name="nome" th:value="${usuario.nome}"
+                                class="w-full border-2 border-black p-3 font-bold uppercase focus:outline-none focus:bg-yellow-50 transition">
+                        </div>
+
+                        <div>
+                            <label class="block font-mono text-[10px] font-bold uppercase tracking-widest mb-1">Região
+                                Administrativa</label>
+                            <div class="relative">
+                                <select name="regiao"
+                                    class="w-full border-2 border-black p-3 font-bold uppercase appearance-none bg-white cursor-pointer focus:outline-none focus:bg-yellow-50 transition">
+                                    <option th:each="ra : ${regioes}" th:value="${ra}" th:text="${ra}"
+                                        th:selected="${ra == usuario.regiao}">RA</option>
+                                </select>
+                                <i data-lucide="chevron-down"
+                                    class="absolute right-4 top-4 w-4 h-4 pointer-events-none"></i>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-mono text-[10px] font-bold uppercase tracking-widest mb-1">Etapa
+                                PAS Alvo</label>
+                            <div class="flex gap-4">
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="etapaAlvo" value="1" class="peer sr-only"
+                                        th:checked="${usuario.etapaAlvo == 1}">
+                                    <div
+                                        class="border-2 border-black p-3 text-center font-black bg-gray-100 peer-checked:bg-black peer-checked:text-white transition hover:bg-gray-200">
+                                        PAS 1
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="etapaAlvo" value="2" class="peer sr-only"
+                                        th:checked="${usuario.etapaAlvo == 2}">
+                                    <div
+                                        class="border-2 border-black p-3 text-center font-black bg-gray-100 peer-checked:bg-black peer-checked:text-white transition hover:bg-gray-200">
+                                        PAS 2
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="etapaAlvo" value="3" class="peer sr-only"
+                                        th:checked="${usuario.etapaAlvo == 3}">
+                                    <div
+                                        class="border-2 border-black p-3 text-center font-black bg-gray-100 peer-checked:bg-black peer-checked:text-white transition hover:bg-gray-200">
+                                        PAS 3
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-black text-white font-black uppercase py-4 hover:bg-[#fbbf24] hover:text-black border-2 border-transparent hover:border-black transition-all shadow-lg hover:shadow-none hover:translate-y-1">
+                                Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- COLUMN 2: Security & Danger -->
+            <div class="space-y-8">
+
+                <!-- CARD: Segurança -->
+                <div class="bg-white border-4 border-black shadow-[8px_8px_0px_black] p-6 relative">
+                    <div
+                        class="absolute -top-4 -right-4 bg-purple-500 text-white border-2 border-black px-3 py-1 font-black text-xs uppercase tracking-widest shadow-[2px_2px_0px_black]">
+                        Segurança
+                    </div>
+
+                    <h2 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
+                        <i data-lucide="lock" class="w-5 h-5"></i> Alterar Senha
+                    </h2>
+
+                    <div th:if="${usuario.provider == T(com.example.PlataformaDarcy.model.Usuario.Provider).GOOGLE}"
+                        class="bg-gray-100 p-4 border-2 border-gray-300 text-center">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg"
+                            class="w-8 h-8 mx-auto mb-2 opacity-50">
+                        <p class="text-xs font-mono font-bold text-gray-500 uppercase">Conta via Google</p>
+                        <p class="text-[10px] text-gray-400">Você não possui senha local.</p>
+                    </div>
+
+                    <form
+                        th:unless="${usuario.provider == T(com.example.PlataformaDarcy.model.Usuario.Provider).GOOGLE}"
+                        action="/configuracoes/senha" method="post" class="space-y-4">
+
+                        <div>
+                            <label class="block font-mono text-[10px] font-bold uppercase tracking-widest mb-1">Senha
+                                Atual</label>
+                            <input type="password" name="senhaAtual" required
+                                class="w-full border-2 border-black p-3 font-bold focus:outline-none focus:bg-purple-50 transition">
+                        </div>
+
+                        <div>
+                            <label class="block font-mono text-[10px] font-bold uppercase tracking-widest mb-1">Nova
+                                Senha</label>
+                            <input type="password" name="novaSenha" required
+                                class="w-full border-2 border-black p-3 font-bold focus:outline-none focus:bg-purple-50 transition">
+                        </div>
+
+                        <div>
+                            <label
+                                class="block font-mono text-[10px] font-bold uppercase tracking-widest mb-1">Confirmar
+                                Nova Senha</label>
+                            <input type="password" name="confirmacaoSenha" required
+                                class="w-full border-2 border-black p-3 font-bold focus:outline-none focus:bg-purple-50 transition">
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                class="w-full bg-white text-black border-2 border-black font-black uppercase py-4 hover:bg-black hover:text-white transition-all shadow-[4px_4px_0px_black] hover:shadow-none hover:translate-y-1">
+                                Atualizar Senha
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- CARD: Privacidade -->
+                <div class="bg-white border-4 border-black shadow-[8px_8px_0px_black] p-6 relative">
+                    <div
+                        class="absolute -top-4 -right-4 bg-blue-500 text-white border-2 border-black px-3 py-1 font-black text-xs uppercase tracking-widest shadow-[2px_2px_0px_black]">
+                        Privacidade
+                    </div>
+
+                    <h2 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
+                        <i data-lucide="database" class="w-5 h-5"></i> Meus Dados (LGPD)
+                    </h2>
+
+                    <p class="text-xs font-mono mb-4 text-gray-600">
+                        Você tem direito de acesso aos seus dados pessoais. Solicite abaixo uma cópia completa das
+                        informações que temos sobre você.
+                    </p>
+
+                    <a href="/configuracoes/dados/exportar" target="_blank"
+                        class="block w-full text-center bg-blue-100 text-blue-800 border-2 border-blue-600 font-black uppercase py-4 hover:bg-blue-200 transition-all">
+                        <i data-lucide="download" class="w-4 h-4 inline mr-2"></i> Baixar Meus Dados (JSON)
+                    </a>
+                </div>
+
+                <!-- CARD: Danger Zone -->
+                <div class="bg-red-50 border-4 border-red-600 p-6 relative opacity-80 hover:opacity-100 transition">
+                    <h2 class="text-lg font-black uppercase mb-4 text-red-700 flex items-center gap-2">
+                        <i data-lucide="skull" class="w-5 h-5"></i> Zona de Perigo
+                    </h2>
+                    <p class="text-xs font-mono font-bold text-red-800 mb-4">Esta ação é irreversível. Seus dados e
+                        progresso serão perdidos permanentemente.</p>
+
+                    <button type="button" onclick="document.getElementById('danger-form').classList.toggle('hidden')"
+                        class="text-xs font-black uppercase underline text-red-600 hover:text-black">
+                        Quero excluir minha conta
+                    </button>
+
+                    <form id="danger-form" action="/configuracoes/excluir" method="post"
+                        class="hidden mt-4 pt-4 border-t-2 border-red-200">
+                        <label
+                            class="block font-mono text-[10px] font-bold uppercase tracking-widest mb-1 text-red-800">Digite
+                            'DELETAR' para confirmar</label>
+                        <div class="flex gap-2">
+                            <input type="text" name="confirmacao" placeholder="DELETAR"
+                                class="flex-1 border-2 border-red-600 p-2 text-xs font-bold uppercase focus:outline-none text-red-600 placeholder-red-300">
+                            <button type="submit"
+                                class="bg-red-600 text-white px-4 font-bold text-xs uppercase border-2 border-red-800 hover:bg-red-700">Confirmar</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -28,7 +28,10 @@ public class TutorService {
      */
     public String perguntarAoDarcy(Usuario usuario, String mensagem) {
         String contextoEstudante = studentContextService.getResumoCompletoParaIA(usuario);
-        String contextoObras = contextService.recuperarContextoRelevante(mensagem);
+
+        // Agora passa a etapa do aluno para priorizar obras relevantes
+        Integer etapaAlvo = (usuario.getEtapaAlvo() != null) ? usuario.getEtapaAlvo() : 1;
+        String contextoObras = contextService.recuperarContextoRelevante(mensagem, etapaAlvo);
 
         String systemPrompt = buildSystemPrompt(contextoEstudante, contextoObras, null, mensagem);
         return geminiService.gerarConteudoBloco(systemPrompt, "", 1);

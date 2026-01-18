@@ -1,0 +1,85 @@
+<nav th:fragment="global-nav" th:if="${showNav != false}"
+    class="w-full bg-white border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+
+            <!-- Left: Logo & Brand -->
+            <div class="flex-shrink-0 flex items-center gap-4">
+                <a href="/" class="group relative">
+                    <div
+                        class="w-12 h-12 bg-[#fbbf24] border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_black] group-hover:shadow-[2px_2px_0px_black] group-hover:translate-x-[2px] group-hover:translate-y-[2px] transition-all">
+                        <span class="font-serif font-black text-2xl text-black italic">D.</span>
+                    </div>
+                </a>
+                <a href="/"
+                    class="hidden md:block font-black text-xl italic tracking-tighter hover:underline decoration-4 decoration-[#fbbf24] underline-offset-4 decoration-skip-ink-none">
+                    PLATAFORMA DARCY
+                </a>
+            </div>
+
+            <!-- Center: Main Navigation -->
+            <div class="hidden md:flex gap-8 items-center font-mono text-xs font-bold uppercase tracking-widest">
+                <a href="/" class="hover:text-[#fbbf24] hover:-translate-y-0.5 transition-transform inline-block">
+                    Início
+                </a>
+                <a href="/metodo" class="hover:text-red-600 hover:-translate-y-0.5 transition-transform inline-block">
+                    Método
+                </a>
+                <a href="/wiki" class="hover:text-purple-600 hover:-translate-y-0.5 transition-transform inline-block">
+                    Wiki
+                </a>
+                <a href="/aluno/tutor"
+                    class="group flex items-center gap-2 text-yellow-600 hover:text-yellow-700 transition">
+                    <span
+                        class="bg-yellow-100 border border-yellow-600 text-yellow-800 px-2 py-0.5 text-[9px] rounded-full group-hover:bg-yellow-200 transition">AI</span>
+                    <span>Tutor</span>
+                </a>
+                <a href="/aluno/podcast" class="group flex items-center gap-2 hover:text-blue-600 transition">
+                    <span>Podcasts</span>
+                </a>
+            </div>
+
+            <!-- Right: User & Actions -->
+            <div class="flex items-center gap-3">
+
+                <!-- Status Badge (Mobile Hidden) -->
+                <div class="hidden lg:flex flex-col items-end mr-2">
+                    <span class="font-bold text-xs uppercase" th:text="${#authentication.name}">USUÁRIO</span>
+                    <span
+                        th:if="${#authentication.principal instanceof T(com.example.PlataformaDarcy.model.Usuario) and #authentication.principal.isPro()}"
+                        class="text-[9px] font-mono font-black text-[#fbbf24] bg-black px-1">PRO</span>
+                    <span
+                        th:unless="${#authentication.principal instanceof T(com.example.PlataformaDarcy.model.Usuario) and #authentication.principal.isPro()}"
+                        class="text-[9px] font-mono text-gray-500">VISITANTE</span>
+                </div>
+
+                <!-- Admin Button -->
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/dashboard"
+                    title="Painel Admin"
+                    class="w-10 h-10 bg-purple-500 border-2 border-black text-white flex items-center justify-center hover:bg-purple-600 hover:shadow-[2px_2px_0px_black] transition-all">
+                    <i data-lucide="shield" class="w-5 h-5"></i>
+                </a>
+
+                <!-- Profile -->
+                <a href="/perfil" title="Meu Perfil"
+                    class="w-10 h-10 bg-white border-2 border-black flex items-center justify-center hover:bg-gray-50 hover:shadow-[2px_2px_0px_black] transition-all">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </a>
+
+                <!-- Config -->
+                <a href="/configuracoes" title="Configurações"
+                    class="w-10 h-10 bg-white border-2 border-black flex items-center justify-center hover:bg-gray-50 hover:shadow-[2px_2px_0px_black] transition-all">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                </a>
+
+                <!-- Logout -->
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" title="Sair"
+                        class="w-10 h-10 bg-black border-2 border-black text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>

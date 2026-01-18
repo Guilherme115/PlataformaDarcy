@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${app.images.path}")
+    @Value("${app.images.path:./output_images}")
     private String imagesPath;
 
     @Override

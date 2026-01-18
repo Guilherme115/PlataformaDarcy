@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layouts/base}"
-    th:with="CONTENT_TITLE='A Universidade Necessária'">
+    th:with="CONTENT_TITLE='Solução de Dados para o PAS/UnB'">
 
 <head>
     <th:block layout:fragment="head-extras">
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap"
+        <link
+            href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;700&display=swap"
             rel="stylesheet">
 
         <script>
@@ -13,19 +14,14 @@
                 theme: {
                     extend: {
                         fontFamily: {
-                            'headline': ['"Playfair Display"', 'serif'],
-                            'tech': ['"JetBrains Mono"', 'monospace'],
+                            'serif-display': ['"DM Serif Display"', 'serif'],
+                            'grotesk': ['"Space Grotesk"', 'sans-serif'],
                             'sans': ['"Inter"', 'sans-serif'],
                         },
                         colors: {
                             'darcy-yellow': '#facc15',
-                            'darcy-red': '#dc2626',
+                            'darcy-blue': '#2563eb',
                             'darcy-black': '#0a0a0a',
-                            'paper': '#fdfdfd',
-                        },
-                        boxShadow: {
-                            'brutal': '6px 6px 0px 0px rgba(0,0,0,1)',
-                            'brutal-lg': '12px 12px 0px 0px rgba(0,0,0,1)',
                         }
                     }
                 }
@@ -34,16 +30,31 @@
 
         <style>
             body {
-                background-color: #e5e5e5 !important;
-                background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png") !important;
+                background-color: #FAFAFA;
                 color: #0a0a0a;
                 overflow-x: hidden;
             }
 
-            .font-headline {
-                font-family: 'Playfair Display', serif;
+            /* Grid Background */
+            .bg-grid {
+                background-size: 50px 50px;
+                background-image:
+                    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
             }
 
+            /* Dot Grid Background */
+            .bg-dot-grid {
+                background-image: radial-gradient(#000000 1px, transparent 1px);
+                background-size: 20px 20px;
+            }
+
+            /* Smooth Scrolling */
+            html {
+                scroll-behavior: smooth;
+            }
+
+            /* Marquee Animation */
             .marquee-container {
                 overflow: hidden;
                 white-space: nowrap;
@@ -57,7 +68,7 @@
             .marquee-content {
                 display: inline-block;
                 animation: marquee 25s linear infinite;
-                font-family: 'JetBrains Mono', monospace;
+                font-family: 'Space Grotesk', sans-serif;
                 font-weight: 800;
                 text-transform: uppercase;
             }
@@ -72,90 +83,33 @@
                 }
             }
 
-            .btn-cta {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 12px;
-                padding: 1.2rem 2.5rem;
-                background: #0a0a0a;
-                color: #fdfdfd;
-                font-family: 'JetBrains Mono', monospace;
-                font-weight: 800;
-                text-transform: uppercase;
-                border: 3px solid #0a0a0a;
-                transition: all 0.2s;
-                box-shadow: 6px 6px 0px 0px #facc15;
+            /* Pulse Animation for Dots */
+            @keyframes pulse {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.5;
+                }
             }
 
-            .btn-cta:hover {
-                background: #facc15;
-                color: #0a0a0a;
-                transform: translate(-2px, -2px);
-                box-shadow: 10px 10px 0px 0px #0a0a0a;
+            .animate-pulse {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             }
 
-            .card-feature {
-                background: #fdfdfd;
-                border: 4px solid #0a0a0a;
-                padding: 2.5rem;
-                transition: all 0.2s;
+            .delay-75 {
+                animation-delay: 75ms;
             }
 
-            .card-feature:hover {
-                transform: translate(-4px, -4px);
-                box-shadow: 8px 8px 0px 0px #facc15;
+            .delay-150 {
+                animation-delay: 150ms;
             }
 
-            .card-price {
-                background: #fdfdfd;
-                border: 4px solid #0a0a0a;
-                padding: 3rem;
-                transition: all 0.2s;
-            }
-
-            .card-price.featured {
-                background: #0a0a0a;
-                color: white;
-                box-shadow: 12px 12px 0px 0px #facc15;
-            }
-
-            .stat-box {
-                background: white;
-                border: 4px solid black;
-                padding: 2rem;
-                text-align: center;
-                transition: all 0.2s;
-            }
-
-            .stat-box:hover {
-                transform: translate(-3px, -3px);
-                box-shadow: 6px 6px 0px black;
-            }
-
-            .philosopher-card {
-                background: white;
-                border: 4px solid black;
-                padding: 2rem;
-                position: relative;
-                transition: all 0.2s;
-            }
-
-            .philosopher-card:hover {
-                transform: translate(-4px, -4px);
-                box-shadow: 8px 8px 0px black;
-            }
-
-            .philosopher-card::before {
-                content: '"';
-                font-family: 'Playfair Display', serif;
-                font-size: 6rem;
-                position: absolute;
-                top: -1rem;
-                left: 1rem;
-                color: #facc15;
-                line-height: 1;
-                opacity: 0.5;
+            .delay-200 {
+                animation-delay: 200ms;
             }
         </style>
     </th:block>
@@ -166,107 +120,423 @@
     <main layout:fragment="content" class="flex flex-col w-full">
 
         <!-- NAVBAR -->
-        <nav
-            class="fixed top-0 left-0 w-full z-50 bg-[#fdfdfd] border-b-4 border-black px-6 py-4 flex justify-between items-center shadow-lg">
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-10 h-10 bg-darcy-yellow border-2 border-black flex items-center justify-center font-headline font-black text-2xl text-black">
-                    D.</div>
-                <span class="font-black uppercase tracking-tighter text-xl hidden md:block text-black">Plataforma
-                    Darcy</span>
-            </div>
-
-            <div class="flex gap-4 text-xs font-bold font-mono text-black items-center">
-                <a href="#manifesto" class="hover:underline hidden lg:block">Filosofia</a>
-                <a href="#ia" class="hover:underline hidden lg:block">IA</a>
-                <a href="#metodologia" class="hover:underline hidden lg:block">Metodologia</a>
-                <a href="#pricing" class="hover:underline hidden lg:block text-darcy-red">Planos</a>
-
-                <div class="h-6 w-px bg-black hidden lg:block mx-2"></div>
-
-                <div sec:authorize="!isAuthenticated()" class="flex gap-3">
-                    <a href="/login"
-                        class="px-4 py-2 border-2 border-black hover:bg-black hover:text-white transition uppercase">Login</a>
-                    <a href="/register"
-                        class="px-4 py-2 bg-black text-white border-2 border-black hover:bg-darcy-yellow hover:text-black transition uppercase">Criar
-                        Conta</a>
+        <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-black bg-white py-3">
+            <div class="container mx-auto px-6 flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 font-black text-2xl tracking-tighter">
+                    <div
+                        class="bg-darcy-yellow border-2 border-black w-10 h-10 flex items-center justify-center font-serif-display italic">
+                        D.
+                    </div>
+                    <span class="hidden md:block">PLATAFORMA DARCY</span>
                 </div>
 
-                <div sec:authorize="isAuthenticated()" class="flex gap-3">
+                <!-- Desktop Nav -->
+                <nav
+                    class="hidden md:flex items-center gap-8 font-grotesk text-sm font-semibold uppercase tracking-wide">
+                    <a href="#filosofia" class="hover:text-darcy-blue transition-colors">Filosofia</a>
+                    <a href="#ia" class="hover:text-darcy-blue transition-colors">IA</a>
+                    <a href="#metodologia" class="hover:text-darcy-blue transition-colors">Metodologia</a>
+                    <a href="#planos" class="text-red-600 hover:text-red-700 transition-colors">Planos</a>
+                    <div class="h-6 w-px bg-gray-300 mx-2"></div>
+
+                    <div sec:authorize="!isAuthenticated()" class="flex gap-3">
+                        <a href="/login" class="hover:underline underline-offset-4">Login</a>
+                        <a href="#" onclick="openRegisterModal(); return false;"
+                            class="bg-black text-white px-6 py-2 font-bold hover:bg-darcy-yellow hover:text-black hover:scale-105 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
+                            CRIAR CONTA
+                        </a>
+                    </div>
+
+                    <div sec:authorize="isAuthenticated()" class="flex gap-3">
+                        <a href="/aluno/home"
+                            class="px-6 py-2 bg-darcy-yellow border-2 border-black font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
+                            Meu Painel →
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- Mobile Toggle -->
+                <button class="md:hidden p-2"
+                    onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu"
+                class="hidden md:hidden absolute top-full left-0 right-0 bg-white border-b-2 border-black p-6 flex flex-col gap-4 shadow-xl">
+                <a href="#filosofia" class="text-lg font-bold uppercase">Filosofia</a>
+                <a href="#ia" class="text-lg font-bold uppercase">IA</a>
+                <a href="#metodologia" class="text-lg font-bold uppercase">Metodologia</a>
+                <a href="#planos" class="text-lg font-bold uppercase text-red-600">Planos</a>
+                <hr class="border-gray-200" />
+
+                <div sec:authorize="!isAuthenticated()">
+                    <a href="/login"
+                        class="block w-full py-3 font-bold border-2 border-black hover:bg-gray-100 text-center mb-2">LOGIN</a>
+                    <a href="#" onclick="openRegisterModal(); return false;"
+                        class="block w-full py-3 bg-darcy-yellow text-black font-black border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">CRIAR
+                        CONTA</a>
+                </div>
+
+                <div sec:authorize="isAuthenticated()">
                     <a href="/aluno/home"
-                        class="px-4 py-2 bg-darcy-yellow border-2 border-black font-black uppercase shadow-hard-sm">Meu
+                        class="block w-full py-3 bg-darcy-yellow text-black font-black border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center">Meu
                         Painel →</a>
                 </div>
             </div>
         </nav>
 
         <!-- HERO SECTION -->
-        <header
-            class="min-h-screen flex flex-col justify-center pt-24 border-b-4 border-black relative bg-white overflow-hidden">
-            <div class="absolute inset-0 opacity-10 pointer-events-none"
-                style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 50px 50px;">
+        <section class="relative pt-32 pb-16 md:pt-40 md:pb-24 border-b-4 border-black overflow-hidden bg-black">
+            <!-- Animated Grid Background -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute inset-0"
+                    style="background-image: repeating-linear-gradient(0deg, #facc15 0px, #facc15 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, #facc15 0px, #facc15 1px, transparent 1px, transparent 20px);">
+                </div>
             </div>
 
-            <div
-                class="max-w-7xl mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
-                <div class="order-2 lg:order-1">
-                    <div class="flex flex-wrap gap-2 mb-8">
-                        <span
-                            class="bg-darcy-yellow border-2 border-black px-3 py-1 text-[10px] font-black uppercase -rotate-1">Inteligência
-                            UnB</span>
-                        <span
-                            class="bg-black text-white border-2 border-black px-3 py-1 text-[10px] font-black uppercase rotate-1">Plano
-                            Elite R$ 19,90</span>
-                        <span
-                            class="bg-red-600 text-white border-2 border-black px-3 py-1 text-[10px] font-black uppercase animate-pulse">Beta
-                            Aberto</span>
-                    </div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
-                    <h1
-                        class="font-headline text-6xl md:text-[100px] font-black uppercase italic leading-[0.8] tracking-tighter mb-10 text-black">
-                        Estudar é<br>um ato de <span
-                            class="bg-black text-white px-3 not-italic inline-block transform rotate-1">Resistência.</span>
-                    </h1>
+                    <!-- Text Content -->
+                    <div class="lg:col-span-7 flex flex-col gap-6">
 
-                    <p
-                        class="font-sans text-xl text-gray-800 leading-relaxed mb-12 border-l-8 border-darcy-yellow pl-6 max-w-lg font-medium">
-                        Hackeamos o código do vestibular. Dados reais do PAS/UnB, IA treinada em obras literárias e um
-                        algoritmo que <strong>aprende com seus erros</strong>.
-                    </p>
+                        <!-- Beta Badge -->
+                        <div class="flex flex-wrap gap-3 items-center">
+                            <div
+                                class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 border-2 border-blue-600 font-black text-xs uppercase">
+                                <i data-lucide="beaker" class="w-4 h-4"></i>
+                                BETA PÚBLICO
+                            </div>
+                            <div
+                                class="inline-flex items-center gap-2 bg-darcy-yellow text-black border-2 border-darcy-yellow px-4 py-2 font-black text-xs uppercase">
+                                <i data-lucide="target" class="w-4 h-4"></i>
+                                PAS/UnB 2026
+                            </div>
+                            <div
+                                class="inline-flex items-center gap-2 bg-green-600 text-white border-2 border-green-600 px-4 py-2 font-black text-xs uppercase">
+                                <i data-lucide="tag" class="w-4 h-4"></i>
+                                A PARTIR DE R$ 24,90/MÊS
+                            </div>
+                        </div>
 
-                    <div class="flex flex-col sm:flex-row gap-6">
-                        <a href="/register" class="btn-cta text-white">Ocupar Minha Vaga <i
-                                data-lucide="arrow-right-circle" class="w-6 h-6"></i></a>
-                        <a href="#manifesto"
-                            class="flex items-center justify-center gap-2 font-black uppercase text-xs hover:underline text-black">
-                            <i data-lucide="scroll-text" class="w-5 h-5"></i> Ler o Manifesto
-                        </a>
-                    </div>
-                </div>
+                        <!-- MAIN HEADLINE - AGGRESSIVE & BOLD -->
+                        <h1
+                            class="text-5xl md:text-7xl lg:text-8xl leading-[0.9] font-black tracking-tighter text-white">
+                            <span class="block mb-3">VESTIBULAR É</span>
+                            <span class="block mb-3">UMA GUERRA DE</span>
+                            <span
+                                class="bg-darcy-yellow text-black px-4 py-2 inline-block transform -rotate-1 border-4 border-darcy-yellow shadow-[12px_12px_0px_0px_rgba(220,38,38,1)]">
+                                INFORMAÇÃO.
+                            </span>
+                        </h1>
 
-                <div
-                    class="order-1 lg:order-2 relative h-[450px] lg:h-[650px] border-4 border-black bg-gray-200 overflow-hidden shadow-brutal-lg">
-                    <img src="img/img_1.png"
-                        class="w-full h-full object-cover object-top grayscale contrast-150 mix-blend-multiply opacity-90 transition duration-700 hover:scale-105"
-                        alt="Darcy Ribeiro">
-                    <div
-                        class="absolute bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t-4 border-black p-6">
-                        <p class="font-headline font-black italic text-2xl text-black leading-tight">
-                            "O fracasso da educação no Brasil não é uma crise; é um projeto."
+                        <!-- Subheadline - Hook -->
+                        <p
+                            class="text-2xl md:text-3xl font-bold text-darcy-yellow leading-tight font-serif-display italic">
+                            E você está indo<br />
+                            desarmado para a batalha.
                         </p>
-                        <span class="font-mono text-[10px] text-gray-500 mt-2 block">— DARCY RIBEIRO, antropólogo e
-                            educador</span>
+
+                        <!-- Value Proposition - Tactical Advantage -->
+                        <div class="bg-darcy-yellow text-black p-6 border-4 border-darcy-yellow transform -rotate-1">
+                            <p class="text-lg md:text-xl font-black leading-tight mb-3 uppercase">
+                                <i data-lucide="crosshair" class="w-5 h-5 inline"></i>
+                                Enquanto eles estudam no escuro...
+                            </p>
+                            <p class="text-xl md:text-2xl font-black leading-tight">
+                                Você tem o MAPA COMPLETO do campo de batalha.
+                            </p>
+                        </div>
+
+                        <!-- Arsenal List -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div
+                                class="bg-white/10 backdrop-blur border-2 border-darcy-yellow p-4 flex items-start gap-3">
+                                <div
+                                    class="w-10 h-10 bg-darcy-yellow text-black border-2 border-black flex items-center justify-center shrink-0 font-black text-lg">
+                                    01
+                                </div>
+                                <div>
+                                    <p class="font-black text-white text-sm uppercase">Arsenal de Dados</p>
+                                    <p class="text-xs text-gray-300 font-bold">15 anos de provas decodificadas</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur border-2 border-darcy-yellow p-4 flex items-start gap-3">
+                                <div
+                                    class="w-10 h-10 bg-red-600 text-white border-2 border-black flex items-center justify-center shrink-0 font-black text-lg">
+                                    02
+                                </div>
+                                <div>
+                                    <p class="font-black text-white text-sm uppercase">IA Tática</p>
+                                    <p class="text-xs text-gray-300 font-bold">42 obras literárias processadas</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur border-2 border-darcy-yellow p-4 flex items-start gap-3">
+                                <div
+                                    class="w-10 h-10 bg-darcy-yellow text-black border-2 border-black flex items-center justify-center shrink-0 font-black text-lg">
+                                    03
+                                </div>
+                                <div>
+                                    <p class="font-black text-white text-sm uppercase">Algoritmo Adaptativo</p>
+                                    <p class="text-xs text-gray-300 font-bold">Identifica seus pontos fracos</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur border-2 border-darcy-yellow p-4 flex items-start gap-3">
+                                <div
+                                    class="w-10 h-10 bg-red-600 text-white border-2 border-black flex items-center justify-center shrink-0 font-black text-lg">
+                                    04
+                                </div>
+                                <div>
+                                    <p class="font-black text-white text-sm uppercase">Intel Cebraspe</p>
+                                    <p class="text-xs text-gray-300 font-bold">Padrões e tendências revelados</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Buttons - STRONG -->
+                        <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                            <a href="#" onclick="openRegisterModal(); return false;"
+                                class="relative bg-red-600 text-white px-10 py-6 text-xl lg:text-2xl font-black flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-all shadow-[10px_10px_0px_0px_rgba(250,204,21,1)] hover:shadow-[6px_6px_0px_0px_rgba(250,204,21,1)] hover:translate-x-1 hover:translate-y-1 group border-4 border-black uppercase">
+                                <i data-lucide="shield" class="w-6 h-6"></i>
+                                ACESSAR ARSENAL
+                                <i data-lucide="arrow-right"
+                                    class="w-6 h-6 group-hover:translate-x-2 transition-transform"></i>
+                            </a>
+                            <a href="#ia"
+                                class="px-8 py-6 text-lg font-black border-4 border-darcy-yellow bg-black text-darcy-yellow hover:bg-darcy-yellow hover:text-black transition-all shadow-[6px_6px_0px_0px_rgba(250,204,21,0.3)] flex items-center justify-center gap-2 uppercase">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
+                                VER COMO FUNCIONA
+                            </a>
+                        </div>
+
+                        <!-- Risk Reversal -->
+                        <div class="flex items-center gap-3 text-sm text-gray-400 mt-2">
+                            <i data-lucide="lock" class="w-5 h-5 text-darcy-yellow"></i>
+                            <span class="font-bold">Plano gratuito disponível • Estudante R$ 24,90 • Premium R$
+                                59,90/mês</span>
+                        </div>
+                    </div>
+
+                    <!-- Visual Area - Intelligence Dashboard -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="relative z-10 space-y-4">
+
+                            <!-- Intel Card 1 - Threat Analysis -->
+                            <div
+                                class="bg-red-600 border-4 border-black p-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transform -rotate-2 hover:rotate-0 transition-transform">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div
+                                        class="w-12 h-12 bg-black border-2 border-white flex items-center justify-center">
+                                        <i data-lucide="alert-circle" class="w-6 h-6 text-red-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-black text-white text-xs uppercase tracking-wider">Análise de
+                                            Ameaças</p>
+                                        <p class="text-white text-lg font-black">PAS 1 • 2026</p>
+                                    </div>
+                                </div>
+                                <div class="bg-black/30 backdrop-blur p-4 border-2 border-black">
+                                    <p class="text-white font-bold text-sm leading-tight">
+                                        <i data-lucide="trending-up" class="w-4 h-4 inline text-darcy-yellow"></i>
+                                        História do Brasil: 87% de probabilidade<br />
+                                        <i data-lucide="trending-up" class="w-4 h-4 inline text-darcy-yellow"></i>
+                                        Biologia Celular: 73% de recorrência
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Intel Card 2 - Battle Stats -->
+                            <div
+                                class="bg-darcy-yellow border-4 border-black p-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transform rotate-1 hover:rotate-0 transition-transform">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <i data-lucide="flame" class="w-10 h-10 text-red-600"></i>
+                                    <div>
+                                        <p class="font-black text-black text-sm uppercase">Seu Arsenal</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="text-center bg-black text-white p-3 border-2 border-black">
+                                        <div class="text-3xl font-black font-serif-display italic">5.2k</div>
+                                        <div class="text-[10px] font-bold uppercase mt-1">Questões<br />Mapeadas</div>
+                                    </div>
+                                    <div class="text-center bg-black text-white p-3 border-2 border-black">
+                                        <div class="text-3xl font-black font-serif-display italic">42</div>
+                                        <div class="text-[10px] font-bold uppercase mt-1">Obras na<br />IA</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Intel Card 3 - Secret Weapon -->
+                            <div
+                                class="bg-black border-4 border-darcy-yellow p-6 shadow-[8px_8px_0px_0px_rgba(250,204,21,1)]">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i data-lucide="zap" class="w-8 h-8 text-darcy-yellow"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Arma Secreta</p>
+                                        <p class="text-white font-black text-lg">Google Gemini™</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 text-xs font-bold leading-tight">
+                                    IA processa PDFs, identifica padrões e te diz EXATAMENTE o que estudar.
+                                </p>
+                            </div>
+
+                            <!-- Urgency Badge -->
+                            <div
+                                class="bg-white/10 backdrop-blur border-2 border-darcy-yellow p-4 flex items-center gap-3">
+                                <i data-lucide="clock" class="w-8 h-8 text-darcy-yellow animate-pulse"></i>
+                                <p class="text-white font-black text-sm uppercase leading-tight">
+                                    Quanto mais cedo você começar,<br />
+                                    maior sua vantagem tática.
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS SECTION -->
+        <section class="py-24 px-6 bg-white border-b-4 border-black relative overflow-hidden">
+            <div class="absolute inset-0 bg-grid opacity-30"></div>
+
+            <div class="container mx-auto relative z-10">
+                <div class="text-center mb-16">
+                    <div
+                        class="inline-block bg-darcy-blue text-white px-4 py-1 font-black text-xs uppercase mb-4 border-2 border-black">
+                        Demonstração
+                    </div>
+                    <h2 class="font-serif-display italic text-5xl md:text-6xl text-black mb-4">
+                        Como Funciona o Arsenal
+                    </h2>
+                    <p class="text-xl text-gray-700 max-w-2xl mx-auto font-bold">
+                        3 passos simples para ter vantagem tática no PAS
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <!-- Step 1 -->
+                    <div
+                        class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#000] transition-all group">
+                        <div
+                            class="w-16 h-16 bg-darcy-yellow border-4 border-black flex items-center justify-center font-black text-3xl mb-6">
+                            01
+                        </div>
+                        <h3 class="font-black text-2xl uppercase mb-4">Acesse o Banco</h3>
+                        <p class="text-gray-700 font-bold leading-relaxed mb-6">
+                            5.200+ questões do PAS indexadas por matéria, ano e dificuldade. Filtre exatamente o que
+                            você precisa treinar.
+                        </p>
+                        <div class="bg-gray-100 border-2 border-black overflow-hidden">
+                            <img src="/img/screenshots/questions-bank.png"
+                                alt="Central de Simulados - Banco de Questões" class="w-full h-auto" />
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div
+                        class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#000] transition-all group">
+                        <div
+                            class="w-16 h-16 bg-red-600 text-white border-4 border-black flex items-center justify-center font-black text-3xl mb-6">
+                            02
+                        </div>
+                        <h3 class="font-black text-2xl uppercase mb-4">IA Analisa</h3>
+                        <p class="text-gray-700 font-bold leading-relaxed mb-6">
+                            Gemini processa suas respostas, identifica padrões de erro e cria um plano de estudos
+                            PERSONALIZADO.
+                        </p>
+                        <div class="bg-gray-100 border-2 border-black overflow-hidden">
+                            <img src="/img/screenshots/ai-tutor.png" alt="Tutor Darcy IA - Interface Gemini"
+                                class="w-full h-auto" />
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div
+                        class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#000] transition-all group">
+                        <div
+                            class="w-16 h-16 bg-green-600 text-white border-4 border-black flex items-center justify-center font-black text-3xl mb-6">
+                            03
+                        </div>
+                        <h3 class="font-black text-2xl uppercase mb-4">Domine o PAS</h3>
+                        <p class="text-gray-700 font-bold leading-relaxed mb-6">
+                            Sistema de repetição espaçada garante que você NUNCA esqueça o que aprendeu. Revisões
+                            automáticas no momento certo.
+                        </p>
+                        <div class="bg-gray-100 border-2 border-black overflow-hidden">
+                            <img src="/img/screenshots/error-notebook.png" alt="Caderno de Erros - Sistema de Revisão"
+                                class="w-full h-auto" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Below -->
+                <div class="text-center mt-16">
+                    <a href="#" onclick="openRegisterModal(); return false;"
+                        class="inline-flex items-center gap-3 bg-black text-white px-12 py-6 text-2xl font-black uppercase border-4 border-black shadow-[12px_12px_0px_0px_rgba(250,204,21,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[6px_6px_0px_0px_rgba(250,204,21,1)] transition-all">
+                        <i data-lucide="rocket" class="w-6 h-6"></i>
+                        TESTAR AGORA - 7 DIAS GRÁTIS
+                        <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                    </a>
+                    <p class="mt-4 text-sm text-gray-600 font-bold">
+                        <i data-lucide="shield-check" class="w-4 h-4 inline text-green-600"></i>
+                        Sem cartão de crédito • Cancele quando quiser
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GUARANTEE SECTION -->
+        <section class="py-16 px-6 bg-darcy-yellow border-b-4 border-black">
+            <div class="container mx-auto">
+                <div
+                    class="max-w-4xl mx-auto bg-white border-4 border-black p-8 md:p-12 shadow-[12px_12px_0px_0px_#000]">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex-shrink-0">
+                            <div class="w-24 h-24 bg-green-600 border-4 border-black flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-12 h-12 text-white"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-black text-3xl uppercase mb-4">Garantia Incondicional de 30 Dias</h3>
+                            <p class="text-lg font-bold text-gray-700 leading-relaxed mb-4">
+                                Use a plataforma por 30 dias completos. Se não gostar por QUALQUER motivo, devolvemos
+                                100% do seu dinheiro. Sem perguntas, sem burocracia.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                    <span class="font-bold text-sm">Reembolso total</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                    <span class="font-bold text-sm">Sem perguntas</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                    <span class="font-bold text-sm">Garantia por escrito</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </header>
+        </section>
 
         <!-- MARQUEE -->
         <div class="marquee-container">
             <div class="marquee-content">
-                PAS 1 • PAS 2 • PAS 3 • CEBRASPE • 15 ANOS DE DADOS • +5.000 QUESTÕES • IA TREINADA • PODCAST EDUCATIVO
+                PAS 1 • PAS 2 • PAS 3 • CEBRASPE • 15 ANOS DE DADOS • +5.000 QUESTÕES • IA TREINADA • UPLOAD DE PDFS
                 • ALGORITMO ADAPTATIVO • CADERNO DE ERROS •
-                PAS 1 • PAS 2 • PAS 3 • CEBRASPE • 15 ANOS DE DADOS • +5.000 QUESTÕES • IA TREINADA • PODCAST EDUCATIVO
+                PAS 1 • PAS 2 • PAS 3 • CEBRASPE • 15 ANOS DE DADOS • +5.000 QUESTÕES • IA TREINADA • UPLOAD DE PDFS
                 • ALGORITMO ADAPTATIVO • CADERNO DE ERROS •
             </div>
         </div>
@@ -274,173 +544,269 @@
         <!-- STATS SECTION -->
         <section class="py-16 px-6 bg-darcy-yellow border-b-4 border-black">
             <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="stat-box">
-                    <div class="text-5xl font-black font-headline italic text-black">15+</div>
-                    <div class="font-mono text-[10px] font-bold uppercase text-gray-600 mt-2">Anos de Provas PAS</div>
-                </div>
-                <div class="stat-box">
-                    <div class="text-5xl font-black font-headline italic text-black">5.2k</div>
-                    <div class="font-mono text-[10px] font-bold uppercase text-gray-600 mt-2">Questões no Banco</div>
-                </div>
-                <div class="stat-box">
-                    <div class="text-5xl font-black font-headline italic text-darcy-red">42</div>
-                    <div class="font-mono text-[10px] font-bold uppercase text-gray-600 mt-2">Obras Literárias na IA
+                <div
+                    class="bg-white border-2 border-black p-6 text-center transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#000] shadow-[8px_8px_0px_0px_#000]">
+                    <div class="text-5xl font-black font-serif-display italic text-black">15+</div>
+                    <div class="font-grotesk text-[10px] font-bold uppercase text-gray-600 mt-2">Anos de Provas PAS
                     </div>
                 </div>
-                <div class="stat-box">
-                    <div class="text-5xl font-black font-headline italic text-black">24/7</div>
-                    <div class="font-mono text-[10px] font-bold uppercase text-gray-600 mt-2">Tutor IA Disponível</div>
+                <div
+                    class="bg-white border-2 border-black p-6 text-center transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#000] shadow-[8px_8px_0px_0px_#000]">
+                    <div class="text-5xl font-black font-serif-display italic text-black">5.2k</div>
+                    <div class="font-grotesk text-[10px] font-bold uppercase text-gray-600 mt-2">Questões no Banco</div>
+                </div>
+                <div
+                    class="bg-white border-2 border-black p-6 text-center transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#000] shadow-[8px_8px_0px_0px_#000]">
+                    <div class="text-5xl font-black font-serif-display italic text-red-600">42</div>
+                    <div class="font-grotesk text-[10px] font-bold uppercase text-gray-600 mt-2">Obras Literárias na IA
+                    </div>
+                </div>
+                <div
+                    class="bg-white border-2 border-black p-6 text-center transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#000] shadow-[8px_8px_0px_0px_#000]">
+                    <div class="text-5xl font-black font-serif-display italic text-black">24/7</div>
+                    <div class="font-grotesk text-[10px] font-bold uppercase text-gray-600 mt-2">Tutor IA Disponível
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- MANIFESTO -->
-        <section id="manifesto" class="py-32 px-6 bg-white border-b-4 border-black text-black">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-20">
-                    <h2 class="font-tech text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-4">A Nossa
-                        Filosofia</h2>
-                    <h3 class="font-headline text-5xl md:text-7xl font-black uppercase italic tracking-tighter">Nós
-                        somos o <span class="text-darcy-red underline decoration-8">Erro</span> no Sistema.</h3>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 font-medium text-lg leading-relaxed text-justify">
-                    <p>Acreditamos que o conhecimento não deve ter catraca. Enquanto a educação for tratada como
-                        mercadoria de luxo, a universidade pública será um privilégio hereditário. <strong>Nós recusamos
-                            essa lógica.</strong></p>
-                    <p>A Plataforma Darcy foi construída para nivelar o campo de batalha. Hackeamos 15 anos de provas do
-                        Cebraspe para te dar a <strong>vantagem tática</strong> que antes só o dinheiro comprava.</p>
-                </div>
-
-                <blockquote
-                    class="mt-16 p-8 bg-gray-100 border-l-[12px] border-black font-black text-2xl italic leading-tight">
-                    "Se você tem a coragem de estudar, nós temos o mapa da mina. Sem promessas vazias, apenas dados."
-                </blockquote>
+        <!-- FILOSOFIA / GÊNESE -->
+        <section class="py-20 md:py-32 bg-darcy-yellow border-b-4 border-black overflow-hidden relative" id="filosofia">
+            <!-- Background Texture -->
+            <div class="absolute inset-0 opacity-10 pointer-events-none"
+                style="background-image: radial-gradient(#000 2px, transparent 2px); background-size: 30px 30px;">
             </div>
-        </section>
 
-        <!-- IA & PODCAST SECTION -->
-        <section id="ia" class="py-32 px-6 bg-black text-white border-b-4 border-darcy-yellow">
-            <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <div class="flex gap-3 mb-8">
-                            <span
-                                class="bg-darcy-yellow text-black border-2 border-darcy-yellow px-3 py-1 text-[10px] font-black uppercase">NOVO</span>
-                            <span
-                                class="bg-transparent text-darcy-yellow border-2 border-darcy-yellow px-3 py-1 text-[10px] font-black uppercase">Inteligência
-                                Artificial</span>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="flex flex-col-reverse lg:flex-row items-center gap-16">
+
+                    <!-- Left: The Narrative -->
+                    <div class="lg:w-1/2 space-y-8">
+                        <div
+                            class="inline-block bg-white text-black font-black px-6 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] uppercase transform -rotate-2">
+                            A Gênese do Projeto
                         </div>
 
                         <h2
-                            class="font-headline text-5xl md:text-6xl font-black uppercase italic tracking-tighter mb-8 text-darcy-yellow">
-                            Tutor IA<br>Darcy.
+                            class="font-serif-display italic text-5xl md:text-7xl leading-[0.9] text-black drop-shadow-sm">
+                            O HUMANISTA <br />
+                            ENCONTRA <br />
+                            <span class="text-white bg-black px-2 decoration-wavy underline decoration-yellow-400">A
+                                MÁQUINA.</span>
                         </h2>
 
-                        <p class="text-xl text-gray-300 leading-relaxed mb-8">
-                            Uma IA treinada especificamente nas <strong class="text-white">42 obras literárias</strong>
-                            do programa do PAS/UnB.
-                            Desde Machado de Assis até Conceição Evaristo, nossa IA conhece cada detalhe, personagem e
-                            contexto histórico.
-                        </p>
-
-                        <ul class="space-y-4 mb-10 font-mono text-sm">
-                            <li class="flex gap-3 items-center"><i data-lucide="check-circle"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Análise profunda de obras literárias</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="check-circle"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Resolução comentada de questões</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="check-circle"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Conexões intertextuais automáticas</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="check-circle"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Disponível 24 horas por dia</li>
-                        </ul>
-
-                        <a href="/tutor"
-                            class="btn-cta bg-darcy-yellow text-black border-darcy-yellow shadow-none hover:bg-white">
-                            <i data-lucide="bot" class="w-5 h-5"></i> Testar Tutor IA
-                        </a>
-                    </div>
-
-                    <div class="bg-gray-900 border-4 border-darcy-yellow p-8 relative overflow-hidden">
-                        <div class="absolute top-4 right-4 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                        <div class="font-mono text-[10px] text-gray-500 mb-4">// EXEMPLO DE INTERAÇÃO</div>
-
-                        <div class="space-y-4">
-                            <div class="bg-gray-800 p-3 rounded-sm border-l-4 border-gray-600">
-                                <span class="text-[10px] text-gray-500 font-mono">VOCÊ</span>
-                                <p class="text-sm text-gray-300 mt-1">Qual a importância de Capitu em Dom Casmurro?</p>
-                            </div>
-                            <div class="bg-darcy-yellow/10 p-3 rounded-sm border-l-4 border-darcy-yellow">
-                                <span class="text-[10px] text-darcy-yellow font-mono">DARCY IA</span>
-                                <p class="text-sm text-gray-200 mt-1">Capitu é a grande enigma do romance. Machado usa a
-                                    ambiguidade como técnica narrativa para questionar a confiabilidade do narrador
-                                    (Bentinho). A famosa "obliquidade" de seus olhos simboliza...</p>
-                            </div>
+                        <div
+                            class="border-l-8 border-black pl-6 space-y-4 text-black bg-white/50 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
+                            <p class="font-medium text-lg">
+                                Darcy Ribeiro sempre sonhou com uma universidade aberta, pulsante e acessível a todos os
+                                "candangos". Mas ele nunca imaginou que, décadas depois, teríamos uma inteligência
+                                artificial capaz de ler milhares de páginas em segundos.
+                            </p>
+                            <p class="font-medium text-lg">
+                                <strong>Esta plataforma nasce desse abraço improvável.</strong>
+                            </p>
+                            <p class="font-medium text-lg">
+                                Não usamos a IA para substituir o pensamento crítico, mas para limpar o terreno. O
+                                Gemini faz o trabalho braçal de organizar dados do PAS, para que você tenha tempo de
+                                fazer o que Darcy mais valorizava: <strong>pensar.</strong>
+                            </p>
                         </div>
 
-                        <div class="mt-8 p-4 bg-gray-800/50 border-2 border-gray-700">
-                            <div class="flex items-center gap-3 mb-3">
-                                <i data-lucide="headphones" class="w-6 h-6 text-darcy-yellow"></i>
-                                <span class="font-black uppercase text-sm">Podcast Educativo</span>
+                        <div class="flex items-center gap-4 mt-6">
+                            <div
+                                class="w-16 h-16 bg-black rounded-full flex items-center justify-center text-yellow-400 border-4 border-white shadow-lg">
+                                <i data-lucide="heart" class="w-8 h-8 fill-current"></i>
                             </div>
-                            <p class="text-xs text-gray-400">Em breve: episódios em áudio gerados pela IA explicando
-                                cada obra. Estude no ônibus, na academia, em qualquer lugar.</p>
+                            <div>
+                                <p class="font-bold uppercase text-sm">Feito com paixão em</p>
+                                <p class="font-black text-xl">Brasília, DF</p>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Right: Darcy Image -->
+                    <div class="lg:w-1/2 w-full flex justify-center">
+                        <div class="relative w-full max-w-lg group">
+                            <!-- Decorative Background -->
+                            <div
+                                class="absolute inset-0 bg-black transform translate-x-6 translate-y-6 rounded-none border-2 border-black">
+                            </div>
+
+                            <!-- Main Image Container -->
+                            <div
+                                class="relative bg-white border-4 border-black p-4 pb-16 shadow-2xl transform transition-transform duration-500 hover:-rotate-1 hover:-translate-y-2">
+                                <div
+                                    class="border-2 border-black bg-gray-100 overflow-hidden relative aspect-square flex items-center justify-center">
+                                    <img src="/img/darcy-gemini.png" alt="Darcy Ribeiro e a tecnologia"
+                                        class="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
+                                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'flex flex-col items-center justify-center h-full text-center p-6\'><span class=\'text-4xl mb-4\'>🖼️</span><span class=\'font-bold border-2 border-black px-2 bg-yellow-400\'>IMAGEM DARCY</span><span class=\'text-xs mt-2 font-mono\'>/img/darcy-gemini.png</span></div>';" />
+                                </div>
+
+                                <!-- Caption -->
+                                <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                                    <div class="font-serif-display italic text-2xl text-black">
+                                        "O Abraço Digital"
+                                    </div>
+                                    <div class="font-grotesk text-xs font-bold text-gray-400">
+                                        EST. 2024
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
 
-        <!-- CADERNO DE ERROS / METODOLOGIA -->
-        <section id="metodologia" class="py-32 px-6 bg-[#f0f0f0] border-b-4 border-black">
+        <!-- IA / FEATURES SECTION -->
+        <section class="py-20 border-y-2 border-black bg-gray-50 bg-dot-grid" id="ia">
+            <div class="container mx-auto px-6">
+
+                <div
+                    class="text-center mb-16 max-w-3xl mx-auto bg-white border-2 border-black p-8 shadow-[8px_8px_0px_0px_#000]">
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-darcy-blue fill-current"></i>
+                        <span class="font-black text-darcy-blue uppercase tracking-widest text-sm">Powered by
+                            Gemini</span>
+                    </div>
+                    <h2 class="font-serif-display italic text-4xl md:text-5xl mb-4 text-black">
+                        ECOSSISTEMA <span
+                            class="bg-darcy-yellow px-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black not-italic font-sans">INTELIGENTE</span>
+                    </h2>
+                    <p class="text-lg text-black font-medium">
+                        Mais do que um banco de questões. Somos a nuvem de dados que conecta o conteúdo do PAS ao seu
+                        objetivo.
+                    </p>
+                </div>
+
+                <!-- Bento Grid Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+                    <!-- Feature 1: PAS Repository -->
+                    <div
+                        class="md:col-span-2 bg-white border-2 border-black p-8 shadow-[8px_8px_0px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#000] transition-all group">
+                        <div
+                            class="bg-darcy-blue border-2 border-black w-12 h-12 flex items-center justify-center mb-6 text-white group-hover:bg-blue-500 transition-colors">
+                            <i data-lucide="library" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-black mb-2 uppercase">Banco PAS Completo</h3>
+                        <p class="text-black font-medium leading-relaxed">
+                            15 anos de provas do Cebraspe indexadas e organizadas. Acesse milhares de questões oficiais,
+                            PDFs compartilhados e mapas mentais. Encontrou um material bom? Suba para a Darcy e deixe a
+                            IA organizar.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2: Gemini Integration -->
+                    <div
+                        class="md:col-span-2 bg-black text-white border-2 border-black p-8 shadow-[8px_8px_0px_0px_rgba(250,204,21,1)] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-32 bg-blue-600 blur-[80px] opacity-40"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-6">
+                                <i data-lucide="sparkles" class="text-darcy-yellow fill-current"></i>
+                                <span
+                                    class="font-grotesk text-xs text-darcy-yellow uppercase border border-darcy-yellow px-2 py-0.5">Tecnologia
+                                    Exclusiva</span>
+                            </div>
+                            <h3 class="text-2xl font-black mb-2 uppercase">Gemini: O Analista</h3>
+                            <p class="text-gray-300 font-medium">
+                                Não sabe se aquele PDF de 100 páginas vale a pena? O Gemini lê para você, resume os
+                                pontos chave e cruza com o programa do PAS. Economize horas de leitura inútil.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 3: Search -->
+                    <div
+                        class="md:col-span-1 bg-darcy-yellow border-2 border-black p-6 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[8px_8px_0px_0px_#000] transition-all">
+                        <i data-lucide="search" class="mb-4 text-black w-7 h-7"></i>
+                        <h3 class="font-black text-lg mb-2 uppercase">Busca Unificada</h3>
+                        <p class="text-sm text-black font-bold">
+                            Pesquise "Barroco" e encontre questões, PDFs e materiais de todas as fontes em uma tela só.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4: Upload -->
+                    <div
+                        class="md:col-span-1 bg-white border-2 border-black p-6 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[8px_8px_0px_0px_#000] transition-all">
+                        <i data-lucide="upload-cloud" class="mb-4 text-purple-600 w-7 h-7"></i>
+                        <h3 class="font-black text-lg mb-2 uppercase">Upload Inteligente</h3>
+                        <p class="text-sm text-black font-medium">
+                            Colabore. Ao subir um arquivo, você ganha pontos e ajuda a democratizar o acesso ao
+                            conhecimento.
+                        </p>
+                    </div>
+
+                    <!-- Feature 5: Adaptive Learning -->
+                    <div
+                        class="md:col-span-2 bg-white border-2 border-black p-6 flex items-center gap-6 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[8px_8px_0px_0px_#000] transition-all">
+                        <div class="bg-green-100 border-2 border-black p-4 text-green-700">
+                            <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-black text-lg mb-1 uppercase">Caderno de Erros Inteligente</h3>
+                            <p class="text-sm text-black font-medium">
+                                Sistema baseado na curva do esquecimento. Identifica suas fraquezas e programa revisões
+                                nos momentos ideais.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- METODOLOGIA -->
+        <section id="metodologia" class="py-32 px-6 bg-white border-b-4 border-black">
             <div class="max-w-7xl mx-auto">
                 <div class="text-center mb-20">
-                    <h2 class="font-tech text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Metodologia
-                        Científica</h2>
+                    <h2 class="font-grotesk text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-4">
+                        Metodologia Científica</h2>
                     <h3
-                        class="font-headline text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-black">
-                        O Algoritmo que<br><span class="text-darcy-red">Aprende com Você.</span></h3>
+                        class="font-serif-display text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-black">
+                        O Algoritmo que<br /><span class="text-red-600">Aprende com Você.</span>
+                    </h3>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div>
-                        <div class="bg-white border-4 border-black p-8 mb-8">
+                        <div class="bg-white border-4 border-black p-8 mb-8 shadow-[8px_8px_0px_0px_#000]">
                             <div class="flex items-center gap-4 mb-6">
                                 <div
-                                    class="w-16 h-16 bg-darcy-red text-white border-4 border-black flex items-center justify-center">
+                                    class="w-16 h-16 bg-red-600 text-white border-4 border-black flex items-center justify-center">
                                     <i data-lucide="target" class="w-8 h-8"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-black text-2xl uppercase">Caderno de Erros</h4>
-                                    <p class="font-mono text-[10px] text-gray-500">SISTEMA DE REPETIÇÃO ESPAÇADA
-                                        INTELIGENTE</p>
+                                    <p class="font-grotesk text-[10px] text-gray-500">REPETIÇÃO ESPAÇADA INTELIGENTE</p>
                                 </div>
                             </div>
                             <p class="text-gray-700 leading-relaxed">
-                                Baseado na ciência cognitiva da <strong>curva do esquecimento</strong> de Ebbinghaus. O
-                                sistema identifica suas fraquezas e
-                                programa revisões nos momentos ideais para maximizar a retenção de longo prazo.
+                                Baseado na <strong>curva do esquecimento</strong> de Ebbinghaus. O sistema identifica
+                                suas fraquezas e programa revisões nos momentos ideais para maximizar a retenção.
                             </p>
                         </div>
 
                         <div class="grid grid-cols-3 gap-4">
                             <div class="bg-black text-white p-4 text-center">
-                                <div class="text-3xl font-black font-headline italic text-darcy-yellow">1°</div>
-                                <div class="text-[9px] font-mono uppercase mt-1">Você Erra</div>
+                                <div class="text-3xl font-black font-serif-display italic text-darcy-yellow">1°</div>
+                                <div class="text-[9px] font-grotesk uppercase mt-1">Você Erra</div>
                             </div>
                             <div class="bg-black text-white p-4 text-center">
-                                <div class="text-3xl font-black font-headline italic text-darcy-yellow">2°</div>
-                                <div class="text-[9px] font-mono uppercase mt-1">Sistema Registra</div>
+                                <div class="text-3xl font-black font-serif-display italic text-darcy-yellow">2°</div>
+                                <div class="text-[9px] font-grotesk uppercase mt-1">Sistema Registra</div>
                             </div>
                             <div class="bg-black text-white p-4 text-center">
-                                <div class="text-3xl font-black font-headline italic text-darcy-yellow">3°</div>
-                                <div class="text-[9px] font-mono uppercase mt-1">Revisão Agendada</div>
+                                <div class="text-3xl font-black font-serif-display italic text-darcy-yellow">3°</div>
+                                <div class="text-[9px] font-grotesk uppercase mt-1">Revisão Agendada</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-6">
-                        <div class="card-feature group">
+                        <div
+                            class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#000] transition-all">
                             <div class="flex gap-4 items-start">
                                 <div
                                     class="w-12 h-12 bg-darcy-yellow border-2 border-black flex items-center justify-center shrink-0">
@@ -454,10 +820,11 @@
                             </div>
                         </div>
 
-                        <div class="card-feature group">
+                        <div
+                            class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#000] transition-all group">
                             <div class="flex gap-4 items-start">
                                 <div
-                                    class="w-12 h-12 bg-white border-2 border-black flex items-center justify-center shrink-0 group-hover:bg-darcy-red group-hover:text-white transition">
+                                    class="w-12 h-12 bg-white border-2 border-black flex items-center justify-center shrink-0 group-hover:bg-red-600 group-hover:text-white transition">
                                     <i data-lucide="skull" class="w-6 h-6"></i>
                                 </div>
                                 <div>
@@ -468,7 +835,8 @@
                             </div>
                         </div>
 
-                        <div class="card-feature group bg-black text-white">
+                        <div
+                            class="bg-black text-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(250,204,21,1)]">
                             <div class="flex gap-4 items-start">
                                 <div
                                     class="w-12 h-12 bg-white text-black border-2 border-white flex items-center justify-center shrink-0">
@@ -487,171 +855,221 @@
             </div>
         </section>
 
-        <!-- PHILOSOPHERS SECTION -->
-        <section class="py-32 px-6 bg-white border-b-4 border-black">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-16">
-                    <h2 class="font-tech text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Inspiração
-                    </h2>
-                    <h3 class="font-headline text-5xl font-black uppercase italic tracking-tighter text-black">Sobre
-                        Ombros de Gigantes.</h3>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="philosopher-card">
-                        <p class="font-serif text-lg italic leading-relaxed mb-6 pt-8">
-                            "As pessoas bem-sucedidas são aquelas que transformam cada fracasso em uma nova oportunidade
-                            de aprendizado."
-                        </p>
-                        <div class="flex items-center gap-3 border-t-2 border-gray-100 pt-4">
-                            <div
-                                class="w-10 h-10 bg-black text-white flex items-center justify-center font-headline font-black text-lg">
-                                P</div>
-                            <div>
-                                <div class="font-black text-sm uppercase">Paulo Freire</div>
-                                <div class="text-[10px] font-mono text-gray-500">Educador</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="philosopher-card bg-black text-white">
-                        <p class="font-serif text-lg italic leading-relaxed mb-6 pt-8 text-gray-200">
-                            "O êxito da vida não se mede pelo caminho que você conquistou, mas sim pelas dificuldades
-                            que superou no caminho."
-                        </p>
-                        <div class="flex items-center gap-3 border-t-2 border-gray-800 pt-4">
-                            <div
-                                class="w-10 h-10 bg-darcy-yellow text-black flex items-center justify-center font-headline font-black text-lg">
-                                A</div>
-                            <div>
-                                <div class="font-black text-sm uppercase text-darcy-yellow">Abraham Lincoln</div>
-                                <div class="text-[10px] font-mono text-gray-500">Estadista</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="philosopher-card">
-                        <p class="font-serif text-lg italic leading-relaxed mb-6 pt-8">
-                            "A educação é a arma mais poderosa que você pode usar para mudar o mundo."
-                        </p>
-                        <div class="flex items-center gap-3 border-t-2 border-gray-100 pt-4">
-                            <div
-                                class="w-10 h-10 bg-darcy-red text-white flex items-center justify-center font-headline font-black text-lg">
-                                N</div>
-                            <div>
-                                <div class="font-black text-sm uppercase">Nelson Mandela</div>
-                                <div class="text-[10px] font-mono text-gray-500">Líder</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-12 p-8 bg-gray-100 border-4 border-black">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                        <div>
-                            <h4 class="font-headline font-black italic text-3xl mb-4">Sobre o PAS/UnB</h4>
-                            <p class="text-gray-700 leading-relaxed">
-                                O Programa de Avaliação Seriada (PAS) é uma modalidade alternativa de acesso à
-                                Universidade de Brasília.
-                                Dividido em três etapas ao longo do Ensino Médio, valoriza o <strong>conhecimento
-                                    acumulado progressivo</strong>
-                                e oferece uma experiência avaliativa mais justa e completa.
-                            </p>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4 text-center">
-                            <div class="p-4 bg-white border-2 border-black">
-                                <div class="font-headline font-black italic text-2xl text-darcy-red">1ª</div>
-                                <div class="text-[9px] font-mono uppercase text-gray-500">Etapa</div>
-                            </div>
-                            <div class="p-4 bg-white border-2 border-black">
-                                <div class="font-headline font-black italic text-2xl text-darcy-red">2ª</div>
-                                <div class="text-[9px] font-mono uppercase text-gray-500">Etapa</div>
-                            </div>
-                            <div class="p-4 bg-white border-2 border-black">
-                                <div class="font-headline font-black italic text-2xl text-darcy-red">3ª</div>
-                                <div class="text-[9px] font-mono uppercase text-gray-500">Etapa</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- PRICING -->
-        <section id="pricing" class="py-32 px-6 bg-[#f0f0f0] border-b-4 border-black text-black">
-            <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-20">
-                    <h2 class="font-headline text-6xl font-black uppercase tracking-tighter">Investimento</h2>
-                    <p class="font-mono text-xs font-bold text-gray-500 mt-4">Cobrimos servidores, não lucros de
-                        acionistas.</p>
+        <section id="planos" class="py-24 bg-white bg-grid border-y-4 border-black relative overflow-hidden">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12">
+                    <div
+                        class="inline-block bg-red-600 text-white font-bold px-4 py-1 mb-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase animate-pulse">
+                        Preço de Lançamento
+                    </div>
+                    <h2 class="font-serif-display italic text-6xl mb-4 text-black">ACESSO AO SISTEMA</h2>
+                    <p class="text-black font-grotesk text-xs uppercase tracking-widest font-bold">
+                        Transparência total sobre custos e sustentabilidade.
+                    </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
-                    <div class="card-price group">
-                        <div class="flex justify-between items-start mb-10">
-                            <h3 class="font-black text-3xl">CALANGO</h3>
-                            <span class="bg-gray-100 border border-black px-2 py-1 text-[10px] font-bold">LIVRE</span>
+                <!-- Developer Transparency Note -->
+                <div class="max-w-4xl mx-auto mb-16">
+                    <div
+                        class="bg-gray-50 border-4 border-black p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start shadow-[12px_12px_0px_0px_#000] relative z-10">
+                        <div class="bg-darcy-blue border-2 border-black p-4 text-white flex-shrink-0">
+                            <i data-lucide="coffee" class="w-8 h-8"></i>
                         </div>
-                        <div class="mb-10">
-                            <span class="text-6xl font-black font-headline italic">R$ 0</span>
-                            <span class="font-mono text-xs text-gray-400">/sempre</span>
+                        <div>
+                            <h3
+                                class="font-black text-xl mb-3 flex items-center gap-2 uppercase bg-black text-white px-2 inline-block transform -rotate-1">
+                                Papo reto de Desenvolvedor
+                            </h3>
+                            <div
+                                class="space-y-3 text-black font-medium leading-relaxed text-sm md:text-base border-l-4 border-black pl-4 mt-2">
+                                <p>
+                                    Olá! Aqui quem fala é o dev. A lógica da <strong>Darcy</strong> é simples:
+                                </p>
+                                <ul class="list-disc pl-5 space-y-1 marker:text-black">
+                                    <li>
+                                        <strong>O que é estático é grátis:</strong> Baixar questões do PAS e ver
+                                        materiais não custa nada para a plataforma. O conhecimento deve circular
+                                        livremente.
+                                    </li>
+                                    <li>
+                                        <strong>O que processa dados é pago:</strong> A IA do Gemini gera custos de API
+                                        a cada clique.
+                                    </li>
+                                </ul>
+                                <p
+                                    class="font-bold text-black pt-2 bg-yellow-200 inline-block px-1 border border-black">
+                                    A assinatura serve estritamente para manter o site no ar e pagar a API do Google.
+                                </p>
+                            </div>
                         </div>
-                        <ul class="space-y-4 mb-10 font-bold text-sm">
-                            <li class="flex gap-3 items-center"><i data-lucide="check"
-                                    class="w-5 h-5 text-green-600"></i> Acervo de Questões</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="check"
-                                    class="w-5 h-5 text-green-600"></i> Wiki Colaborativa</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="check"
-                                    class="w-5 h-5 text-green-600"></i> Simulados Básicos</li>
-                            <li class="flex gap-3 items-center opacity-30"><i data-lucide="x"
-                                    class="w-5 h-5 text-red-600"></i> IA Tática</li>
-                            <li class="flex gap-3 items-center opacity-30"><i data-lucide="x"
-                                    class="w-5 h-5 text-red-600"></i> Caderno de Erros Avançado</li>
+                    </div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row justify-center items-stretch gap-6 max-w-6xl mx-auto mb-20">
+                    <!-- Plan 1: Free -->
+                    <div
+                        class="w-full max-w-sm p-6 border-4 border-black relative flex flex-col transition-all duration-300 bg-white shadow-[8px_8px_0px_0px_#000]">
+                        <h3 class="text-xl font-black uppercase mb-2 bg-black text-white inline-block px-2">GRATUITO
+                        </h3>
+                        <div class="flex items-baseline mb-6 pb-6 border-b-4 border-black mt-4">
+                            <span class="text-4xl font-serif-display italic text-black">R$ 0</span>
+                            <span class="text-sm font-bold text-gray-500 ml-2">/sempre</span>
+                        </div>
+
+                        <ul class="space-y-3 mb-6 flex-grow text-sm">
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Simulados e Questões PAS
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Wiki Colaborativa
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Caderno de Erros Básico
+                            </li>
+                            <li class="flex items-start gap-2 text-gray-400">
+                                <i data-lucide="x" class="w-4 h-4 text-red-500 shrink-0 mt-0.5"></i>
+                                <span class="line-through">Tutor IA Darcy</span>
+                                <span class="text-[10px] bg-gray-200 px-2 py-0.5 rounded font-bold">0 msgs</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-gray-400">
+                                <i data-lucide="x" class="w-4 h-4 text-red-500 shrink-0 mt-0.5"></i>
+                                <span class="line-through">Podcasts de PDFs</span>
+                            </li>
                         </ul>
+
                         <a href="/register"
-                            class="block text-center border-4 border-black py-4 font-black uppercase hover:bg-black hover:text-white transition">Começar
-                            Agora</a>
+                            class="block text-center border-4 border-black py-3 font-black uppercase hover:bg-black hover:text-white transition text-sm">
+                            Criar Conta Grátis
+                        </a>
                     </div>
 
-                    <div class="card-price featured">
-                        <div class="flex justify-between items-start mb-10">
-                            <h3 class="font-black text-3xl">ELITE DARCY</h3>
-                            <span
-                                class="bg-darcy-yellow text-black border border-black px-2 py-1 text-[10px] font-bold">COMPLETO</span>
+                    <!-- Plan 2: Estudante -->
+                    <div
+                        class="w-full max-w-sm p-6 border-4 border-blue-600 relative flex flex-col transition-all duration-300 bg-white shadow-[8px_8px_0px_0px_#3b82f6]">
+                        <div
+                            class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-black px-4 py-1 border-2 border-black uppercase tracking-wider whitespace-nowrap flex items-center gap-1">
+                            <i data-lucide="flame" class="w-3 h-3"></i> Mais Popular
                         </div>
-                        <div class="mb-10">
-                            <span class="text-7xl font-black font-headline italic text-darcy-yellow">R$ 19,90</span>
-                            <span class="font-mono text-xs text-gray-500">/mês</span>
+
+                        <h3 class="text-xl font-black uppercase mb-2 bg-blue-600 text-white inline-block px-2">ESTUDANTE
+                        </h3>
+                        <div class="flex items-baseline mb-2 mt-4">
+                            <span class="text-xl text-gray-400 line-through mr-2">R$ 29,90</span>
+                            <span class="text-4xl font-serif-display italic text-black">R$ 24,90</span>
+                            <span class="text-sm font-bold text-gray-500 ml-2">/mês</span>
                         </div>
-                        <ul class="space-y-4 mb-10 font-bold text-sm">
-                            <li class="flex gap-3 items-center"><i data-lucide="zap"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Tutor IA 24/7</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="zap"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Caderno de Erros com Algoritmo Adaptativo
+                        <div class="text-xs font-bold text-blue-600 mb-6 pb-6 border-b-4 border-black">💰 Economize R$
+                            60/ano</div>
+
+                        <ul class="space-y-3 mb-6 flex-grow text-sm">
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Tudo do Gratuito +
                             </li>
-                            <li class="flex gap-3 items-center"><i data-lucide="zap"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Telemetria Completa de Desempenho</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="zap"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Simulados Personalizados Ilimitados</li>
-                            <li class="flex gap-3 items-center"><i data-lucide="zap"
-                                    class="w-5 h-5 text-darcy-yellow"></i> Podcast Educativo (Em breve)</li>
+                            <li class="flex items-start gap-2 font-bold text-blue-700">
+                                <i data-lucide="bot" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+                                <div>
+                                    <div>Tutor IA Darcy</div>
+                                    <span
+                                        class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-bold">100
+                                        msgs/dia</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-blue-700">
+                                <i data-lucide="headphones" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+                                <div>
+                                    <div>Podcasts de PDFs</div>
+                                    <span
+                                        class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-bold">5/mês</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Análise de Erros Avançada
+                            </li>
                         </ul>
-                        <a href="/checkout/premium"
-                            class="block text-center bg-darcy-yellow text-black py-4 font-black uppercase hover:bg-white transition border-2 border-transparent">Assinar
-                            Elite</a>
+
+                        <a href="/planos"
+                            class="block text-center bg-blue-600 text-white py-3 font-black uppercase hover:bg-blue-700 transition border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm">
+                            Assinar Estudante
+                        </a>
+                    </div>
+
+                    <!-- Plan 3: Premium -->
+                    <div
+                        class="w-full max-w-sm p-6 border-4 border-darcy-yellow relative flex flex-col transition-all duration-300 bg-white shadow-[12px_12px_0px_0px_#facc15] scale-100 lg:scale-105 z-10">
+                        <div
+                            class="absolute -top-4 left-1/2 -translate-x-1/2 bg-darcy-yellow text-black text-xs font-black px-4 py-1 border-2 border-black uppercase tracking-wider whitespace-nowrap flex items-center gap-1">
+                            <i data-lucide="infinity" class="w-3 h-3"></i> Sem Limites
+                        </div>
+
+                        <h3 class="text-xl font-black uppercase mb-2 bg-black text-darcy-yellow inline-block px-2">
+                            PREMIUM
+                        </h3>
+                        <div class="flex items-baseline mb-2 mt-4">
+                            <span class="text-xl text-gray-400 line-through mr-2">R$ 79,90</span>
+                            <span class="text-4xl font-serif-display italic text-black">R$ 59,90</span>
+                            <span class="text-sm font-bold text-gray-500 ml-2">/mês</span>
+                        </div>
+                        <div class="text-xs font-bold text-yellow-700 mb-6 pb-6 border-b-4 border-black">💰 Economize R$
+                            240/ano</div>
+
+                        <ul class="space-y-3 mb-6 flex-grow text-sm">
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Tudo do Estudante +
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-yellow-700">
+                                <i data-lucide="infinity" class="w-4 h-4 text-darcy-yellow shrink-0 mt-0.5"></i>
+                                <div>
+                                    <div>IA Ilimitada</div>
+                                    <span
+                                        class="text-[10px] bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-bold">∞
+                                        msgs/dia</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-yellow-700">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-darcy-yellow shrink-0 mt-0.5"></i>
+                                <div>
+                                    <div>Podcasts Ilimitados</div>
+                                    <span
+                                        class="text-[10px] bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-bold">∞/mês</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Modelo IA Avançado (Gemini Pro)
+                            </li>
+                            <li class="flex items-start gap-2 font-bold text-black">
+                                <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                                Suporte Prioritário
+                            </li>
+                        </ul>
+
+                        <a href="/planos"
+                            class="block text-center bg-black text-darcy-yellow py-3 font-black uppercase hover:bg-darcy-yellow hover:text-black transition border-2 border-black shadow-[4px_4px_0px_0px_rgba(250,204,21,1)] text-sm">
+                            Assinar Premium
+                        </a>
                     </div>
                 </div>
 
                 <div
-                    class="mt-16 p-8 border-4 border-black border-dashed bg-white flex flex-col md:flex-row gap-8 items-center">
+                    class="mt-16 p-8 border-4 border-black border-dashed bg-white flex flex-col md:flex-row gap-8 items-center max-w-4xl mx-auto">
                     <div class="flex-1">
                         <h4 class="font-black text-xl mb-2 uppercase italic">A Grana tá Curta?</h4>
-                        <p class="text-sm font-medium text-gray-600">Acreditamos na solidariedade radical. Se você não
-                            pode pagar, ofereça uma permuta: ajude a moderar a Wiki ou transcrever questões e nós
-                            liberamos seu acesso.</p>
+                        <p class="text-sm font-medium text-gray-600">
+                            Acreditamos na solidariedade radical. Se você não pode pagar, ofereça uma permuta: ajude a
+                            moderar a Wiki ou transcrever questões e nós liberamos seu acesso.
+                        </p>
                     </div>
-                    <a href="https://wa.me/suporte"
-                        class="btn-cta bg-green-600 text-white shadow-none hover:bg-green-700">Tentar Permuta</a>
+                    <a href="mailto:contato@plataformadarcy.com.br"
+                        class="bg-green-600 text-white px-8 py-4 font-bold uppercase shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:bg-green-700 transition border-2 border-black">
+                        Tentar Permuta
+                    </a>
                 </div>
             </div>
         </section>
@@ -660,33 +1078,178 @@
         <section class="py-32 px-6 bg-black text-white">
             <div class="max-w-4xl mx-auto text-center">
                 <h2
-                    class="font-headline text-6xl md:text-8xl font-black uppercase italic tracking-tighter mb-8 text-darcy-yellow">
-                    A Universidade<br>é Nossa.
+                    class="font-serif-display text-6xl md:text-8xl font-black uppercase italic tracking-tighter mb-8 text-darcy-yellow">
+                    A Universidade<br />é Nossa.
                 </h2>
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
                     Darcy Ribeiro sonhou com uma universidade para o povo. Nós estamos construindo a ferramenta que vai
                     te levar até lá.
                 </p>
-                <a href="/register" class="btn-cta bg-darcy-yellow text-black border-darcy-yellow hover:bg-white">
-                    Ocupar Minha Vaga Agora <i data-lucide="arrow-right-circle" class="w-6 h-6"></i>
+                <a href="/register"
+                    class="inline-flex items-center justify-center gap-3 bg-darcy-yellow text-black px-8 py-4 text-xl font-bold border-2 border-darcy-yellow hover:bg-white transition shadow-[8px_8px_0px_0px_rgba(250,204,21,1)] hover:shadow-[4px_4px_0px_0px_rgba(250,204,21,1)] hover:translate-x-1 hover:translate-y-1">
+                    Ocupar Minha Vaga Agora
+                    <i data-lucide="arrow-right-circle" class="w-6 h-6"></i>
                 </a>
             </div>
         </section>
 
+        <!-- ABOUT SECTION - TRANSPARENCY -->
+        <section id="sobre" class="py-24 px-6 bg-white border-b-4 border-black">
+            <div class="container mx-auto max-w-5xl">
+                <div class="text-center mb-16">
+                    <div
+                        class="inline-block bg-green-600 text-white px-4 py-1 font-black text-xs uppercase mb-4 border-2 border-black">
+                        Transparência Total
+                    </div>
+                    <h2 class="font-serif-display italic text-5xl md:text-6xl text-black mb-4">
+                        Por que Criamos Isso
+                    </h2>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Story -->
+                    <div class="bg-gray-50 border-4 border-black p-8 md:p-12 shadow-[8px_8px_0px_0px_#000]">
+                        <h3 class="font-black text 2xl uppercase mb-4 flex items-center gap-3">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                            A História
+                        </h3>
+                        <p class="text-lg font-bold text-gray-700 leading-relaxed mb-4">
+                            Sou estudante/ex-aluno da UnB que passou pelo PAS. Vi colegas gastarem <strong>R$
+                                800-1.500/mês</strong> em cursinhos que vendem a mesma coisa: acesso a questões antigas
+                            e professores.
+                        </p>
+                        <p class="text-lg font-bold text-gray-700 leading-relaxed mb-4">
+                            A Plataforma Darcy nasceu da revolta com essa indústria. Se você tem disciplina para estudar
+                            sozinho, <strong>não precisa pagar R$ 15 mil</strong> por ano.
+                        </p>
+                        <p class="text-lg font-bold text-gray-700 leading-relaxed">
+                            Hoje usamos IA do Google (Gemini) para dar o que cursinhos não podem: análise personalizada
+                            dos SEUS pontos fracos, 24/7, a partir de R$ 24,90/mês.
+                        </p>
+                    </div>
+
+                    <!-- Cost Breakdown -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-red-600 text-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000]">
+                            <h4 class="font-black text-xl uppercase mb-4 flex items-center gap-2">
+                                <i data-lucide="x-circle" class="w-5 h-5"></i>
+                                Cursinho Tradicional
+                            </h4>
+                            <ul class="space-y-2 font-bold">
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>R$ 800-1.500/mês</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>Horários fixos presenciais</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>Professores genéricos</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>Sem personalização</span>
+                                </li>
+                            </ul>
+                            <div class="mt-6 pt-6 border-t-2 border-white/30">
+                                <p class="text-3xl font-black font-serif-display italic">R$ 18.000/ano</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-darcy-yellow text-black border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000]">
+                            <h4 class="font-black text-xl uppercase mb-4 flex items-center gap-2">
+                                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                                Plataforma Darcy
+                            </h4>
+                            <ul class="space-y-2 font-bold">
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>A partir de R$ 24,90/mês</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>Estude quando quiser</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>IA Google Gemini 24/7</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span>•</span>
+                                    <span>Quotas por plano (protege seu bolso)</span>
+                                </li>
+                            </ul>
+                            <div class="mt-6 pt-6 border-t-2 border-black/30">
+                                <p class="text-3xl font-black font-serif-display italic">R$ 299-719/ano</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Commitment -->
+                    <div class="bg-black text-white border-4 border-black p-8 md:p-12">
+                        <h3 class="font-black text-2xl uppercase mb-6 text-darcy-yellow flex items-center gap-3">
+                            <i data-lucide="heart" class="w-6 h-6"></i>
+                            Nosso Compromisso
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <div
+                                    class="w-12 h-12 bg-darcy-yellow text-black border-2 border-white flex items-center justify-center font-black text-xl mb-3">
+                                    01
+                                </div>
+                                <h4 class="font-black uppercase text-sm mb-2">Preço Justo</h4>
+                                <p class="text-sm text-gray-300 font-bold">
+                                    R$ 24,90-59,90 cobre custos de IA + servidor. Quotas protegem contra abuso. Educação
+                                    não é extorsão.
+                                </p>
+                            </div>
+                            <div>
+                                <div
+                                    class="w-12 h-12 bg-darcy-yellow text-black border-2 border-white flex items-center justify-center font-black text-xl mb-3">
+                                    02
+                                </div>
+                                <h4 class="font-black uppercase text-sm mb-2">Código Aberto</h4>
+                                <p class="text-sm text-gray-300 font-bold">
+                                    Projeto open-source. Qualquer um pode verificar o código e contribuir. Sem caixa
+                                    preta.
+                                </p>
+                            </div>
+                            <div>
+                                <div
+                                    class="w-12 h-12 bg-darcy-yellow text-black border-2 border-white flex items-center justify-center font-black text-xl mb-3">
+                                    03
+                                </div>
+                                <h4 class="font-black uppercase text-sm mb-2">Feito por Estudantes</h4>
+                                <p class="text-sm text-gray-300 font-bold">
+                                    Criado por quem conhece a dor. Sem marketing enganoso. Só ferramenta boa a preço
+                                    honesto.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- FOOTER -->
+
         <footer class="bg-darcy-black text-white py-20 px-6 border-t-4 border-darcy-yellow">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     <div>
                         <a href="/"
-                            class="w-14 h-14 bg-white text-black flex items-center justify-center font-headline font-black text-3xl mb-6 hover:bg-darcy-red hover:text-white transition inline-block">D.</a>
-                        <p class="font-mono text-[10px] text-gray-500 tracking-widest uppercase">Brasília - DF</p>
-                        <p class="font-mono text-[10px] text-gray-500 tracking-widest uppercase">Criado por estudantes.
-                        </p>
+                            class="w-14 h-14 bg-white text-black flex items-center justify-center font-serif-display font-black text-3xl mb-6 hover:bg-red-600 hover:text-white transition inline-block">
+                            D.
+                        </a>
+                        <p class="font-grotesk text-[10px] text-gray-500 tracking-widest uppercase">Brasília - DF</p>
+                        <p class="font-grotesk text-[10px] text-gray-500 tracking-widest uppercase">Criado por
+                            estudantes.</p>
                     </div>
                     <div>
                         <h5 class="font-black uppercase text-sm mb-4 text-darcy-yellow">Plataforma</h5>
-                        <ul class="space-y-2 font-mono text-xs text-gray-400">
+                        <ul class="space-y-2 font-grotesk text-xs text-gray-400">
                             <li><a href="/simulado" class="hover:text-white transition">Simulados</a></li>
                             <li><a href="/tutor" class="hover:text-white transition">Tutor IA</a></li>
                             <li><a href="/wiki" class="hover:text-white transition">Acervo Wiki</a></li>
@@ -695,15 +1258,15 @@
                     </div>
                     <div>
                         <h5 class="font-black uppercase text-sm mb-4 text-darcy-yellow">Comunidade</h5>
-                        <ul class="space-y-2 font-mono text-xs text-gray-400">
-                            <li><a href="#manifesto" class="hover:text-white transition">Manifesto</a></li>
+                        <ul class="space-y-2 font-grotesk text-xs text-gray-400">
+                            <li><a href="#filosofia" class="hover:text-white transition">Manifesto</a></li>
                             <li><a href="#" class="hover:text-white transition">Código Aberto</a></li>
                             <li><a href="#" class="hover:text-white transition">Contribuir</a></li>
                         </ul>
                     </div>
                     <div>
                         <h5 class="font-black uppercase text-sm mb-4 text-darcy-yellow">Contato</h5>
-                        <ul class="space-y-2 font-mono text-xs text-gray-400">
+                        <ul class="space-y-2 font-grotesk text-xs text-gray-400">
                             <li><a href="mailto:contato@plataformadarcy.com.br"
                                     class="hover:text-white transition">contato@plataformadarcy.com.br</a></li>
                             <li><a href="https://wa.me/suporte" class="hover:text-white transition">WhatsApp Suporte</a>
@@ -713,9 +1276,10 @@
                 </div>
 
                 <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="font-headline font-black italic text-xl text-darcy-yellow">Plataforma Darcy © 2026</p>
-                    <p class="font-mono text-[9px] text-gray-600 uppercase">"O fracasso da educação no Brasil não é uma
-                        crise; é um projeto." — Darcy Ribeiro</p>
+                    <p class="font-serif-display font-black italic text-xl text-darcy-yellow">Plataforma Darcy © 2026
+                    </p>
+                    <p class="font-grotesk text-[9px] text-gray-600 uppercase">"A universidade necessária" — Darcy
+                        Ribeiro</p>
                 </div>
             </div>
         </footer>
@@ -723,14 +1287,388 @@
     </main>
 
     <th:block layout:fragment="page-scripts">
+        <!-- REGISTRATION MODAL -->
+        <div id="registerModal" class="modal-overlay">
+            <div class="modal-backdrop" onclick="closeRegisterModal()"></div>
+            <div class="modal-container">
+                <!-- Close Button -->
+                <button onclick="closeRegisterModal()" class="modal-close">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+
+                <!-- Modal Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <div
+                            class="inline-block bg-blue-600 border-4 border-black text-white px-4 py-2 text-xs font-black uppercase mb-4 shadow-[4px_4px_0px_0px_#000]">
+                            <i data-lucide="pen-tool" class="w-3 h-3 inline mr-1"></i>
+                            FICHA DE ALISTAMENTO
+                        </div>
+                        <h2 class="text-3xl font-black text-black uppercase tracking-tight">Crie sua Conta</h2>
+                        <p class="text-gray-600 text-sm mt-2 font-medium">Preencha os dados abaixo para começar</p>
+                    </div>
+
+                    <!-- Error Box -->
+                    <div th:if="${error}" class="error-box-modal">
+                        <i data-lucide="alert-circle" class="w-5 h-5 inline mr-2"></i>
+                        <span th:text="${error}">Erro aqui</span>
+                    </div>
+
+                    <!-- Form -->
+                    <form th:action="@{/register}" method="POST" class="space-y-6">
+
+                        <!-- Nome -->
+                        <div class="input-group-modal">
+                            <label class="floating-label-modal">
+                                <i data-lucide="user" class="w-3 h-3 inline mr-1"></i>
+                                NOME COMPLETO
+                            </label>
+                            <input type="text" name="nome" class="premium-input-modal" placeholder="João da Silva"
+                                required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="input-group-modal">
+                            <label class="floating-label-modal">
+                                <i data-lucide="mail" class="w-3 h-3 inline mr-1"></i>
+                                E-MAIL
+                            </label>
+                            <input type="email" name="email" class="premium-input-modal" placeholder="seu@email.com"
+                                required>
+                        </div>
+
+                        <!-- Região -->
+                        <div class="input-group-modal">
+                            <label class="floating-label-modal">
+                                <i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i>
+                                REGIÃO (DF)
+                            </label>
+                            <select name="regiao" class="premium-input-modal premium-select-modal" required>
+                                <option value="" disabled selected>Selecione sua região...</option>
+                                <option value="Plano Piloto">Plano Piloto</option>
+                                <option value="Ceilândia">Ceilândia</option>
+                                <option value="Taguatinga">Taguatinga</option>
+                                <option value="Samambaia">Samambaia</option>
+                                <option value="Águas Claras">Águas Claras</option>
+                                <option value="Gama">Gama</option>
+                                <option value="Guará">Guará</option>
+                                <option value="Santa Maria">Santa Maria</option>
+                                <option value="Planaltina">Planaltina</option>
+                                <option value="Recanto das Emas">Recanto das Emas</option>
+                                <option value="Sobradinho">Sobradinho</option>
+                                <option value="Outra / Entorno">Outra / Entorno</option>
+                            </select>
+                        </div>
+
+                        <!-- Senha -->
+                        <div class="input-group-modal">
+                            <label class="floating-label-modal">
+                                <i data-lucide="lock" class="w-3 h-3 inline mr-1"></i>
+                                SENHA DE ACESSO
+                            </label>
+                            <input type="password" name="senha" class="premium-input-modal" placeholder="••••••••"
+                                required>
+                        </div>
+
+                        <!-- Checkbox Termos -->
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" class="premium-checkbox-modal mt-0.5" required>
+                            <label class="text-sm text-gray-600 leading-relaxed">
+                                Li e aceito o <a href="/"
+                                    class="text-black hover:text-darcy-blue font-bold underline transition">manifesto da
+                                    plataforma</a> e concordo com os termos de uso.
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit"
+                            class="premium-btn-modal w-full py-4 text-white font-black text-base uppercase tracking-wider flex items-center justify-center gap-3">
+                            <i data-lucide="rocket" class="w-5 h-5"></i>
+                            Gerar Matrícula e Entrar
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="flex items-center gap-4 my-6">
+                            <div class="h-px bg-gray-300 flex-1"></div>
+                            <span class="text-xs font-bold text-gray-500 uppercase">Ou</span>
+                            <div class="h-px bg-gray-300 flex-1"></div>
+                        </div>
+
+                        <!-- Google OAuth -->
+                        <a href="/oauth2/authorization/google"
+                            class="google-btn-modal w-full py-4 font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-3">
+                            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5"
+                                alt="Google">
+                            Continuar com Google
+                        </a>
+
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="mt-8 text-center pt-6 border-t-2 border-gray-200">
+                        <p class="text-sm text-gray-600">
+                            Já possui matrícula?
+                            <a href="/login" class="text-black hover:text-darcy-blue font-bold transition ml-1">
+                                Acessar QG →
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Modal Overlay */
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .modal-overlay.active {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+
+            /* Modal Backdrop */
+            .modal-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.85);
+                backdrop-filter: blur(5px);
+            }
+
+            /* Modal Container - Neo-Brutalist */
+            .modal-container {
+                position: relative;
+                background: white;
+                border: 6px solid black;
+                box-shadow: 16px 16px 0px 0px #facc15;
+                max-width: 600px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                z-index: 10000;
+                animation: slideDown 0.4s ease-out;
+            }
+
+            /* Modal Content */
+            .modal-content {
+                padding: 40px;
+            }
+
+            @media (max-width: 640px) {
+                .modal-content {
+                    padding: 24px;
+                }
+
+                .modal-container {
+                    max-height: 95vh;
+                }
+            }
+
+            /* Close Button */
+            .modal-close {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                background: black;
+                border: 3px solid black;
+                color: white;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                z-index: 10001;
+            }
+
+            .modal-close:hover {
+                background: #facc15;
+                color: black;
+                transform: translate(-2px, -2px);
+                box-shadow: 4px 4px 0px 0px black;
+            }
+
+            /* Modal Input Fields */
+            .input-group-modal {
+                position: relative;
+            }
+
+            .floating-label-modal {
+                position: absolute;
+                left: 18px;
+                top: 0;
+                transform: translateY(-50%);
+                font-size: 0.7rem;
+                font-weight: 900;
+                text-transform: uppercase;
+                color: #000;
+                background: #facc15;
+                padding: 2px 8px;
+                letter-spacing: 0.1em;
+                border: 2px solid #000;
+            }
+
+            .premium-input-modal {
+                width: 100%;
+                padding: 14px 18px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.9rem;
+                background: #f9f9f9;
+                border: 3px solid #333;
+                color: black;
+                transition: all 0.2s ease;
+            }
+
+            .premium-input-modal::placeholder {
+                color: rgba(0, 0, 0, 0.4);
+            }
+
+            .premium-input-modal:focus {
+                outline: none;
+                background: white;
+                border: 3px solid #facc15;
+                box-shadow: 4px 4px 0px 0px rgba(250, 204, 21, 0.5);
+                transform: translate(-2px, -2px);
+            }
+
+            /* Select */
+            .premium-select-modal {
+                appearance: none;
+                cursor: pointer;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23facc15' stroke-width='3' stroke-linecap='square' stroke-linejoin='miter'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                background-size: 20px;
+                padding-right: 45px;
+            }
+
+            /* Checkbox */
+            .premium-checkbox-modal {
+                width: 20px;
+                height: 20px;
+                border: 3px solid #000;
+                background: #fff;
+                transition: all 0.2s ease;
+            }
+
+            .premium-checkbox-modal:checked {
+                background: #facc15;
+                border-color: #000;
+            }
+
+            /* Submit Button */
+            .premium-btn-modal {
+                position: relative;
+                overflow: hidden;
+                background: #ef4444;
+                border: 4px solid #000;
+                box-shadow: 6px 6px 0px 0px #000;
+                transition: all 0.2s ease;
+            }
+
+            .premium-btn-modal:hover {
+                background: #dc2626;
+                transform: translate(-2px, -2px);
+                box-shadow: 8px 8px 0px 0px #000;
+            }
+
+            .premium-btn-modal:active {
+                transform: translate(2px, 2px);
+                box-shadow: 2px 2px 0px 0px #000;
+            }
+
+            /* Google Button */
+            .google-btn-modal {
+                transition: all 0.2s ease;
+                background: #fff;
+                border: 4px solid #000;
+                color: #000;
+                box-shadow: 4px 4px 0px 0px #000;
+            }
+
+            .google-btn-modal:hover {
+                background: #facc15;
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px #000;
+            }
+
+            /* Error Box */
+            .error-box-modal {
+                background: #ef4444;
+                color: white;
+                padding: 16px 20px;
+                border: 4px solid #000;
+                font-weight: 900;
+                font-family: 'JetBrains Mono', monospace;
+                margin-bottom: 24px;
+                box-shadow: 6px 6px 0px 0px #000;
+            }
+
+            /* Animations */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-50px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+
         <script>
             lucide.createIcons();
+
+            // Modal Functions
+            function openRegisterModal() {
+                document.getElementById('registerModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+                // Re-initialize icons after modal opens
+                setTimeout(() => lucide.createIcons(), 100);
+            }
+
+            function closeRegisterModal() {
+                document.getElementById('registerModal').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            // Close on ESC key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeRegisterModal();
+            });
+
+            // Smooth scroll for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                        // Close mobile menu if open
+                        document.getElementById('mobile-menu')?.classList.add('hidden');
+                    }
                 });
             });
         </script>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Debug - Status do Plano</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 40px;
+            background: #000;
+            color: #0f0;
+        }
+
+        .info {
+            border: 2px solid #0f0;
+            padding: 20px;
+            margin: 10px 0;
+        }
+
+        .true {
+            color: #0f0;
+            font-weight: bold;
+        }
+
+        .false {
+            color: #f00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 DEBUG - STATUS DO PLANO</h1>
+
+    <div class="info">
+        <p><strong>USUÁRIO:</strong> <span th:text="${#authentication.principal.nome}">Nome</span></p>
+        <p><strong>EMAIL:</strong> <span th:text="${#authentication.principal.email}">Email</span></p>
+    </div>
+
+    <div class="info">
+        <p><strong>PLANO ATUAL:</strong> <span th:text="${#authentication.principal.plano}">FREE</span></p>
+        <p><strong>DATA EXPIRAÇÃO:</strong> <span th:text="${#authentication.principal.dataExpiracaoPlano}">null</span>
+        </p>
+    </div>
+
+    <div class="info">
+        <p><strong>isPro():</strong>
+            <span th:class="${#authentication.principal.isPro()} ? 'true' : 'false'"
+                th:text="${#authentication.principal.isPro()}">false</span>
+        </p>
+        <p><strong>Has ROLE_PRO:</strong>
+            <span th:class="${#authorization.expression('hasRole(''PRO'')')} ? 'true' : 'false'"
+                th:text="${#authorization.expression('hasRole(''PRO'')')}">false</span>
+        </p>
+    </div>
+
+    <div class="info">
+        <p><strong>AUTHORITIES:</strong></p>
+        <ul>
+            <li th:each="auth : ${#authentication.principal.authorities}" th:text="${auth.authority}">ROLE_</li>
+        </ul>
+    </div>
+
+    <hr>
+    <p>Se "isPro()" = <span class="true">true</span> e "Has ROLE_PRO" = <span class="true">true</span>,
+        então as funções premium devem funcionar!</p>
+    <p>Se algum deles for <span class="false">false</span>, você precisa:</p>
+    <ol>
+        <li>Ir em /planos</li>
+        <li>Assinar e simular pagamento</li>
+        <li><strong>FAZER LOGOUT</strong></li>
+        <li><strong>FAZER LOGIN NOVAMENTE</strong></li>
+        <li>Voltar aqui e verificar</li>
+    </ol>
+</body>
+
+</html>

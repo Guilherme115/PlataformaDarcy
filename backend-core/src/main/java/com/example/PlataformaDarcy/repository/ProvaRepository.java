@@ -14,4 +14,11 @@ public interface ProvaRepository extends JpaRepository<Prova, Long> {
 
     @Query("SELECT DISTINCT p.ano FROM Prova p WHERE p.etapa = :etapa ORDER BY p.ano DESC")
     List<Integer> findAnosByEtapa(@Param("etapa") Integer etapa);
+
+    List<Prova> findByOrigemOrderByAnoDesc(String origem);
+
+    // Métodos para gestão de Simulados Oficiais
+    List<Prova> findByOrigemAndAtivoTrueOrderByIdDesc(String origem);
+
+    List<Prova> findByOrigemOrderByIdDesc(String origem);
 }

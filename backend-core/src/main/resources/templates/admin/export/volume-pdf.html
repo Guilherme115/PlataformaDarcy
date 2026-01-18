@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${volume.titulo}">Volume PDF</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: black;
+        }
+
+        /* Utilitários Básicos (Tailwind-ish) */
+        .w-full {
+            width: 100%;
+        }
+
+        .h-full {
+            height: 100%;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .items-start {
+            align-items: flex-start;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .relative {
+            position: relative;
+        }
+
+        .absolute {
+            position: absolute;
+        }
+
+        .border-black {
+            border-color: black;
+        }
+
+        .bg-black {
+            background-color: black;
+        }
+
+        .text-white {
+            color: white;
+        }
+
+        /* Layouts */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            page-break-after: always;
+            position: relative;
+            box-sizing: border-box;
+            background: white;
+        }
+
+        .layout-standard {
+            padding: 25mm 20mm 20mm 20mm;
+        }
+
+        .layout-cover {
+            padding: 0;
+        }
+
+        .layout-toc {
+            padding: 25mm 20mm 20mm 20mm;
+        }
+
+        /* Tipografia de Impressão */
+        h1 {
+            font-size: 24pt;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 11pt;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Rodapé de Impressão */
+        .footer {
+            position: absolute;
+            bottom: 15mm;
+            left: 20mm;
+            right: 20mm;
+            border-top: 1px solid black;
+            padding-top: 2mm;
+            font-size: 9pt;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Fix para quebra de página */
+        .page:last-child {
+            page-break-after: avoid;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Iterar sobre todas as páginas do volume -->
+    <div th:each="p : ${volume.paginas}" class="page" th:classappend="'layout-' + ${p.layout.name().toLowerCase()}">
+
+        <!-- LAYOUT COVER -->
+        <div th:if="${p.layout.name() == 'COVER'}" style="height: 100%; padding: 15mm; border: 6px solid black;">
+            <div th:utext="${p.htmlContent}"></div>
+        </div>
+
+        <!-- LAYOUT STANDARD e TOC -->
+        <div th:if="${p.layout.name() != 'COVER'}">
+
+            <!-- Cabeçalho (Opcional) -->
+            <div th:if="${p.layout.name() == 'STANDARD'}"
+                style="border-bottom: 2px solid black; padding-bottom: 5mm; margin-bottom: 10mm;">
+                <span
+                    style="background: black; color: white; padding: 2px 6px; font-size: 8pt; font-weight: bold; text-transform: uppercase;"
+                    th:text="${p.modulo}">MÓDULO</span>
+                <h1 style="margin-top: 5mm; text-transform: uppercase; font-weight: 900;" th:text="${p.titulo}">TÍTULO
+                </h1>
+            </div>
+
+            <!-- Conteúdo Principal -->
+            <div th:utext="${p.htmlContent}"></div>
+
+            <!-- Rodapé -->
+            <div class="footer">
+                <span th:text="${volume.livro.titulo + ' • ' + p.modulo}">Rodapé Texto</span>
+                <span style="background: black; color: white; padding: 0 5px; font-weight: bold;"
+                    th:text="${p.numeroPagina}">1</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

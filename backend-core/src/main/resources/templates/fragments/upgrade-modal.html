@@ -1,0 +1,61 @@
+<div th:fragment="modal" id="upgrade-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center">
+    <!-- Overlay -->
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeUpgradeModal()"></div>
+
+    <!-- Modal Card (Neo-Brutalist) -->
+    <div
+        class="relative bg-[#fdfbf7] p-8 max-w-md w-full border-[3px] border-black shadow-hard transform transition-all scale-100 animate-in fade-in zoom-in duration-300">
+
+        <!-- Close Button -->
+        <button onclick="closeUpgradeModal()"
+            class="absolute top-4 right-4 text-black hover:text-red-600 font-bold text-xl">
+            &times;
+        </button>
+
+        <!-- Content -->
+        <div class="text-center">
+            <div
+                class="inline-flex items-center justify-center w-16 h-16 bg-darcy-yellow border-[3px] border-black rounded-full mb-6">
+                <i data-lucide="crown" class="w-8 h-8 text-black"></i>
+            </div>
+
+            <h2 class="text-2xl font-black font-serif mb-2">Acesso Exclusivo!</h2>
+
+            <p class="text-gray-600 mb-8 font-mono text-sm leading-relaxed">
+                Essa funcionalidade utiliza Inteligência Artificial avançada e está disponível apenas para alunos do
+                <span class="bg-darcy-yellow px-1 font-bold border border-black">Plano Darcy PRO</span>.
+            </p>
+
+            <div class="flex flex-col gap-3">
+                <a th:href="@{/planos}"
+                    class="block w-full bg-black text-white py-3 font-bold uppercase tracking-wider hover:bg-darcy-yellow hover:text-black border-[3px] border-black hover:shadow-hard transition-all text-sm mb-2">
+                    Quero ser PRO 🚀
+                </a>
+
+                <button onclick="closeUpgradeModal()"
+                    class="block w-full bg-white text-gray-500 py-3 font-bold border-[3px] border-gray-300 hover:border-black hover:text-black transition-all text-sm">
+                    Continuar no Grátis
+                </button>
+            </div>
+
+            <p class="mt-6 text-xs text-gray-400">
+                A partir de apenas R$ 19,90/mês
+            </p>
+        </div>
+    </div>
+
+    <!-- Script Inline para Controle -->
+    <script>
+        function openUpgradeModal() {
+            const modal = document.getElementById('upgrade-modal');
+            modal.classList.remove('hidden');
+            // Re-render icons just in case
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function closeUpgradeModal() {
+            const modal = document.getElementById('upgrade-modal');
+            modal.classList.add('hidden');
+        }
+    </script>
+</div>

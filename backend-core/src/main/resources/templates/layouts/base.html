@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
 
     <title layout:title-pattern="$CONTENT_TITLE - Plataforma Darcy">Plataforma Darcy</title>
 
@@ -77,6 +80,8 @@
     style="background-image: radial-gradient(#a3a3a3 1px, transparent 1px); background-size: 20px 20px;">
 
     <div th:replace="~{fragments/loader :: global-loader}"></div>
+
+    <div th:replace="~{fragments/nav :: global-nav}"></div>
 
     <main layout:fragment="content" class="flex-1 w-full h-full"></main>
 
@@ -152,6 +157,33 @@
         // Finish progress when page loads
         window.addEventListener('pageshow', finishProgress);
         window.addEventListener('load', finishProgress);
+    </script>
+
+    <!-- Upgrade Modal (Global) -->
+    <div th:replace="~{fragments/upgrade-modal :: modal}"></div>
+
+    <!-- Pro Feature Interceptor Script -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const userIsPro = /*[[${#authorization.expression('hasRole(''PRO'')')}]]*/ false;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!userIsPro) {
+                document.body.addEventListener('click', function (e) {
+                    const target = e.target.closest('.restricted-pro');
+                    if (target) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (typeof openUpgradeModal === 'function') {
+                            openUpgradeModal();
+                        } else {
+                            alert("Esta funcionalidade é exclusiva para assinantes PRO!");
+                        }
+                    }
+                }, true); // Use capture phase to intercept early
+            }
+        });
+        /*]]>*/
     </script>
 
     <th:block layout:fragment="page-scripts"></th:block>

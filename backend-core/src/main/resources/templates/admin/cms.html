@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}"
-      th:with="bodyClass='h-screen flex flex-col overflow-hidden font-serif text-black relative bg-[#e5e5e5]'">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='h-screen flex flex-col overflow-hidden font-serif text-black relative bg-[#e5e5e5]'">
 
 <head>
     <title>Editor CMS - PAS [[${etapaAtiva}]]</title>
@@ -15,266 +14,624 @@
                 --font-mono: 'Courier New', monospace;
             }
 
-            body { font-family: var(--font-serif) !important; }
+            body {
+                font-family: var(--font-serif) !important;
+            }
 
             /* Ajuste de Sombras (Brutalismo 4px conforme Doc 3) */
             .shadow-hard {
-                box-shadow: 4px 4px 0px 0px rgba(0,0,0,1) !important;
-            }
-            .shadow-hard-sm {
-                box-shadow: 3px 3px 0px 0px rgba(0,0,0,1) !important;
+                box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
             }
 
-            .cespe-input { width: 100%; background: #fff; border: 2px solid #000; padding: 0.5rem; outline: none; font-size: 0.9rem; font-family: var(--font-mono); }
-            .cespe-input:focus { background-color: #fef08a; box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); }
+            .shadow-hard-sm {
+                box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1) !important;
+            }
+
+            .cespe-input {
+                width: 100%;
+                background: #fff;
+                border: 2px solid #000;
+                padding: 0.5rem;
+                outline: none;
+                font-size: 0.9rem;
+                font-family: var(--font-mono);
+            }
+
+            .cespe-input:focus {
+                background-color: #fef08a;
+                box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+            }
 
             /* Lógica de exibição por tipo de questão */
-            .group.type-C .painel-alternativas { display: grid; }
-            .group.type-C .painel-padrao { display: none; }
-            .group.type-B .painel-numerico, .group.type-D .painel-numerico { display: block; }
-            .group.type-B .painel-padrao, .group.type-D .painel-padrao { display: none; }
+            .group.type-C .painel-alternativas {
+                display: grid;
+            }
 
-            .btn-tipo { border-right-width: 2px; border-color: black; padding: 0.25rem 0.75rem; font-size: 10px; font-weight: bold; text-transform: uppercase; transition: all 150ms; cursor: pointer; }
-            .btn-tipo:hover { background-color: #e5e7eb; }
-            .btn-tipo.active { background-color: black; color: white; }
+            .group.type-C .painel-padrao {
+                display: none;
+            }
 
-            .modal-overlay { background: rgba(0,0,0,0.8); }
+            .group.type-B .painel-numerico,
+            .group.type-D .painel-numerico {
+                display: block;
+            }
+
+            .group.type-B .painel-padrao,
+            .group.type-D .painel-padrao {
+                display: none;
+            }
+
+            .btn-tipo {
+                border-right-width: 2px;
+                border-color: black;
+                padding: 0.25rem 0.75rem;
+                font-size: 10px;
+                font-weight: bold;
+                text-transform: uppercase;
+                transition: all 150ms;
+                cursor: pointer;
+            }
+
+            .btn-tipo:hover {
+                background-color: #e5e7eb;
+            }
+
+            .btn-tipo.active {
+                background-color: black;
+                color: white;
+            }
+
+            .modal-overlay {
+                background: rgba(0, 0, 0, 0.8);
+            }
         </style>
     </th:block>
 </head>
 
 <body>
 
-<div layout:fragment="content" class="flex flex-col h-full w-full">
+    <div layout:fragment="content" class="flex flex-col h-full w-full">
 
-    <header class="bg-black text-white border-b-4 border-gray-400 p-3 flex justify-between items-center h-14 shrink-0 z-20 shadow-hard-sm mx-4 mt-4 relative">
-        <div class="flex items-center gap-4">
-            <a href="/cms" class="w-8 h-8 bg-white text-black font-black flex items-center justify-center border-2 border-gray-500 hover:bg-yellow-400">D.</a>
-            <div>
-                <h1 class="text-sm font-bold tracking-widest uppercase">
-                    PAS <span th:text="${etapaAtiva}"></span> (<span th:text="${anoAtivo}"></span>)
-                </h1>
-            </div>
-        </div>
-        <div class="flex gap-2">
-            <a th:href="@{/cms(etapa=${etapaAtiva})}" class="text-[10px] uppercase font-bold text-gray-400 hover:text-white border-b border-transparent hover:border-white">Trocar Ano</a>
-        </div>
-    </header>
-
-    <div class="flex-1 grid grid-cols-12 overflow-hidden p-4 gap-4">
-
-        <aside class="col-span-2 bg-white border-2 border-black flex flex-col overflow-hidden shadow-hard">
-            <div class="bg-black text-white text-[10px] font-bold uppercase p-2 text-center">Índice de Blocos</div>
-            <div class="flex-1 overflow-y-auto bg-gray-50 p-2 space-y-2">
-                <div th:each="b : ${blocosSidebar}" class="border border-black bg-white shadow-sm hover:translate-x-1 transition">
-                    <a th:href="@{/cms(etapa=${etapaAtiva}, ano=${anoAtivo}, blocoId=${b.id})}"
-                       class="p-2 flex justify-between items-center cursor-pointer"
-                       th:classappend="${blocoAtivo != null && blocoAtivo.id == b.id} ? 'bg-yellow-100 border-l-4 border-l-black'">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase block">Bloco #<span th:text="${b.id}"></span></span>
-                            <span class="text-[9px] text-gray-500 font-mono truncate w-24 block" th:text="${#strings.abbreviate(b.textoBase, 20)}">...</span>
-                        </div>
-                    </a>
+        <header
+            class="bg-black text-white border-b-4 border-gray-400 p-3 flex justify-between items-center h-14 shrink-0 z-20 shadow-hard-sm mx-4 mt-4 relative">
+            <div class="flex items-center gap-4">
+                <a href="/cms"
+                    class="w-8 h-8 bg-white text-black font-black flex items-center justify-center border-2 border-gray-500 hover:bg-yellow-400">D.</a>
+                <div>
+                    <h1 class="text-sm font-bold tracking-widest uppercase">
+                        PAS <span th:text="${etapaAtiva}"></span> (<span th:text="${anoAtivo}"></span>)
+                    </h1>
                 </div>
             </div>
-        </aside>
+            <div class="flex gap-2">
+                <a th:href="@{/cms(etapa=${etapaAtiva})}"
+                    class="text-[10px] uppercase font-bold text-gray-400 hover:text-white border-b border-transparent hover:border-white">Trocar
+                    Ano</a>
+            </div>
+        </header>
 
-        <section class="col-span-6 bg-white border-2 border-black flex flex-col overflow-hidden shadow-hard" th:if="${blocoAtivo != null}">
-            <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-8 pb-32">
+        <div class="flex-1 grid grid-cols-12 overflow-hidden p-4 gap-4">
 
-                <div class="bg-gray-100 p-4 border-2 border-black relative group">
-                    <span class="absolute -top-3 left-2 bg-black text-white text-[10px] px-2 py-0.5 font-bold uppercase tracking-widest">Texto Base (Bloco #<span th:text="${blocoAtivo.id}"></span>)</span>
-                    <form th:action="@{/cms/salvar-bloco/{id}(id=${blocoAtivo.id})}" method="post" hx-post="@{/cms/salvar-bloco/{id}(id=${blocoAtivo.id})}" hx-swap="none" class="flex flex-col gap-2">
-                        <div th:if="${blocoAtivo.caminhoImagem}" class="mb-2">
-                            <img th:src="@{'/media/' + ${blocoAtivo.caminhoImagem}}" class="h-32 border border-black object-contain bg-white">
-                        </div>
-                        <textarea name="textoBase" class="w-full bg-white border border-black p-2 font-serif text-sm leading-relaxed resize-y h-48 focus:bg-yellow-50 outline-none" th:text="${blocoAtivo.textoBase}"></textarea>
-                        <div class="flex justify-end">
-                            <button type="submit" class="bg-black text-white text-xs font-bold uppercase px-4 py-2 hover:bg-gray-800 transition shadow-sm">Salvar Texto</button>
-                        </div>
-                    </form>
+            <aside class="col-span-2 bg-white border-2 border-black flex flex-col overflow-hidden shadow-hard">
+                <div
+                    class="bg-black text-white text-[10px] font-bold uppercase p-2 text-center flex justify-between items-center">
+                    <span>Índice de Blocos</span>
+                    <button onclick="document.getElementById('modal-criar-bloco').classList.remove('hidden')"
+                        class="bg-yellow-400 text-black px-2 py-0.5 text-[9px] font-black hover:bg-yellow-300 transition">
+                        + NOVO
+                    </button>
                 </div>
-
-                <div th:each="q : ${blocoAtivo.questoes}" th:id="'card-questao-' + ${q.id}" th:class="'border-2 border-black p-4 bg-white shadow-sm mb-6 group type-' + ${q.tipo}">
-
-                    <div class="flex justify-between items-center mb-4 border-b-2 border-gray-200 pb-2">
-                        <div class="flex items-center gap-3">
-                            <span class="font-black text-2xl bg-black text-white px-3 py-1 shadow-sm">Q.<span th:text="${q.numero}"></span></span>
-                            <div class="flex items-center gap-1">
-                                <div th:class="${q.status.name() == 'REVISADO'} ? 'w-4 h-4 rounded-full bg-green-500 border border-black' : 'w-4 h-4 rounded-full bg-red-500 border border-black'"></div>
-                                <span class="text-[10px] font-bold uppercase text-gray-500" th:text="${q.status}"></span>
+                <div class="flex-1 overflow-y-auto bg-gray-50 p-2 space-y-2">
+                    <div th:each="b : ${blocosSidebar}"
+                        class="border border-black bg-white shadow-sm hover:translate-x-1 transition group/bloco relative">
+                        <a th:href="@{/cms(etapa=${etapaAtiva}, ano=${anoAtivo}, blocoId=${b.id})}"
+                            class="p-2 flex justify-between items-center cursor-pointer"
+                            th:classappend="${blocoAtivo != null && blocoAtivo.id == b.id} ? 'bg-yellow-100 border-l-4 border-l-black'">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase block">Bloco #<span
+                                        th:text="${b.id}"></span></span>
+                                <span class="text-[9px] text-gray-500 font-mono truncate w-24 block"
+                                    th:text="${#strings.abbreviate(b.textoBase, 20)}">...</span>
                             </div>
-                        </div>
+                        </a>
+                        <!-- Botão excluir bloco -->
+                        <button th:hx-delete="@{/cms/bloco/{id}(id=${b.id})}"
+                            hx-confirm="Tem certeza? Isso excluirá o bloco e todas as questões!"
+                            hx-target="closest .group/bloco" hx-swap="outerHTML"
+                            class="absolute right-1 top-1 w-5 h-5 bg-red-500 text-white text-xs font-bold flex items-center justify-center opacity-0 group-hover/bloco:opacity-100 transition border border-black">
+                            ×
+                        </button>
+                    </div>
+                </div>
 
-                        <div class="flex items-center gap-2">
-                            <button type="button"
+                <!-- PAINEL IA AUTO-CLASSIFICAÇÃO -->
+                <div id="painel-ia" class="bg-yellow-100 border-t-2 border-black p-3 shrink-0">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-xs uppercase flex items-center gap-1">
+                            🤖 IA Classifier
+                        </span>
+                        <span id="ia-status" class="text-[10px] font-mono bg-black text-white px-2 py-0.5">Parado</span>
+                    </div>
+                    <div class="flex gap-1 mb-2">
+                        <button onclick="iniciarClassificacao()"
+                            class="flex-1 bg-green-500 text-white text-[10px] px-2 py-1 font-bold border border-black hover:bg-green-600">
+                            ▶ INICIAR
+                        </button>
+                        <button onclick="pararClassificacao()"
+                            class="flex-1 bg-red-500 text-white text-[10px] px-2 py-1 font-bold border border-black hover:bg-red-600">
+                            ⏸ PARAR
+                        </button>
+                    </div>
+                    <div class="text-[10px] font-mono mb-1">
+                        Progresso: <span id="ia-progresso">0</span>/<span id="ia-total">0</span>
+                        <span id="ia-velocidade" class="text-gray-500 ml-2">~600/h</span>
+                    </div>
+                    <div class="w-full bg-gray-300 h-2 border border-black">
+                        <div id="ia-barra" class="bg-green-500 h-full transition-all duration-500" style="width: 0%">
+                        </div>
+                    </div>
+                    <div id="ia-ultima-tag" class="text-[9px] font-mono text-gray-600 mt-1 truncate">
+                        Última: -
+                    </div>
+                </div>
+            </aside>
+
+            <section class="col-span-6 bg-white border-2 border-black flex flex-col overflow-hidden shadow-hard"
+                th:if="${blocoAtivo != null}">
+                <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-8 pb-32">
+
+                    <div class="bg-gray-100 p-4 border-2 border-black relative group">
+                        <span
+                            class="absolute -top-3 left-2 bg-black text-white text-[10px] px-2 py-0.5 font-bold uppercase tracking-widest">Texto
+                            Base (Bloco #<span th:text="${blocoAtivo.id}"></span>)</span>
+                        <!-- Botão excluir bloco no topo -->
+                        <button th:hx-delete="@{/cms/bloco/{id}(id=${blocoAtivo.id})}"
+                            hx-confirm="Tem certeza? Isso excluirá o bloco e todas as questões!" hx-swap="none"
+                            th:onclick="'setTimeout(function() { window.location.href=\\'/cms?etapa=' + ${etapaAtiva} + '&amp;ano=' + ${anoAtivo} + '\\'; }, 500);'"
+                            class="absolute -top-3 right-2 bg-red-500 text-white text-[10px] px-2 py-0.5 font-bold uppercase tracking-widest hover:bg-red-600 transition">
+                            EXCLUIR BLOCO
+                        </button>
+                        <form th:action="@{/cms/salvar-bloco/{id}(id=${blocoAtivo.id})}" method="post"
+                            hx-post="@{/cms/salvar-bloco/{id}(id=${blocoAtivo.id})}" hx-swap="none"
+                            class="flex flex-col gap-2">
+                            <div th:if="${blocoAtivo.caminhoImagem}" class="mb-2">
+                                <img th:src="@{'/media/' + ${blocoAtivo.caminhoImagem}}"
+                                    class="h-32 border border-black object-contain bg-white">
+                            </div>
+                            <textarea name="textoBase"
+                                class="w-full bg-white border border-black p-2 font-serif text-sm leading-relaxed resize-y h-48 focus:bg-yellow-50 outline-none"
+                                th:text="${blocoAtivo.textoBase}"></textarea>
+                            <div class="flex justify-end gap-2">
+                                <span class="text-[10px] text-gray-400 font-mono">Disciplina: <span
+                                        th:text="${blocoAtivo.disciplina}">GERAL</span></span>
+                                <button type="submit"
+                                    class="bg-black text-white text-xs font-bold uppercase px-4 py-2 hover:bg-gray-800 transition shadow-sm">Salvar
+                                    Texto</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div th:each="q : ${blocoAtivo.questoes}" th:id="'card-questao-' + ${q.id}"
+                        th:class="'border-2 border-black p-4 bg-white shadow-sm mb-6 group type-' + ${q.tipo}">
+
+                        <div class="flex justify-between items-center mb-4 border-b-2 border-gray-200 pb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="font-black text-2xl bg-black text-white px-3 py-1 shadow-sm">Q.<span
+                                        th:text="${q.numero}"></span></span>
+                                <div class="flex items-center gap-1">
+                                    <div
+                                        th:class="${q.status.name() == 'REVISADO'} ? 'w-4 h-4 rounded-full bg-green-500 border border-black' : 'w-4 h-4 rounded-full bg-red-500 border border-black'">
+                                    </div>
+                                    <span class="text-[10px] font-bold uppercase text-gray-500"
+                                        th:text="${q.status}"></span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <!-- Botão Galeria -->
+                                <button type="button"
                                     th:hx-get="@{/cms/galeria(ano=${anoAtivo}, etapa=${etapaAtiva}, qid=${q.id}, tag='ENUNCIADO')}"
                                     hx-target="#modal-container"
                                     class="bg-yellow-300 border-2 border-black text-xs font-bold px-2 py-1 uppercase hover:bg-yellow-400 flex items-center gap-1">
-                                <i data-lucide="image" class="w-3 h-3"></i> Galeria
-                            </button>
+                                    <i data-lucide="image" class="w-3 h-3"></i> Galeria
+                                </button>
 
-                            <div class="flex border-2 border-black bg-white shadow-sm">
-                                <button type="button" onclick="setTipo(this, 'A')" class="btn-tipo" th:classappend="${q.tipo.name() == 'A'} ? 'active'">A</button>
-                                <button type="button" onclick="setTipo(this, 'C')" class="btn-tipo" th:classappend="${q.tipo.name() == 'C'} ? 'active'">C</button>
-                                <button type="button" onclick="setTipo(this, 'B')" class="btn-tipo border-r-0" th:classappend="${q.tipo.name() == 'B' or q.tipo.name() == 'D'} ? 'active'">B/D</button>
+                                <!-- Botão Duplicar -->
+                                <button type="button" th:hx-post="@{/cms/duplicar-questao/{id}(id=${q.id})}"
+                                    hx-swap="none" onclick="setTimeout(function() { window.location.reload(); }, 500);"
+                                    class="bg-blue-100 border-2 border-black text-xs font-bold px-2 py-1 uppercase hover:bg-blue-200 flex items-center gap-1"
+                                    title="Duplicar questão">
+                                    <i data-lucide="copy" class="w-3 h-3"></i>
+                                </button>
+
+                                <!-- Botão Excluir Questão -->
+                                <button type="button" th:hx-delete="@{/cms/questao/{id}(id=${q.id})}"
+                                    hx-confirm="Excluir esta questão permanentemente?" hx-target="closest .group"
+                                    hx-swap="outerHTML"
+                                    class="bg-red-100 border-2 border-black text-xs font-bold px-2 py-1 uppercase hover:bg-red-200 flex items-center gap-1"
+                                    title="Excluir questão">
+                                    <i data-lucide="trash-2" class="w-3 h-3"></i>
+                                </button>
+
+                                <div class="flex border-2 border-black bg-white shadow-sm">
+                                    <button type="button" onclick="setTipo(this, 'A')" class="btn-tipo"
+                                        th:classappend="${q.tipo.name() == 'A'} ? 'active'">A</button>
+                                    <button type="button" onclick="setTipo(this, 'C')" class="btn-tipo"
+                                        th:classappend="${q.tipo.name() == 'C'} ? 'active'">C</button>
+                                    <button type="button" onclick="setTipo(this, 'B')" class="btn-tipo border-r-0"
+                                        th:classappend="${q.tipo.name() == 'B' or q.tipo.name() == 'D'} ? 'active'">B/D</button>
+                                </div>
                             </div>
+                            <div th:id="'status-' + ${q.id}" class="text-[10px] font-mono text-gray-400"></div>
                         </div>
-                        <div th:id="'status-' + ${q.id}" class="text-[10px] font-mono text-gray-400"></div>
+
+                        <form th:hx-post="@{/cms/salvar-questao/{id}(id=${q.id})}" th:hx-target="'#status-' + ${q.id}"
+                            hx-trigger="keyup changed delay:1s, change delay:0.2s" class="flex flex-col gap-4">
+                            <input type="hidden" name="tipo" th:value="${q.tipo}" class="input-tipo">
+
+                            <div>
+                                <label
+                                    class="text-[10px] font-bold uppercase text-gray-500 mb-1 block">Enunciado</label>
+                                <textarea name="enunciado"
+                                    class="w-full bg-white border-2 border-black p-3 font-serif text-sm h-28 resize-y outline-none focus:bg-yellow-50 transition shadow-sm"
+                                    th:text="${q.enunciado}"></textarea>
+                            </div>
+
+                            <div class="p-3 bg-gray-100 border border-black">
+                                <label class="text-[10px] font-bold uppercase text-gray-500 mb-2 block">Classificação de
+                                    Conteúdo</label>
+                                <div class="grid grid-cols-3 gap-2 mb-2">
+                                    <select id="sel-materia" onchange="atualizarSubareas()"
+                                        class="w-full bg-white border border-black p-1 text-xs uppercase font-bold outline-none">
+                                        <option value="">Matéria...</option>
+                                    </select>
+                                    <select id="sel-subarea" onchange="atualizarTopicos()"
+                                        class="w-full bg-white border border-black p-1 text-xs outline-none disabled:bg-gray-200"
+                                        disabled>
+                                        <option value="">Área...</option>
+                                    </select>
+                                    <select id="sel-topico" onchange="adicionarTagAutomatica()"
+                                        class="w-full bg-white border border-black p-1 text-xs outline-none disabled:bg-gray-200"
+                                        disabled>
+                                        <option value="">Tópico...</option>
+                                    </select>
+                                </div>
+                                <input type="text" name="tags" id="input-tags" th:value="${q.tags}"
+                                    class="w-full bg-white border-2 border-black p-2 font-mono text-xs outline-none focus:bg-yellow-50 transition shadow-sm uppercase">
+                            </div>
+
+                            <div class="painel-padrao bg-gray-50 p-3 border border-gray-300">
+                                <div class="flex gap-6 items-center">
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio"
+                                            name="gabarito" value="C" th:checked="${q.gabarito == 'C'}"
+                                            class="accent-black"><span class="text-sm font-bold">CERTO</span></label>
+                                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio"
+                                            name="gabarito" value="E" th:checked="${q.gabarito == 'E'}"
+                                            class="accent-black"><span class="text-sm font-bold">ERRADO</span></label>
+                                </div>
+                            </div>
+
+                            <div class="painel-numerico bg-yellow-50 p-3 border border-yellow-300 hidden">
+                                <input type="text" name="gabarito" th:value="${q.gabarito}"
+                                    class="w-full bg-white border border-black p-2 font-mono text-sm"
+                                    placeholder="Resposta Numérica">
+                            </div>
+
+                            <div
+                                class="painel-alternativas grid grid-cols-1 gap-3 bg-blue-50 p-3 border border-blue-200 hidden">
+                                <div th:each="letra : ${ {'A','B','C','D'} }"
+                                    class="flex items-center gap-2 bg-white p-2 border border-blue-100 shadow-sm">
+                                    <input type="radio" name="gabarito" th:value="${letra}"
+                                        th:checked="${q.gabarito == letra}" class="accent-blue-600">
+                                    <span class="font-black text-sm w-4" th:text="${letra} + ')'"></span>
+                                    <input type="text" th:name="'alt' + ${letra}" th:value="${q.getAltTexto(letra)}"
+                                        class="flex-1 bg-transparent border-b border-gray-300 focus:border-black outline-none text-xs font-serif py-1">
+                                </div>
+                            </div>
+
+                            <div class="mt-2 border-t pt-2 flex justify-between items-center">
+                                <label class="flex items-center gap-2 cursor-pointer select-none">
+                                    <input type="checkbox" name="statusCheck" value="REVISADO"
+                                        th:checked="${q.status.name() == 'REVISADO'}"
+                                        class="w-5 h-5 accent-black border-2 border-black">
+                                    <span class="text-xs font-bold uppercase tracking-wide">Marcar como Revisado</span>
+                                </label>
+                                <button type="submit"
+                                    class="text-[10px] font-bold text-gray-400 hover:text-black uppercase">Salvar
+                                    Questão</button>
+                            </div>
+                        </form>
                     </div>
 
-                    <form th:hx-post="@{/cms/salvar-questao/{id}(id=${q.id})}" th:hx-target="'#status-' + ${q.id}" hx-trigger="keyup changed delay:1s, change delay:0.2s" class="flex flex-col gap-4">
-                        <input type="hidden" name="tipo" th:value="${q.tipo}" class="input-tipo">
-
-                        <div>
-                            <label class="text-[10px] font-bold uppercase text-gray-500 mb-1 block">Enunciado</label>
-                            <textarea name="enunciado" class="w-full bg-white border-2 border-black p-3 font-serif text-sm h-28 resize-y outline-none focus:bg-yellow-50 transition shadow-sm" th:text="${q.enunciado}"></textarea>
-                        </div>
-
-                        <div class="p-3 bg-gray-100 border border-black">
-                            <label class="text-[10px] font-bold uppercase text-gray-500 mb-2 block">Classificação de Conteúdo</label>
-                            <div class="grid grid-cols-3 gap-2 mb-2">
-                                <select id="sel-materia" onchange="atualizarSubareas()" class="w-full bg-white border border-black p-1 text-xs uppercase font-bold outline-none">
-                                    <option value="">Matéria...</option>
-                                </select>
-                                <select id="sel-subarea" onchange="atualizarTopicos()" class="w-full bg-white border border-black p-1 text-xs outline-none disabled:bg-gray-200" disabled>
-                                    <option value="">Área...</option>
-                                </select>
-                                <select id="sel-topico" onchange="adicionarTagAutomatica()" class="w-full bg-white border border-black p-1 text-xs outline-none disabled:bg-gray-200" disabled>
-                                    <option value="">Tópico...</option>
-                                </select>
-                            </div>
-                            <input type="text" name="tags" id="input-tags" th:value="${q.tags}" class="w-full bg-white border-2 border-black p-2 font-mono text-xs outline-none focus:bg-yellow-50 transition shadow-sm uppercase">
-                        </div>
-
-                        <div class="painel-padrao bg-gray-50 p-3 border border-gray-300">
-                            <div class="flex gap-6 items-center">
-                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="gabarito" value="C" th:checked="${q.gabarito == 'C'}" class="accent-black"><span class="text-sm font-bold">CERTO</span></label>
-                                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="gabarito" value="E" th:checked="${q.gabarito == 'E'}" class="accent-black"><span class="text-sm font-bold">ERRADO</span></label>
-                            </div>
-                        </div>
-
-                        <div class="painel-numerico bg-yellow-50 p-3 border border-yellow-300 hidden">
-                            <input type="text" name="gabarito" th:value="${q.gabarito}" class="w-full bg-white border border-black p-2 font-mono text-sm" placeholder="Resposta Numérica">
-                        </div>
-
-                        <div class="painel-alternativas grid grid-cols-1 gap-3 bg-blue-50 p-3 border border-blue-200 hidden">
-                            <div th:each="letra : ${ {'A','B','C','D'} }" class="flex items-center gap-2 bg-white p-2 border border-blue-100 shadow-sm">
-                                <input type="radio" name="gabarito" th:value="${letra}" th:checked="${q.gabarito == letra}" class="accent-blue-600">
-                                <span class="font-black text-sm w-4" th:text="${letra} + ')'"></span>
-                                <input type="text" th:name="'alt' + ${letra}" th:value="${q.getAltTexto(letra)}" class="flex-1 bg-transparent border-b border-gray-300 focus:border-black outline-none text-xs font-serif py-1">
-                            </div>
-                        </div>
-
-                        <div class="mt-2 border-t pt-2 flex justify-between items-center">
-                            <label class="flex items-center gap-2 cursor-pointer select-none">
-                                <input type="checkbox" name="statusCheck" value="REVISADO" th:checked="${q.status.name() == 'REVISADO'}" class="w-5 h-5 accent-black border-2 border-black">
-                                <span class="text-xs font-bold uppercase tracking-wide">Marcar como Revisado</span>
-                            </label>
-                            <button type="submit" class="text-[10px] font-bold text-gray-400 hover:text-black uppercase">Salvar Questão</button>
-                        </div>
+                    <!-- Botão Criar Nova Questão -->
+                    <form th:action="@{/cms/criar-questao}" method="post" class="mt-4">
+                        <input type="hidden" name="blocoId" th:value="${blocoAtivo.id}">
+                        <input type="hidden" name="etapa" th:value="${etapaAtiva}">
+                        <input type="hidden" name="ano" th:value="${anoAtivo}">
+                        <button type="submit"
+                            class="w-full py-3 border-2 border-dashed border-gray-400 bg-gray-50 text-gray-600 font-bold uppercase text-sm hover:bg-yellow-100 hover:border-black transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                            Adicionar Nova Questão
+                        </button>
                     </form>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="col-span-4 bg-white border-2 border-black flex flex-col overflow-hidden shadow-hard" th:if="${blocoAtivo != null}">
-            <div class="p-2 border-b-2 border-black bg-gray-50 text-center"><span class="text-[10px] font-bold uppercase">Imagens Vinculadas</span></div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-200">
-                <div th:each="q : ${blocoAtivo.questoes}">
-                    <div th:id="'lista-imagens-' + ${q.id}">
-                        <div th:if="${!q.imagens.isEmpty()}" class="mb-4">
-                            <span class="bg-black text-white text-[9px] px-2 py-1 font-bold">Q.<span th:text="${q.numero}"></span></span>
-                            <div class="grid grid-cols-2 gap-2 mt-2">
-                                <div th:each="img : ${q.imagens}" class="bg-white border border-black p-1 relative group">
-                                    <img th:src="@{'/media/' + ${img.caminhoArquivo}}" class="w-full object-contain mix-blend-multiply">
-                                    <button th:hx-delete="@{/cms/imagem/{id}(id=${img.id})}" hx-target="closest .group" hx-swap="outerHTML" class="absolute top-0 right-0 bg-red-600 text-white w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition border-l border-b border-black">&times;</button>
+            <section class="col-span-4 bg-white border-2 border-black flex flex-col overflow-hidden shadow-hard"
+                th:if="${blocoAtivo != null}">
+                <div class="p-2 border-b-2 border-black bg-gray-50 text-center"><span
+                        class="text-[10px] font-bold uppercase">Imagens Vinculadas</span></div>
+                <div class="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-200">
+                    <div th:each="q : ${blocoAtivo.questoes}">
+                        <div th:id="'lista-imagens-' + ${q.id}">
+                            <div th:if="${!q.imagens.isEmpty()}" class="mb-4">
+                                <span class="bg-black text-white text-[9px] px-2 py-1 font-bold">Q.<span
+                                        th:text="${q.numero}"></span></span>
+                                <div class="grid grid-cols-2 gap-2 mt-2">
+                                    <div th:each="img : ${q.imagens}"
+                                        class="bg-white border border-black p-1 relative group">
+                                        <img th:src="@{'/media/' + ${img.caminhoArquivo}}"
+                                            class="w-full object-contain mix-blend-multiply">
+                                        <button th:hx-delete="@{/cms/imagem/{id}(id=${img.id})}"
+                                            hx-target="closest .group" hx-swap="outerHTML"
+                                            class="absolute top-0 right-0 bg-red-600 text-white w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition border-l border-b border-black">&times;</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
+        </div>
+
+        <!-- MODAL: Criar Bloco (DENTRO do fragment) -->
+        <div id="modal-criar-bloco" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+            <div class="bg-white border-4 border-black shadow-hard p-6 w-full max-w-md">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-black pb-2">
+                    <h2 class="font-black text-lg uppercase">Criar Novo Bloco</h2>
+                    <button onclick="document.getElementById('modal-criar-bloco').classList.add('hidden')"
+                        class="text-2xl font-black hover:text-red-500">&times;</button>
+                </div>
+                <form th:action="@{/cms/criar-bloco}" method="post" class="space-y-4">
+                    <input type="hidden" name="etapa" th:value="${etapaAtiva}">
+                    <input type="hidden" name="ano" th:value="${anoAtivo}">
+
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 mb-1 block">Texto Base
+                            (opcional)</label>
+                        <textarea name="textoBase" rows="4"
+                            class="w-full bg-white border-2 border-black p-2 font-serif text-sm resize-y outline-none focus:bg-yellow-50"
+                            placeholder="Texto de apoio para as questões deste bloco..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 mb-1 block">Disciplina</label>
+                        <select name="disciplina"
+                            class="w-full bg-white border-2 border-black p-2 font-mono text-sm outline-none">
+                            <option value="GERAL">GERAL</option>
+                            <option value="ESPANHOL">ESPANHOL</option>
+                            <option value="FRANCÊS">FRANCÊS</option>
+                            <option value="INGLÊS">INGLÊS</option>
+                            <option value="MATEMÁTICA">MATEMÁTICA</option>
+                            <option value="FÍSICA">FÍSICA</option>
+                            <option value="QUÍMICA">QUÍMICA</option>
+                            <option value="BIOLOGIA">BIOLOGIA</option>
+                            <option value="PORTUGUÊS">PORTUGUÊS</option>
+                            <option value="HISTÓRIA">HISTÓRIA</option>
+                            <option value="GEOGRAFIA">GEOGRAFIA</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2 pt-2">
+                        <button type="button"
+                            onclick="document.getElementById('modal-criar-bloco').classList.add('hidden')"
+                            class="flex-1 py-2 border-2 border-black bg-gray-100 font-bold uppercase text-sm hover:bg-gray-200 transition">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="flex-1 py-2 border-2 border-black bg-black text-white font-bold uppercase text-sm hover:bg-gray-800 transition">
+                            Criar Bloco
+                        </button>
+                    </div>
+                </form>
             </div>
-        </section>
+        </div>
+
+        <!-- Container para modais carregados via HTMX -->
+        <div id="modal-container"></div>
     </div>
-</div>
 
-<th:block layout:fragment="page-scripts">
-    <script th:inline="javascript">
-        function setTipo(btn, tipo) {
-            let card = btn.closest('.group');
-            card.classList.remove('type-A', 'type-B', 'type-C', 'type-D');
-            card.classList.add('type-' + tipo);
-            let input = card.querySelector('.input-tipo');
-            input.value = tipo;
-            input.dispatchEvent(new Event('change'));
+    <th:block layout:fragment="page-scripts">
+        <script th:inline="javascript">
+            function setTipo(btn, tipo) {
+                let card = btn.closest('.group');
+                card.classList.remove('type-A', 'type-B', 'type-C', 'type-D');
+                card.classList.add('type-' + tipo);
+                let input = card.querySelector('.input-tipo');
+                input.value = tipo;
+                input.dispatchEvent(new Event('change'));
 
-            let btns = btn.parentElement.querySelectorAll('button');
-            btns.forEach(b => { b.classList.remove('active'); });
-            btn.classList.add('active');
-        }
-
-        // TAXONOMIA
-        const taxonomyData = JSON.parse([[${taxonomyJson}]]);
-        const selMateria = document.getElementById('sel-materia');
-        const selSubarea = document.getElementById('sel-subarea');
-        const selTopico = document.getElementById('sel-topico');
-        const inputTags = document.getElementById('input-tags');
-
-        function initTaxonomy() {
-            if(!selMateria) return;
-            selMateria.innerHTML = '<option value="">MATÉRIA...</option>';
-            for (let materia in taxonomyData) {
-                let opt = document.createElement('option');
-                opt.value = materia;
-                opt.innerText = materia.toUpperCase();
-                selMateria.appendChild(opt);
+                let btns = btn.parentElement.querySelectorAll('button');
+                btns.forEach(b => { b.classList.remove('active'); });
+                btn.classList.add('active');
             }
-        }
 
-        function atualizarSubareas() {
-            const materia = selMateria.value;
-            selSubarea.innerHTML = '<option value="">ÁREA...</option>';
-            selTopico.innerHTML = '<option value="">TÓPICO...</option>';
-            selTopico.disabled = true;
-            if (materia && taxonomyData[materia]) {
-                selSubarea.disabled = false;
-                for (let sub in taxonomyData[materia]) {
+            // TAXONOMIA
+            const taxonomyData = JSON.parse([[${ taxonomyJson }]]);
+            const selMateria = document.getElementById('sel-materia');
+            const selSubarea = document.getElementById('sel-subarea');
+            const selTopico = document.getElementById('sel-topico');
+            const inputTags = document.getElementById('input-tags');
+
+            function initTaxonomy() {
+                if (!selMateria) return;
+                selMateria.innerHTML = '<option value="">MATÉRIA...</option>';
+                for (let materia in taxonomyData) {
                     let opt = document.createElement('option');
-                    opt.value = sub; opt.innerText = sub.toUpperCase();
-                    selSubarea.appendChild(opt);
+                    opt.value = materia;
+                    opt.innerText = materia.toUpperCase();
+                    selMateria.appendChild(opt);
                 }
-            } else { selSubarea.disabled = true; }
-        }
-
-        function atualizarTopicos() {
-            const materia = selMateria.value;
-            const sub = selSubarea.value;
-            selTopico.innerHTML = '<option value="">TÓPICO...</option>';
-            if (materia && sub && taxonomyData[materia][sub]) {
-                selTopico.disabled = false;
-                taxonomyData[materia][sub].forEach(topico => {
-                    let opt = document.createElement('option');
-                    opt.value = topico; opt.innerText = topico.toUpperCase();
-                    selTopico.appendChild(opt);
-                });
-            } else { selTopico.disabled = true; }
-        }
-
-        function adicionarTagAutomatica() {
-            const materia = selMateria.value;
-            const sub = selSubarea.value;
-            const topico = selTopico.value;
-            if (materia && sub && topico) {
-                // CORRIGIDO: Usando crases (Template Literals)
-                const novaTag = `${materia}, ${sub}, ${topico}`.toUpperCase();
-                inputTags.value = novaTag;
-                inputTags.dispatchEvent(new Event('change'));
             }
-        }
 
-        initTaxonomy();
-    </script>
-</th:block>
+            function atualizarSubareas() {
+                const materia = selMateria.value;
+                selSubarea.innerHTML = '<option value="">ÁREA...</option>';
+                selTopico.innerHTML = '<option value="">TÓPICO...</option>';
+                selTopico.disabled = true;
+                if (materia && taxonomyData[materia]) {
+                    selSubarea.disabled = false;
+                    for (let sub in taxonomyData[materia]) {
+                        let opt = document.createElement('option');
+                        opt.value = sub; opt.innerText = sub.toUpperCase();
+                        selSubarea.appendChild(opt);
+                    }
+                } else { selSubarea.disabled = true; }
+            }
+
+            function atualizarTopicos() {
+                const materia = selMateria.value;
+                const sub = selSubarea.value;
+                selTopico.innerHTML = '<option value="">TÓPICO...</option>';
+                if (materia && sub && taxonomyData[materia][sub]) {
+                    selTopico.disabled = false;
+                    taxonomyData[materia][sub].forEach(topico => {
+                        let opt = document.createElement('option');
+                        opt.value = topico; opt.innerText = topico.toUpperCase();
+                        selTopico.appendChild(opt);
+                    });
+                } else { selTopico.disabled = true; }
+            }
+
+            function adicionarTagAutomatica() {
+                const materia = selMateria.value;
+                const sub = selSubarea.value;
+                const topico = selTopico.value;
+                if (materia && sub && topico) {
+                    // CORRIGIDO: Usando crases (Template Literals)
+                    const novaTag = `${materia}, ${sub}, ${topico}`.toUpperCase();
+                    inputTags.value = novaTag;
+                    inputTags.dispatchEvent(new Event('change'));
+                }
+            }
+
+            // GALERIA: Vincular imagem à questão
+            function vincularImagem(caminho, questaoId, tag) {
+                fetch('/cms/vincular-imagem?qid=' + questaoId + '&caminho=' + encodeURIComponent(caminho) + '&tag=' + tag, {
+                    method: 'POST'
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById('modal-container').innerHTML = '';
+                        window.location.reload();
+                    } else {
+                        alert('Erro ao vincular imagem');
+                    }
+                }).catch(err => {
+                    console.error('Erro:', err);
+                    alert('Erro ao vincular imagem');
+                });
+            }
+
+            // GALERIA: Fechar modal ao clicar fora
+            function closeModal(event) {
+                if (event.target.classList.contains('modal-overlay')) {
+                    document.getElementById('modal-container').innerHTML = '';
+                }
+            }
+
+            // ==================== IA AUTO-CLASSIFICAÇÃO ====================
+            const etapaAtiva = [[${ etapaAtiva }]];
+            const anoAtivo = [[${ anoAtivo }]];
+
+            let iaRodando = false;
+            let filaPendentes = [];
+            let indiceAtual = 0;
+            const DELAY_MS = 6000; // 6 segundos entre requests (10 req/min, safe)
+
+            async function iniciarClassificacao() {
+                if (iaRodando) return;
+                if (!anoAtivo) {
+                    alert('Selecione um ano primeiro!');
+                    return;
+                }
+
+                iaRodando = true;
+                document.getElementById('ia-status').innerText = 'Buscando...';
+                document.getElementById('ia-status').className = 'text-[10px] font-mono bg-blue-500 text-white px-2 py-0.5';
+
+                try {
+                    // 1. Busca lista de pendentes
+                    const resp = await fetch(`/cms/ia/pendentes?etapa=${etapaAtiva}&ano=${anoAtivo}`);
+                    filaPendentes = await resp.json();
+                    indiceAtual = 0;
+
+                    document.getElementById('ia-total').innerText = filaPendentes.length;
+                    document.getElementById('ia-progresso').innerText = '0';
+                    document.getElementById('ia-barra').style.width = '0%';
+
+                    if (filaPendentes.length === 0) {
+                        document.getElementById('ia-status').innerText = 'Nada a classificar!';
+                        document.getElementById('ia-status').className = 'text-[10px] font-mono bg-green-500 text-white px-2 py-0.5';
+                        iaRodando = false;
+                        return;
+                    }
+
+                    document.getElementById('ia-status').innerText = 'Rodando...';
+                    document.getElementById('ia-status').className = 'text-[10px] font-mono bg-yellow-500 text-black px-2 py-0.5 animate-pulse';
+
+                    processarProximo();
+
+                } catch (e) {
+                    console.error('Erro ao buscar pendentes:', e);
+                    document.getElementById('ia-status').innerText = 'Erro!';
+                    document.getElementById('ia-status').className = 'text-[10px] font-mono bg-red-500 text-white px-2 py-0.5';
+                    iaRodando = false;
+                }
+            }
+
+            async function processarProximo() {
+                if (!iaRodando || indiceAtual >= filaPendentes.length) {
+                    iaRodando = false;
+                    document.getElementById('ia-status').innerText = 'Concluído!';
+                    document.getElementById('ia-status').className = 'text-[10px] font-mono bg-green-500 text-white px-2 py-0.5';
+                    return;
+                }
+
+                const qid = filaPendentes[indiceAtual];
+                document.getElementById('ia-status').innerText = `Q#${qid}...`;
+
+                try {
+                    const resp = await fetch(`/cms/ia/classificar/${qid}`, { method: 'POST' });
+                    const data = await resp.json();
+
+                    if (data.success) {
+                        document.getElementById('ia-ultima-tag').innerText = `Última: ${data.tags}`;
+                    } else {
+                        document.getElementById('ia-ultima-tag').innerText = `Erro: ${data.error || 'desconhecido'}`;
+                    }
+                } catch (e) {
+                    console.error('Erro ao classificar:', e);
+                    document.getElementById('ia-ultima-tag').innerText = `Erro: ${e.message}`;
+                }
+
+                indiceAtual++;
+                document.getElementById('ia-progresso').innerText = indiceAtual;
+                const pct = (indiceAtual / filaPendentes.length) * 100;
+                document.getElementById('ia-barra').style.width = `${pct}%`;
+
+                // THROTTLE: Espera 6 segundos antes da próxima
+                setTimeout(processarProximo, DELAY_MS);
+            }
+
+            function pararClassificacao() {
+                iaRodando = false;
+                document.getElementById('ia-status').innerText = 'Parado';
+                document.getElementById('ia-status').className = 'text-[10px] font-mono bg-black text-white px-2 py-0.5';
+            }
+
+            initTaxonomy();
+        </script>
+    </th:block>
 </body>
+
 </html>

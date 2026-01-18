@@ -1,91 +1,150 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/base}"
-  th:with="bodyClass='flex flex-col min-h-screen text-black font-serif p-4 md:p-8 bg-[#e5e5e5]'">
+  th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#f5f5f5]', showNav=false">
 
 <head>
-  <title>Painel de Comando - Darcy</title>
+  <title>Painel Admin - Darcy</title>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="/js/admin-analytics.js" defer></script>
 
   <th:block layout:fragment="head-extras">
     <style>
-      .card-hub {
+      /* STRICT NEO BRUTALIST THEME */
+
+      /* Reset & Base */
+      .admin-sidebar {
+        background: white;
+        border-right: 3px solid black;
+      }
+
+      .admin-nav-item {
+        padding: 12px 16px;
+        margin: 4px 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #666;
+        border: 2px solid transparent;
+        transition: all 0.1s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .admin-nav-item:hover {
+        background: #f0f0f0;
+        color: black;
+        border: 2px solid black;
+        box-shadow: 2px 2px 0 black;
+        transform: translate(-1px, -1px);
+      }
+
+      .admin-nav-item.active {
+        background: #fbbf24;
+        color: black;
+        border: 2px solid black;
+        box-shadow: 2px 2px 0 black;
+        transform: translate(-1px, -1px);
+      }
+
+      /* Cards */
+      .admin-card {
         background: white;
         border: 3px solid black;
-        box-shadow: 6px 6px 0px 0px black;
-        transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        height: 100%;
+        box-shadow: 4px 4px 0 black;
+      }
+
+      /* KPI Cards */
+      .kpi-card {
+        background: white;
+        border: 3px solid black;
+        box-shadow: 4px 4px 0 black;
+        padding: 20px;
         display: flex;
         flex-direction: column;
-      }
-
-      .card-hub:hover {
-        transform: translate(-4px, -4px);
-        box-shadow: 10px 10px 0px 0px black;
-      }
-
-      .card-hub:active {
-        transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0px 0px black;
-      }
-
-      .header-section {
-        padding: 0.75rem;
-        font-family: 'JetBrains Mono', monospace;
-        font-weight: 800;
-        text-transform: uppercase;
-        border-bottom: 4px solid black;
-        display: flex;
         justify-content: space-between;
-        align-items: center;
-        color: white;
+        transition: all 0.2s;
       }
 
-      .btn-action {
-        border: 2px solid black;
-        font-weight: 800;
-        text-transform: uppercase;
-        font-size: 0.65rem;
-        padding: 4px 12px;
-        transition: all 0.1s;
+      .kpi-card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 black;
+      }
+
+      /* Quick Actions */
+      .quick-action {
         background: white;
-        color: black;
+        border: 3px solid black;
+        box-shadow: 4px 4px 0 black;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.2s;
         cursor: pointer;
       }
 
-      .btn-action:hover {
+      .quick-action:hover {
+        background: #fffbeb;
         transform: translate(-2px, -2px);
-        box-shadow: 3px 3px 0px black;
+        box-shadow: 6px 6px 0 black;
       }
 
-      .btn-action:active {
-        transform: translate(0, 0);
-        box-shadow: 0 0 0 black;
-      }
-
-      .kpi-value {
-        font-family: 'JetBrains Mono', monospace;
-        letter-spacing: -1px;
-      }
-
-      .btn-header {
-        width: 2.5rem;
-        height: 2.5rem;
+      .quick-action .icon-box {
+        width: 48px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 2px solid black;
         background: white;
-        transition: all 0.2s;
-        box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
       }
 
-      .btn-header:hover {
+      /* Feed */
+      .feed-item {
+        border: 2px solid black;
+        margin-bottom: 8px;
+        padding: 12px;
+        background: white;
+        box-shadow: 2px 2px 0 #ccc;
+      }
+
+      .feed-item:last-child {
+        margin-bottom: 0;
+      }
+
+      /* Inputs */
+      input,
+      select,
+      textarea {
+        border: 3px solid black !important;
+        background: white !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        background: #fffbeb !important;
+        outline: none !important;
+      }
+
+      /* Buttons */
+      button[type="submit"] {
         background: black;
         color: white;
-        transform: translate(-1px, -1px);
-        box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+        border: 3px solid black;
+        text-transform: uppercase;
+        font-weight: 800;
+        box-shadow: 3px 3px 0 #fbbf24;
+        transition: all 0.1s;
+      }
+
+      button[type="submit"]:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 5px 5px 0 #fbbf24;
       }
     </style>
   </th:block>
@@ -93,299 +152,370 @@
 
 <body>
 
-  <div layout:fragment="content">
+  <div layout:fragment="content" class="flex min-h-screen">
 
-    <!-- SYSTEM STATUS BAR -->
-    <div
-      class="max-w-7xl mx-auto w-full mb-6 flex justify-between items-center border-b-2 border-gray-400 pb-2 font-mono text-[10px] uppercase tracking-widest text-gray-600">
-      <div class="flex items-center gap-2">
-        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-        <span>Sistema Online • Admin Mode</span>
-      </div>
-      <div>Brasília, DF • <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}">DATA</span></div>
-    </div>
+    <!-- SIDEBAR (WHITE & BRUTAL) -->
+    <aside class="admin-sidebar w-64 flex flex-col shrink-0">
 
-    <!-- HEADER -->
-    <header
-      class="max-w-7xl mx-auto w-full mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-      <div class="flex items-end gap-5">
-        <div class="w-20 h-20 bg-black border-4 border-black flex items-center justify-center shadow-hard shrink-0">
-          <span class="font-serif font-black text-5xl text-darcy-yellow italic">D.</span>
-        </div>
-        <div class="mb-1">
-          <div
-            class="bg-red-600 text-white px-2 py-0.5 text-[10px] font-mono font-bold inline-block mb-1 uppercase tracking-wide flex items-center gap-1">
-            <i data-lucide="shield" class="w-3 h-3"></i> Painel Administrativo
+      <!-- Logo Area -->
+      <div class="p-6 border-b-3 border-black bg-white">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-[#fbbf24] flex items-center justify-center border-3 border-black">
+            <span class="font-serif font-black text-2xl text-black italic">D.</span>
           </div>
-          <h1 class="text-5xl md:text-6xl font-black italic tracking-tighter leading-[0.9]">COMANDO.</h1>
-        </div>
-      </div>
-
-      <div class="flex flex-col items-end gap-3 w-full md:w-auto">
-        <nav class="flex gap-6 font-mono text-xs font-bold uppercase tracking-wide border-b-2 border-transparent pb-1">
-          <a href="/" class="hover:underline hover:text-yellow-600 transition">Voltar ao Site</a>
-          <a href="/cms" class="hover:underline hover:text-purple-600 transition">CMS</a>
-        </nav>
-        <div class="flex items-center gap-4 bg-white border-2 border-black p-2 shadow-hard-sm">
-          <div class="text-right px-2 border-r-2 border-gray-200 pr-4 mr-2">
-            <span class="block font-bold text-sm uppercase font-sans">ADMINISTRADOR</span>
-            <span class="block text-[10px] text-gray-500 font-mono">STATUS: ATIVO</span>
-          </div>
-          <div class="flex gap-2">
-            <form th:action="@{/logout}" method="post">
-              <button class="btn-header hover:!bg-red-600 hover:!border-red-600" title="Sair"><i data-lucide="log-out"
-                  class="w-4 h-4"></i></button>
-            </form>
+          <div>
+            <div class="text-black font-black text-lg tracking-tight">DARCY</div>
+            <div class="text-[10px] font-mono text-red-600 uppercase font-bold">Admin Panel</div>
           </div>
         </div>
       </div>
-    </header>
 
-    <!-- DATA INJECTION FOR CHARTS -->
-    <script type="application/json" id="data-chart-labels" th:utext="${chart_labels}"></script>
-    <script type="application/json" id="data-chart-users" th:utext="${chart_users}"></script>
-    <script type="application/json" id="data-chart-simulados" th:utext="${chart_simulados}"></script>
-    <script type="application/json" id="data-chart-subjects-keys" th:utext="${chart_desempenho_keys}"></script>
-    <script type="application/json" id="data-chart-subjects-values" th:utext="${chart_desempenho_values}"></script>
-
-    <main class="max-w-7xl mx-auto w-full">
-
-      <!-- KPI ROW -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <!-- Total Users -->
-        <a href="/admin/usuarios" class="card-hub p-6 relative overflow-hidden group cursor-pointer">
-          <div class="absolute right-0 top-0 p-3 opacity-5 group-hover:opacity-10 transition"><i data-lucide="users"
-              class="w-20 h-20 text-black"></i></div>
-          <h3 class="text-[10px] font-bold uppercase text-gray-500 mb-1 font-mono">Total Usuários</h3>
-          <div class="text-4xl font-black text-black kpi-value" th:text="${kpi_users}">1,248</div>
-          <div class="mt-2 text-[10px] text-green-600 font-mono border border-green-600 bg-green-50 px-1 inline-block">
-            +12% essa semana</div>
-          <div class="mt-3 text-[9px] font-bold uppercase text-gray-400 group-hover:text-black transition">CLIQUE PARA
-            GERENCIAR →</div>
+      <!-- Navigation -->
+      <nav class="flex-1 py-4 overflow-y-auto">
+        <div class="px-5 py-2 text-[10px] font-mono text-[#888] uppercase tracking-wider font-bold">Principal</div>
+        <a href="/admin" class="admin-nav-item active">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        </a>
+        <a href="/admin/usuarios" class="admin-nav-item">
+          <i data-lucide="users" class="w-4 h-4"></i> Usuários
+        </a>
+        <a href="/admin/pdfs" class="admin-nav-item">
+          <i data-lucide="file-text" class="w-4 h-4"></i> Central PDFs
         </a>
 
-        <!-- Revenue (MRR) -->
-        <div class="card-hub p-6 relative overflow-hidden group border-[#fbbf24]">
-          <div class="absolute right-0 top-0 p-3 opacity-5 group-hover:opacity-10 transition"><i
-              data-lucide="dollar-sign" class="w-20 h-20 text-yellow-500"></i></div>
-          <h3 class="text-[10px] font-bold uppercase text-gray-500 mb-1 font-mono">Receita Estimada</h3>
-          <div class="text-4xl font-black text-[#c59102] kpi-value" th:text="${kpi_revenue}">R$ 45.2k</div>
-          <div class="mt-2 text-[10px] text-gray-400 font-mono">Baseado em assinaturas ativas</div>
+        <div class="px-5 py-2 mt-4 text-[10px] font-mono text-[#888] uppercase tracking-wider font-bold">Conteúdo</div>
+        <a href="/cms" class="admin-nav-item">
+          <i data-lucide="layers" class="w-4 h-4"></i> CMS / Provas
+        </a>
+        <a href="/admin/simulados-oficiais" class="admin-nav-item">
+          <i data-lucide="cpu" class="w-4 h-4"></i> Simulados Oficiais
+        </a>
+        <a href="/admin/editora" class="admin-nav-item">
+          <i data-lucide="book-open" class="w-4 h-4"></i> Editora
+        </a>
+        <a href="/admin/transmissoes" class="admin-nav-item">
+          <i data-lucide="radio" class="w-4 h-4"></i> Transmissões
+        </a>
+        <a href="/admin/taxonomia" class="admin-nav-item">
+          <i data-lucide="tags" class="w-4 h-4"></i> Taxonomia / Tags
+        </a>
+
+        <div class="px-5 py-2 mt-4 text-[10px] font-mono text-[#888] uppercase tracking-wider font-bold">Sistema</div>
+        <a href="/admin/bugs" class="admin-nav-item">
+          <i data-lucide="bug" class="w-4 h-4"></i> Bug Tracker
+          <span th:if="${kpi_bugs_criticos > 0}"
+            class="ml-auto bg-red-600 text-white text-[9px] px-2 py-0.5 border border-black font-bold"
+            th:text="${kpi_bugs_criticos}">0</span>
+        </a>
+        <a href="#" class="admin-nav-item">
+          <i data-lucide="settings" class="w-4 h-4"></i> Configurações
+        </a>
+      </nav>
+
+      <!-- Footer User -->
+      <div class="p-4 border-t-3 border-black bg-white">
+        <div class="flex items-center gap-3 mb-4 px-2">
+          <div
+            class="w-8 h-8 bg-black flex items-center justify-center text-[#fbbf24] border-2 border-black font-bold text-xs">
+            AD
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-black text-sm font-bold truncate">Administrador</div>
+            <div class="text-[#666] text-[10px] font-mono">Super Admin</div>
+          </div>
         </div>
 
-        <!-- Active Issues -->
-        <div class="card-hub p-6 relative overflow-hidden group border-red-600">
-          <div class="absolute right-0 top-0 p-3 opacity-5 group-hover:opacity-10 transition"><i data-lucide="bug"
-              class="w-20 h-20 text-red-500"></i></div>
-          <h3 class="text-[10px] font-bold uppercase text-gray-500 mb-1 font-mono">Issues Pendentes</h3>
-          <div class="flex items-baseline gap-2">
-            <span class="text-4xl font-black text-red-600 kpi-value" th:text="${kpi_bugs}">8</span>
-            <span class="text-xs font-bold text-white bg-red-600 px-2 py-0.5 border-2 border-black"
-              th:if="${kpi_bugs_criticos > 0}" th:text="${kpi_bugs_criticos} + ' CRÍTICOS'">2 CRÍTICOS</span>
+        <a href="/" class="flex items-center gap-2 text-xs font-bold text-black uppercase hover:underline px-2 mb-2">
+          <i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar ao Site
+        </a>
+        <form th:action="@{/logout}" method="post">
+          <button
+            class="w-full text-left flex items-center gap-2 text-xs font-bold text-red-600 uppercase hover:underline px-2">
+            <i data-lucide="log-out" class="w-3 h-3"></i> Sair
+          </button>
+        </form>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 p-8 overflow-y-auto">
+
+      <!-- Header (Simple & Brutal) -->
+      <header class="flex justify-between items-end mb-8 pb-4 border-b-3 border-black">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <div class="w-3 h-3 bg-[#22c55e] border-2 border-black"></div>
+            <span class="text-[11px] font-mono text-black uppercase font-bold tracking-wider">Sistema Online</span>
           </div>
-          <div class="mt-2 text-[10px] text-gray-400 font-mono">Requer atenção imediata</div>
+          <h1 class="text-5xl font-black text-black tracking-tighter">PAINEL DE COMANDO</h1>
+        </div>
+        <div class="text-right">
+          <div class="text-[12px] font-mono text-black font-bold uppercase"
+            th:text="${#dates.format(#dates.createNow(), 'EEEE, dd MMM yyyy')}">DATA COMPLETA</div>
+          <div class="text-[32px] font-black text-[#fbbf24] leading-none" style="-webkit-text-stroke: 1px black;">DARCY
+            v1.0</div>
+        </div>
+      </header>
+
+      <!-- KPI ROW -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+
+        <div class="kpi-card">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-[10px] font-mono text-[#666] uppercase font-bold">Total Usuários</span>
+            <i data-lucide="users" class="w-5 h-5 text-black"></i>
+          </div>
+          <div class="text-4xl font-black text-black" th:text="${kpi_users}">0</div>
+          <div
+            class="mt-2 inline-block bg-[#dcfce7] border-2 border-black px-2 py-0.5 text-[10px] font-bold text-green-800 self-start">
+            +12% RECENTE
+          </div>
         </div>
 
-        <!-- System Health -->
-        <div
-          class="card-hub p-6 relative overflow-hidden flex justify-between items-center bg-black text-white border-black">
-          <div>
-            <h3 class="text-[10px] font-bold uppercase text-gray-400 mb-1 font-mono">System Uptime</h3>
-            <div class="text-3xl font-black text-green-400 kpi-value" th:text="${kpi_uptime}">99.9%</div>
-            <h3 class="text-[10px] font-bold uppercase text-gray-400 mt-3 mb-1 font-mono">Server Load</h3>
-            <div class="w-full bg-gray-700 h-2 mt-1 overflow-hidden border border-gray-600">
-              <div class="bg-darcy-yellow h-full w-[40%]"></div>
-            </div>
+        <div class="kpi-card">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-[10px] font-mono text-[#666] uppercase font-bold">Receita (MRR)</span>
+            <i data-lucide="dollar-sign" class="w-5 h-5 text-black"></i>
           </div>
-          <div id="chart-server" class="w-[100px] h-[100px] -mr-2"></div>
+          <div class="text-4xl font-black text-black" th:text="${kpi_revenue}">R$ 0</div>
+          <div class="mt-2 text-[10px] font-mono text-[#666]">Assinaturas ativas</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-[10px] font-mono text-[#666] uppercase font-bold">Simulados Hoje</span>
+            <i data-lucide="play-circle" class="w-5 h-5 text-black"></i>
+          </div>
+          <div class="text-4xl font-black text-black" th:text="${kpi_simulados_hoje}">0</div>
+          <div class="mt-2 text-[10px] font-mono text-[#666]">Engajamento real</div>
+        </div>
+
+        <div class="kpi-card bg-red-50">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-[10px] font-mono text-red-600 uppercase font-bold">Bugs Pendentes</span>
+            <i data-lucide="bug" class="w-5 h-5 text-red-600"></i>
+          </div>
+          <div class="text-4xl font-black text-red-600" th:text="${kpi_bugs}">0</div>
+          <div th:if="${kpi_bugs_criticos > 0}"
+            class="mt-2 inline-block bg-red-600 border-2 border-black text-white px-2 py-0.5 text-[10px] font-bold self-start">
+            <span th:text="${kpi_bugs_criticos}">0</span> CRÍTICOS
+          </div>
+        </div>
+
+        <div class="kpi-card bg-[#fbbf24]">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-[10px] font-mono text-black uppercase font-bold">Uptime</span>
+            <i data-lucide="activity" class="w-5 h-5 text-black"></i>
+          </div>
+          <div class="text-4xl font-black text-black" th:text="${kpi_uptime}">100%</div>
+          <div class="mt-2 text-[10px] font-mono text-black font-bold">Sistema Estável</div>
         </div>
       </div>
 
-      <!-- MAIN GRID -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      <!-- Quick Actions Grid -->
+      <div class="mb-8">
+        <h2 class="text-xl font-black text-black mb-4 flex items-center gap-2 uppercase tracking-tight">
+          <span class="bg-black text-white px-2">AÇÕES</span> RÁPIDAS
+        </h2>
 
-        <!-- GROWTH CHART -->
-        <div class="lg:col-span-2 card-hub">
-          <div class="header-section bg-black">
-            <span class="flex items-center gap-2"><i data-lucide="trending-up" class="w-4 h-4 text-darcy-yellow"></i>
-              GROWTH ENGINE</span>
-            <div class="flex gap-2">
-              <span class="text-[9px] px-2 py-0.5 bg-darcy-yellow text-black border border-black">7D</span>
-              <span
-                class="text-[9px] px-2 py-0.5 bg-black text-gray-500 border border-gray-700 cursor-not-allowed">30D</span>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+
+          <a href="/admin/pdfs" class="quick-action group">
+            <div class="icon-box group-hover:bg-red-500 group-hover:text-white transition-colors">
+              <i data-lucide="file-plus" class="w-6 h-6"></i>
             </div>
-          </div>
-          <div class="p-6 flex-1">
-            <div id="chart-growth" class="w-full h-[300px]"></div>
-          </div>
-        </div>
+            <div>
+              <div class="font-bold text-sm uppercase">Central PDFs</div>
+              <div class="text-[10px] font-mono text-[#666]">Gerenciar</div>
+            </div>
+          </a>
 
-        <!-- LIVE FEED -->
-        <div class="card-hub border-red-600">
-          <div class="header-section bg-red-600">
-            <span class="flex items-center gap-2"><i data-lucide="radio" class="w-4 h-4"></i> LIVE FEED</span>
-            <div class="w-3 h-3 bg-white rounded-full animate-ping"></div>
+          <a href="/cms" class="quick-action group">
+            <div class="icon-box group-hover:bg-purple-500 group-hover:text-white transition-colors">
+              <i data-lucide="layers" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm uppercase">CMS</div>
+              <div class="text-[10px] font-mono text-[#666]">Editar</div>
+            </div>
+          </a>
+
+          <a href="/admin/usuarios" class="quick-action group">
+            <div class="icon-box group-hover:bg-blue-500 group-hover:text-white transition-colors">
+              <i data-lucide="user-plus" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm uppercase">Usuários</div>
+              <div class="text-[10px] font-mono text-[#666]">Adicionar</div>
+            </div>
+          </a>
+
+          <a href="/admin/transmissoes" class="quick-action group">
+            <div class="icon-box group-hover:bg-[#fbbf24] group-hover:text-black transition-colors">
+              <i data-lucide="radio" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm uppercase">Transmitir</div>
+              <div class="text-[10px] font-mono text-[#666]">Alertar</div>
+            </div>
+          </a>
+
+          <a href="/admin/editora" class="quick-action group">
+            <div class="icon-box group-hover:bg-green-500 group-hover:text-white transition-colors">
+              <i data-lucide="book-open" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <div class="font-bold text-sm uppercase">Editora</div>
+              <div class="text-[10px] font-mono text-[#666]">Livros</div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Feed com Visual Cru -->
+        <div class="lg:col-span-2">
+          <div class="bg-black text-white p-3 border-3 border-black border-b-0 flex justify-between items-center">
+            <h3 class="font-black text-sm uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="activity" class="w-4 h-4 text-[#fbbf24]"></i> Log de Atividades
+            </h3>
+            <div class="text-[10px] font-mono text-[#fbbf24]">AO VIVO</div>
           </div>
-          <div class="p-4 space-y-4 overflow-y-auto max-h-[350px] flex-1">
-            <div th:each="log : ${feed}" class="flex gap-3 items-start border-b border-gray-100 pb-3 last:border-0">
-              <div class="shrink-0 mt-1">
-                <div th:if="${log.icon == 'user'}" class="w-3 h-3 rounded-full bg-blue-500 border-2 border-black"></div>
-                <div th:if="${log.icon == 'play'}" class="w-3 h-3 rounded-full bg-yellow-500 border-2 border-black">
-                </div>
-                <div th:if="${log.icon == 'alert'}" class="w-3 h-3 rounded-full bg-red-500 border-2 border-black"></div>
-              </div>
-              <div>
-                <span class="block text-[10px] font-bold uppercase text-gray-400 font-mono"
+          <div class="admin-card p-4 overflow-y-auto max-h-[350px] bg-[#f0f0f0]">
+
+            <div th:each="log : ${feed}" class="feed-item">
+              <div class="flex justify-between items-center mb-1 border-b-2 border-[#eee] pb-1">
+                <span class="text-[10px] font-black uppercase bg-black text-white px-1"
                   th:text="${log.tipo}">TIPO</span>
-                <p class="text-xs font-mono text-black leading-tight" th:text="${log.desc}">Descrição do log...</p>
+                <span class="text-[10px] font-mono text-[#666]">agora</span>
+              </div>
+              <p class="text-sm font-bold text-black mt-1" th:text="${log.desc}">Descrição da atividade...</p>
+            </div>
+
+            <div th:if="${#lists.isEmpty(feed)}" class="text-center py-10 opacity-50">
+              <i data-lucide="clock" class="w-8 h-8 mx-auto mb-2"></i>
+              <p class="font-mono text-xs uppercase">Nenhuma atividade recente</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Column Stack -->
+        <div class="flex flex-col gap-6">
+
+          <!-- Generator Card -->
+          <div>
+            <div class="bg-black text-white p-3 border-3 border-black border-b-0">
+              <h3 class="font-black text-sm uppercase tracking-wider flex items-center gap-2">
+                <i data-lucide="cpu" class="w-4 h-4 text-[#fbbf24]"></i> Gerador I.A.
+              </h3>
+            </div>
+            <div class="admin-card p-4">
+              <p class="text-[10px] font-mono text-[#666] mb-3 leading-tight">Gera uma prova inédita completa baseada na
+                matriz do PAS.</p>
+
+              <form action="/simulado/oficiais/gerar-novo" method="post" class="space-y-3">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase mb-1">Etapa</label>
+                  <select name="etapa"
+                    class="w-full bg-white border-2 border-black p-2 text-xs font-bold focus:bg-[#fffbeb] outline-none">
+                    <option value="1">PAS 1</option>
+                    <option value="2">PAS 2</option>
+                    <option value="3">PAS 3</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase mb-1">Senha Admin</label>
+                  <input type="password" name="senha" placeholder="••••" required
+                    class="w-full p-2 text-xs font-mono border-2 border-black focus:bg-[#fffbeb] outline-none">
+                </div>
+                <button type="submit"
+                  class="w-full bg-black text-white py-2 text-xs font-bold uppercase border-2 border-black hover:bg-[#fbbf24] hover:text-black transition flex items-center justify-center gap-2">
+                  <i data-lucide="zap" class="w-3 h-3"></i> Gerar Prova
+                </button>
+              </form>
+
+              <div th:if="${sucesso}"
+                class="mt-3 bg-green-100 border border-green-500 text-green-700 px-3 py-2 text-[10px] font-mono font-bold">
+                <i data-lucide="check" class="w-3 h-3 inline mr-1"></i> <span th:text="${sucesso}">Sucesso</span>
+              </div>
+              <div th:if="${erro}"
+                class="mt-3 bg-red-100 border border-red-500 text-red-700 px-3 py-2 text-[10px] font-mono font-bold">
+                <i data-lucide="alert-triangle" class="w-3 h-3 inline mr-1"></i> <span th:text="${erro}">Erro</span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- BOTTOM GRID -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-
-        <!-- TRANSMISSION -->
-        <div class="card-hub border-[#fbbf24]">
-          <div class="header-section bg-[#fbbf24] text-black">
-            <span class="flex items-center gap-2 font-black"><i data-lucide="radio" class="w-4 h-4"></i>
-              TRANSMISSÃO</span>
-            <a href="/admin/transmissoes"
-              class="text-[9px] bg-black text-white px-2 py-0.5 hover:bg-gray-800 transition">VER TODOS</a>
+          <!-- Broadcast Form -->
+          <div class="bg-[#fbbf24] text-black p-3 border-3 border-black border-b-0">
+            <h3 class="font-black text-sm uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="megaphone" class="w-4 h-4"></i> Transmissão
+            </h3>
           </div>
-          <div class="p-4 flex flex-col gap-3 flex-1">
-            <form hx-post="/admin/transmitir" hx-target="#status-msg" class="flex flex-col gap-3 flex-1">
-              <input type="text" name="titulo" placeholder="TÍTULO DO ALERTA"
-                class="border-2 border-black p-3 text-xs font-bold uppercase w-full outline-none focus:bg-yellow-50"
-                required>
+          <div class="admin-card p-4">
+            <form hx-post="/admin/transmitir" hx-target="#status-msg" class="space-y-4">
 
-              <!-- Type Selector -->
-              <select name="tipo"
-                class="border-2 border-black p-3 text-xs font-bold uppercase w-full outline-none focus:bg-yellow-50 bg-white">
-                <option value="INFO">📢 INFO - Novidade/Atualização</option>
-                <option value="ALERTA" selected>🔔 ALERTA - Aviso Importante</option>
-                <option value="EVENTO">🎉 EVENTO - Acontecimento Especial</option>
-              </select>
+              <div>
+                <label class="block text-[10px] font-bold uppercase mb-1">Título</label>
+                <input type="text" name="titulo" placeholder="Ex: Manutenção..." required
+                  class="w-full p-2 text-sm font-bold">
+              </div>
 
-              <textarea name="mensagem" rows="3" placeholder="MENSAGEM..."
-                class="border-2 border-black p-3 text-xs font-mono w-full resize-none outline-none focus:bg-yellow-50 flex-1"
-                required></textarea>
-              <button type="submit"
-                class="bg-black text-white py-3 text-xs font-black uppercase tracking-widest hover:bg-gray-800 flex items-center justify-center gap-2">
-                <i data-lucide="send" class="w-3 h-3"></i> TRANSMITIR AGORA
+              <div>
+                <label class="block text-[10px] font-bold uppercase mb-1">Tipo</label>
+                <div class="grid grid-cols-3 gap-2">
+                  <label class="cursor-pointer">
+                    <input type="radio" name="tipo" value="INFO" class="peer hidden" checked>
+                    <div
+                      class="text-center py-2 text-[10px] font-bold border-2 border-black peer-checked:bg-blue-500 peer-checked:text-white hover:bg-gray-100 transition">
+                      INFO</div>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="tipo" value="ALERTA" class="peer hidden">
+                    <div
+                      class="text-center py-2 text-[10px] font-bold border-2 border-black peer-checked:bg-red-500 peer-checked:text-white hover:bg-gray-100 transition">
+                      ALERTA</div>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="tipo" value="EVENTO" class="peer hidden">
+                    <div
+                      class="text-center py-2 text-[10px] font-bold border-2 border-black peer-checked:bg-[#fbbf24] peer-checked:text-black hover:bg-gray-100 transition">
+                      EVENTO</div>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold uppercase mb-1">Mensagem</label>
+                <textarea name="mensagem" rows="3" required class="w-full p-2 text-sm font-mono"></textarea>
+              </div>
+
+              <button type="submit" class="w-full py-3 flex justify-center items-center gap-2">
+                <i data-lucide="send" class="w-4 h-4"></i> ENVIAR AGORA
               </button>
+
               <div id="status-msg"></div>
             </form>
           </div>
         </div>
 
-        <!-- EXAM PERFORMANCE -->
-        <div class="card-hub">
-          <div class="header-section bg-purple-600">
-            <span class="flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> DESEMPENHO POR
-              MATÉRIA</span>
-          </div>
-          <div class="p-4 flex-1">
-            <div id="chart-subjects" class="w-full h-[250px]"></div>
-          </div>
-        </div>
-
-        <!-- USER SEARCH -->
-        <div class="card-hub">
-          <div class="header-section bg-black">
-            <span class="flex items-center gap-2"><i data-lucide="search" class="w-4 h-4"></i> BUSCAR USUÁRIO</span>
-          </div>
-          <div class="p-4 flex flex-col flex-1">
-            <input type="text" placeholder="Nome, Email ou Matrícula..."
-              class="w-full border-2 border-black p-3 font-mono text-xs focus:bg-gray-50 outline-none uppercase font-bold mb-4"
-              hx-post="/admin/usuarios/buscar-rapido" hx-trigger="keyup changed delay:500ms"
-              hx-target="#resultado-busca">
-            <div id="resultado-busca" class="flex-1 overflow-y-auto min-h-[100px]">
-              <div class="text-center text-gray-400 text-xs italic mt-8 font-mono">Digite para buscar...</div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- CMS SHORTCUTS -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="card-hub">
-          <div class="header-section bg-black">
-            <span class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4"></i> GESTÃO DE PROVAS</span>
-            <span class="text-darcy-yellow text-xs" th:text="${provas.size()} + ' cadastradas'">0 cadastradas</span>
-          </div>
-          <div class="p-0 flex-1 overflow-y-auto max-h-[200px]">
-            <table class="w-full text-left text-sm font-mono">
-              <tbody class="divide-y-2 divide-gray-100">
-                <tr th:each="p : ${provas}" th:if="${pStat.index < 5}"
-                  class="hover:bg-yellow-50 cursor-pointer transition group"
-                  th:attr="hx-get=@{/admin/detalhes/prova/{id}(id=${p.id})}" hx-target="#modal-container">
-                  <td class="p-3 pl-4 font-bold group-hover:underline uppercase text-xs">
-                    PAS <span th:text="${p.etapa}">3</span> - <span th:text="${p.ano}">2025</span>
-                  </td>
-                  <td class="p-3 text-right pr-4">
-                    <span th:if="${p.ativo}"
-                      class="text-green-600 border-2 border-green-600 px-1 text-[9px] font-black">ON</span>
-                    <span th:unless="${p.ativo}"
-                      class="text-yellow-600 border-2 border-yellow-600 px-1 text-[9px] font-black">DRAFT</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="p-4 border-t-2 border-black">
-            <a href="/cms"
-              class="w-full block text-center py-2 bg-black text-white text-xs font-black uppercase hover:bg-gray-800 transition">
-              Acessar CMS Completo
-            </a>
-          </div>
-        </div>
-
-        <!-- BUGS PENDENTES -->
-        <div class="card-hub border-red-600">
-          <div class="header-section bg-red-600">
-            <span class="flex items-center gap-2"><i data-lucide="bug" class="w-4 h-4"></i> BUG TRACKER</span>
-            <span class="bg-white text-red-600 text-[10px] px-2 font-black border-2 border-black"
-              th:text="${kpi_bugs_criticos} + ' CRÍTICOS'">0 CRÍTICOS</span>
-          </div>
-          <div class="p-4 space-y-4 max-h-[250px] overflow-y-auto flex-1">
-            <div th:each="bug : ${bugsPendentes}" th:if="${bugStat.index < 4}"
-              class="border-b-2 border-gray-100 pb-4 last:border-0">
-              <div class="flex justify-between items-start mb-1">
-                <span
-                  class="bg-red-100 text-red-600 text-[9px] px-1 font-bold border border-red-600 uppercase font-mono">Sistema</span>
-                <span class="text-[10px] font-mono text-gray-400">Recente</span>
-              </div>
-              <h4 class="font-bold text-sm mb-3 uppercase leading-tight" th:text="${bug.titulo}">ERRO NO LOGIN</h4>
-              <div class="flex gap-2">
-                <button class="btn-action" th:attr="hx-get=@{/admin/detalhes/bug/{id}(id=${bug.id})}"
-                  hx-target="#modal-container">LOGS</button>
-                <button class="btn-action border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
-                  th:attr="hx-post=@{/admin/bug/resolver/{id}(id=${bug.id})}" hx-target="closest div.border-b-2"
-                  hx-swap="delete">RESOLVER</button>
-              </div>
-            </div>
-            <div th:if="${#lists.isEmpty(bugsPendentes)}"
-              class="text-center text-gray-400 text-xs italic font-mono py-8">
-              Nenhum bug pendente. Sistema estável.
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Data Injection for Charts (Hidden but present) -->
+      <script type="application/json" id="data-chart-labels" th:utext="${chart_labels}"></script>
+      <script type="application/json" id="data-chart-users" th:utext="${chart_users}"></script>
+      <script type="application/json" id="data-chart-simulados" th:utext="${chart_simulados}"></script>
 
     </main>
-
-    <!-- MODAL CONTAINER (HTMX) -->
-    <div id="modal-container"></div>
-
-    <script>
-      lucide.createIcons();
-    </script>
-
   </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+
 </body>
 
 </html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plataforma Darcy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'serif': ['"Crimson Pro"', 'serif'],
+              'mono': ['"JetBrains Mono"', 'monospace'],
+              'sans': ['"Inter"', 'sans-serif'],
+            },
+            colors: {
+              'ink': '#000000',
+              'paper': '#fdfbf7',
+              'darcy-yellow': '#facc15',
+              'darcy-dark': '#222222',
+            },
+            boxShadow: {
+              'brutal': '6px 6px 0px 0px black',
+              'brutal-sm': '4px 4px 0px 0px black',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        /* Custom scrollbar for the dark theme */
+        body::-webkit-scrollbar {
+          width: 8px;
+        }
+        body::-webkit-scrollbar-track {
+          background: #222;
+        }
+        body::-webkit-scrollbar-thumb {
+          background: #444;
+          border-radius: 4px;
+        }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/": "https://esm.sh/react-dom@18.2.0/",
+    "react": "https://esm.sh/react@18.2.0",
+    "react/": "https://esm.sh/react@18.2.0/",
+    "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-darcy-dark text-ink antialiased">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

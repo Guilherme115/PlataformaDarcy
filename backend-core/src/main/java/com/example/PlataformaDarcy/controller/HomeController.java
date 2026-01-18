@@ -19,6 +19,11 @@ public class HomeController {
     @Autowired
     private ComunicadoRepository comunicadoRepo;
 
+    @GetMapping("/500")
+    public String triggerError() {
+        throw new RuntimeException("Teste de Explosão Controlada 💥");
+    }
+
     @GetMapping("/")
     public String home(@AuthenticationPrincipal Usuario usuario, Model model) {
         if (usuario != null) {
@@ -39,5 +44,17 @@ public class HomeController {
             return "aluno/home"; // Caminho: templates/aluno/home.html
         }
         return "public/index"; // Caminho: templates/public/index.html
+    }
+
+    // Redirect /home to /
+    @GetMapping("/home")
+    public String redirectHome() {
+        return "redirect:/";
+    }
+
+    // Método Darcy - Página institucional
+    @GetMapping("/metodo")
+    public String metodo() {
+        return "public/metodo";
     }
 }

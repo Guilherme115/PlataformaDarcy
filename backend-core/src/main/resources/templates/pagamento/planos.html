@@ -12,11 +12,21 @@
                 border: 3px solid black;
                 box-shadow: 6px 6px 0px 0px black;
                 transition: all 0.2s;
+                position: relative;
             }
 
             .card-plan:hover {
                 transform: translate(-4px, -4px);
                 box-shadow: 10px 10px 0px 0px black;
+            }
+
+            .card-estudante {
+                border-color: #3b82f6;
+                box-shadow: 6px 6px 0px 0px #3b82f6;
+            }
+
+            .card-estudante:hover {
+                box-shadow: 10px 10px 0px 0px #3b82f6;
             }
 
             .card-pro {
@@ -43,6 +53,15 @@
                 box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.3);
             }
 
+            .btn-estudante {
+                background: #3b82f6;
+                border-color: #3b82f6;
+            }
+
+            .btn-estudante:hover {
+                background: #60a5fa;
+            }
+
             .badge-promo {
                 animation: pulse 2s infinite;
             }
@@ -59,19 +78,25 @@
                 }
             }
 
-            .feature-check {
-                color: #22c55e;
+            .ai-alert {
+                background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                border-left: 4px solid #f59e0b;
             }
 
-            .feature-x {
-                color: #ef4444;
+            .quota-badge {
+                background: #dbeafe;
+                color: #1e40af;
+                font-size: 10px;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-weight: bold;
             }
         </style>
     </th:block>
 </head>
 
 <body>
-    <div layout:fragment="content" class="max-w-5xl mx-auto w-full">
+    <div layout:fragment="content" class="max-w-6xl mx-auto w-full">
 
         <!-- HEADER -->
         <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
@@ -83,7 +108,7 @@
                 <div>
                     <div
                         class="bg-black text-white px-2 py-0.5 text-[10px] font-mono font-bold inline-block mb-1 uppercase tracking-wide">
-                        Escolha seu Plano
+                        🎯 Promoção de Lançamento
                     </div>
                     <h1 class="text-4xl md:text-5xl font-black italic tracking-tighter leading-[0.9]">PLANOS.</h1>
                 </div>
@@ -93,101 +118,172 @@
             </a>
         </div>
 
-        <!-- STATUS ATUAL -->
-        <div th:if="${planoInfo.isPro}" class="mb-8 bg-green-100 border-2 border-green-600 p-4 flex items-center gap-4">
-            <i data-lucide="crown" class="w-8 h-8 text-green-600"></i>
-            <div>
-                <div class="font-black text-green-700">Você é PRO!</div>
-                <div class="font-mono text-xs text-green-600">
-                    Expira em <span th:text="${planoInfo.diasRestantes}">0</span> dias
+        <!-- ALERTA DE USO DE IA -->
+        <div class="ai-alert p-4 mb-6 border-2 border-yellow-500 shadow-hard-sm">
+            <div class="flex items-start gap-3">
+                <i data-lucide="zap" class="w-6 h-6 text-yellow-700 shrink-0 mt-0.5"></i>
+                <div>
+                    <div class="font-black text-yellow-900 mb-1">⚡ Uso de IA = Valor Real</div>
+                    <div class="text-sm text-yellow-800 font-mono">
+                        Cada pergunta ao Tutor IA e podcast gerado tem custo. Por isso, limitamos o uso FREE e ESTUDANTE
+                        para manter preços acessíveis. Upgrade PRO = uso ilimitado! 🚀
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- CARDS DE PLANOS -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
 
             <!-- PLANO FREE -->
-            <div class="card-plan p-8">
-                <div class="text-[10px] font-mono uppercase text-gray-500 mb-2">Plano Básico</div>
-                <h2 class="text-4xl font-black italic mb-2">FREE</h2>
-                <div class="text-5xl font-black mb-6">R$0<span class="text-lg">/mês</span></div>
+            <div class="card-plan p-6 flex flex-col">
+                <div class="text-[10px] font-mono uppercase text-gray-500 mb-2">Para conhecer</div>
+                <h2 class="text-3xl font-black italic mb-2">FREE</h2>
+                <div class="text-4xl font-black mb-4">R$0<span class="text-sm">/mês</span></div>
 
-                <ul class="space-y-3 mb-8 font-mono text-sm">
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
-                        Simulados ilimitados
+                <ul class="space-y-2 mb-6 font-mono text-xs flex-grow">
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                        <span>Simulados ilimitados</span>
                     </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
-                        Caderno de Erros
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                        <span>Caderno de Erros</span>
                     </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
-                        Protocolo de Expurgo
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                        <span>Protocolo de Expurgo</span>
                     </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
-                        Wiki colaborativa
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                        <span>Wiki colaborativa</span>
                     </li>
-                    <li class="flex items-center gap-2 text-gray-400">
-                        <i data-lucide="x" class="w-5 h-5 feature-x"></i>
-                        <span class="line-through">Tutor IA Darcy</span>
+                    <li class="flex items-start gap-2 text-gray-400">
+                        <i data-lucide="x" class="w-4 h-4 text-red-500 shrink-0 mt-0.5"></i>
+                        <span class="line-through">Tutor IA</span>
+                        <span class="quota-badge bg-gray-200 text-gray-600">0 msgs</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-gray-400">
+                        <i data-lucide="x" class="w-4 h-4 text-red-500 shrink-0 mt-0.5"></i>
+                        <span class="line-through">Podcasts IA</span>
+                        <span class="quota-badge bg-gray-200 text-gray-600">0/mês</span>
                     </li>
                 </ul>
 
-                <div class="text-center font-mono text-sm text-gray-500 border-t-2 border-gray-200 pt-4">
+                <div class="text-center font-mono text-xs text-gray-500 border-t-2 border-gray-200 pt-4">
                     Seu plano atual
                 </div>
             </div>
 
-            <!-- PLANO PRO -->
-            <div class="card-plan card-pro p-8 relative">
-                <!-- Badge Promo -->
+            <!-- PLANO ESTUDANTE -->
+            <div class="card-plan card-estudante p-6 flex flex-col">
                 <div
-                    class="absolute -top-4 -right-4 bg-red-600 text-white px-4 py-2 font-black text-sm uppercase border-2 border-black shadow-hard badge-promo rotate-3">
-                    -66% OFF
+                    class="absolute -top-3 -right-3 bg-blue-600 text-white px-3 py-1 font-black text-[10px] uppercase border-2 border-black shadow-hard rotate-3">
+                    🔥 Mais Popular
                 </div>
 
-                <div class="text-[10px] font-mono uppercase text-darcy-yellow mb-2 font-bold">Recomendado</div>
-                <h2 class="text-4xl font-black italic mb-2">PRO</h2>
+                <div class="text-[10px] font-mono uppercase text-blue-600 mb-2 font-bold">Melhor custo-benefício</div>
+                <h2 class="text-3xl font-black italic mb-2">ESTUDANTE</h2>
 
-                <div class="flex items-baseline gap-2 mb-2">
-                    <span class="text-2xl text-gray-400 line-through">R$<span
-                            th:text="${#numbers.formatDecimal(precoNormal, 1, 2)}">59</span></span>
-                    <span class="text-5xl font-black">R$<span
-                            th:text="${#numbers.formatDecimal(precoPromo, 1, 2)}">19,90</span></span>
-                    <span class="text-lg">/mês</span>
+                <div class="flex items-baseline gap-2 mb-1">
+                    <span class="text-xl text-gray-400 line-through">R$29,90</span>
+                    <span class="text-4xl font-black">R$24,90</span>
+                    <span class="text-sm">/mês</span>
                 </div>
-                <div class="font-mono text-xs text-gray-600 mb-6">por 12 meses</div>
+                <div class="font-mono text-[10px] text-gray-600 mb-4">💰 Economize R$ 60/ano</div>
 
-                <ul class="space-y-3 mb-8 font-mono text-sm">
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-5 h-5 feature-check"></i>
-                        <strong>Tudo do FREE +</strong>
-                    </li>
+                <ul class="space-y-2 mb-6 font-mono text-xs flex-grow">
                     <li class="flex items-center gap-2 font-bold">
-                        <i data-lucide="bot" class="w-5 h-5 text-darcy-yellow"></i>
-                        Tutor IA Darcy
+                        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+                        Tudo do FREE +
                     </li>
-                    <li class="flex items-center gap-2 pl-7 text-gray-600">
-                        • Análise de erros personalizada
+                    <li class="flex items-start gap-2 font-bold text-blue-700">
+                        <i data-lucide="bot" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+                        <div>
+                            <div>Tutor IA Darcy</div>
+                            <span class="quota-badge">100 msgs/dia</span>
+                        </div>
                     </li>
-                    <li class="flex items-center gap-2 pl-7 text-gray-600">
+                    <li class="flex items-start gap-2 pl-6 text-gray-600">
+                        • Análise de erros
+                    </li>
+                    <li class="flex items-start gap-2 pl-6 text-gray-600">
                         • Desempenho por matéria
                     </li>
-                    <li class="flex items-center gap-2 pl-7 text-gray-600">
-                        • Explicações de obras do PAS
+                    <li class="flex items-start gap-2 pl-6 text-gray-600">
+                        • Explicação de obras PAS
                     </li>
-                    <li class="flex items-center gap-2 pl-7 text-gray-600">
-                        • Chat ilimitado com IA
+                    <li class="flex items-start gap-2 font-bold text-blue-700">
+                        <i data-lucide="headphones" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+                        <div>
+                            <div>Podcasts de PDFs</div>
+                            <span class="quota-badge">5/mês</span>
+                        </div>
                     </li>
                 </ul>
 
-                <form th:action="@{/planos/assinar}" method="post">
-                    <button type="submit" class="btn-assinar w-full py-4 font-black text-lg uppercase">
-                        <i data-lucide="zap" class="w-5 h-5 inline mr-2"></i>
-                        Assinar PRO
+                <form th:action="@{/planos/assinar-estudante}" method="post">
+                    <button type="submit" class="btn-assinar btn-estudante w-full py-3 font-black text-sm uppercase">
+                        <i data-lucide="rocket" class="w-4 h-4 inline mr-2"></i>
+                        Assinar Estudante
+                    </button>
+                </form>
+            </div>
+
+            <!-- PLANO PREMIUM -->
+            <div class="card-plan card-pro p-6 flex flex-col">
+                <div
+                    class="absolute -top-3 -right-3 bg-darcy-yellow text-black px-3 py-1 font-black text-[10px] uppercase border-2 border-black shadow-hard rotate-3">
+                    ⭐ Sem Limites
+                </div>
+
+                <div class="text-[10px] font-mono uppercase text-darcy-yellow mb-2 font-bold">Para aprovação</div>
+                <h2 class="text-3xl font-black italic mb-2">PREMIUM</h2>
+
+                <div class="flex items-baseline gap-2 mb-1">
+                    <span class="text-xl text-gray-400 line-through">R$79,90</span>
+                    <span class="text-4xl font-black">R$59,90</span>
+                    <span class="text-sm">/mês</span>
+                </div>
+                <div class="font-mono text-[10px] text-gray-600 mb-4">💰 Economize R$ 240/ano</div>
+
+                <ul class="space-y-2 mb-6 font-mono text-xs flex-grow">
+                    <li class="flex items-center gap-2 font-bold">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+                        Tudo do ESTUDANTE +
+                    </li>
+                    <li class="flex items-start gap-2 font-bold text-yellow-700">
+                        <i data-lucide="infinity" class="w-4 h-4 text-darcy-yellow shrink-0 mt-0.5"></i>
+                        <div>
+                            <div>IA Ilimitada</div>
+                            <span class="quota-badge bg-yellow-100 text-yellow-800">∞ msgs/dia</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2 font-bold text-yellow-700">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-darcy-yellow shrink-0 mt-0.5"></i>
+                        <div>
+                            <div>Podcasts Ilimitados</div>
+                            <span class="quota-badge bg-yellow-100 text-yellow-800">∞/mês</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                        <span>Modelo IA Avançado (Gemini Pro)</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                        <span>Suporte prioritário</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 shrink-0 mt-0.5"></i>
+                        <span>Recursos futuros em 1ª mão</span>
+                    </li>
+                </ul>
+
+                <form th:action="@{/planos/assinar-pro}" method="post">
+                    <button type="submit" class="btn-assinar w-full py-3 font-black text-sm uppercase">
+                        <i data-lucide="crown" class="w-4 h-4 inline mr-2"></i>
+                        Assinar Premium
                     </button>
                 </form>
             </div>
@@ -202,17 +298,29 @@
             </h3>
             <div class="space-y-4 font-mono text-sm">
                 <div>
-                    <div class="font-bold">Como funciona o pagamento?</div>
-                    <div class="text-gray-600">Pagamento único via Pix. Você recebe acesso imediato após confirmação.
-                    </div>
+                    <div class="font-bold">⚡ Por que limitar uso de IA no FREE?</div>
+                    <div class="text-gray-600">Cada pergunta ao Tutor IA tem custo real (~R$ 0,01-0,03). Sem limite,
+                        seria impossível oferecer plano gratuito.</div>
                 </div>
                 <div>
-                    <div class="font-bold">Posso cancelar?</div>
-                    <div class="text-gray-600">O plano é válido por 12 meses. Não há renovação automática.</div>
+                    <div class="font-bold">💬 100 mensagens/dia é suficiente?</div>
+                    <div class="text-gray-600">SIM! Estudantes ativos usam em média 20-40 msgs/dia. 100 msgs = ~3h de
+                        estudo intenso com IA.</div>
                 </div>
                 <div>
-                    <div class="font-bold">E se eu já tiver o plano FREE?</div>
-                    <div class="text-gray-600">Você mantém tudo que já tem e ganha acesso ao Tutor IA.</div>
+                    <div class="font-bold">🎧 O que são "Podcasts de PDFs"?</div>
+                    <div class="text-gray-600">Você envia um PDF (apostila, resumo) e a IA converte em podcast narrado
+                        para ouvir enquanto estuda.</div>
+                </div>
+                <div>
+                    <div class="font-bold">💳 Como funciona o pagamento?</div>
+                    <div class="text-gray-600">Pagamento mensal via Pix. Você recebe acesso imediato após confirmação.
+                        Pode cancelar quando quiser.</div>
+                </div>
+                <div>
+                    <div class="font-bold">🎁 Promoção de lançamento até quando?</div>
+                    <div class="text-gray-600">Preços promocionais (R$ 24,90 e R$ 59,90) válidos até fim do mês. Depois
+                        voltam ao normal.</div>
                 </div>
             </div>
         </div>

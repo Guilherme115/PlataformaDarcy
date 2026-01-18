@@ -1,50 +1,157 @@
 <div th:fragment="modal-galeria" class="fixed inset-0 z-[999] flex items-center justify-center modal-overlay"
-     onclick="closeModal(event)" xmlns:th="http://www.w3.org/1999/xhtml">
-  <div class="bg-white border-4 border-black w-4/5 h-4/5 flex flex-col shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-in fade-in zoom-in duration-200" onclick="event.stopPropagation()">
+  onclick="closeModal(event)" xmlns:th="http://www.w3.org/1999/xhtml">
+  <div
+    class="bg-white border-4 border-black w-4/5 h-4/5 flex flex-col shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-in fade-in zoom-in duration-200"
+    onclick="event.stopPropagation()">
 
     <div class="flex justify-between items-center p-4 border-b-4 border-black bg-yellow-300">
       <div>
         <h2 class="text-xl font-black uppercase tracking-tighter">Galeria: <span th:text="${pasta}"></span></h2>
-        <p class="text-xs font-bold font-mono">Selecione para vincular à Questão <span th:text="${questaoId}"></span></p>
+        <p class="text-xs font-bold font-mono">Selecione para vincular à Questão <span th:text="${questaoId}"></span>
+        </p>
       </div>
-      <button onclick="document.getElementById('modal-container').innerHTML = ''" class="bg-red-600 text-white font-black px-4 py-2 border-2 border-black hover:bg-red-700 shadow-[2px_2px_0px_0px_#000] active:translate-y-1 active:shadow-none">
+      <button onclick="document.getElementById('modal-container').innerHTML = ''"
+        class="bg-red-600 text-white font-black px-4 py-2 border-2 border-black hover:bg-red-700 shadow-[2px_2px_0px_0px_#000] active:translate-y-1 active:shadow-none">
         FECHAR
       </button>
+    </div>
+
+    <!-- UPLOAD DO PC -->
+    <div class="p-4 bg-gray-100 border-b-4 border-black">
+      <form id="upload-form" enctype="multipart/form-data" class="flex items-center gap-4">
+        <input type="hidden" name="qid" th:value="${questaoId}">
+        <input type="hidden" name="tag" th:value="${tagAlvo}">
+
+        <label class="flex-1 cursor-pointer">
+          <div id="drop-zone"
+            class="border-2 border-dashed border-gray-400 bg-white p-4 text-center hover:border-black hover:bg-yellow-50 transition flex items-center justify-center gap-4">
+            <i data-lucide="upload-cloud" class="w-8 h-8 text-gray-500"></i>
+            <div>
+              <p class="font-bold text-sm uppercase">Arraste uma imagem aqui ou clique para selecionar</p>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG, WEBP (máx 5MB)</p>
+            </div>
+          </div>
+          <input type="file" name="file" id="file-input" accept="image/*" class="hidden"
+            onchange="handleFileSelect(this)">
+        </label>
+
+        <button type="button" onclick="uploadFile()" id="btn-upload"
+          class="bg-green-600 text-white font-black px-6 py-3 border-2 border-black hover:bg-green-700 shadow-[3px_3px_0px_0px_#000] active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled>
+          <i data-lucide="upload" class="w-5 h-5 inline"></i>
+          ENVIAR
+        </button>
+      </form>
+      <div id="upload-status" class="mt-2 text-xs font-mono hidden"></div>
     </div>
 
     <div class="flex-1 overflow-y-auto p-4 bg-gray-200">
 
       <div class="grid grid-cols-4 gap-4" th:if="${!imagensGaleria.isEmpty()}">
         <div th:each="caminho : ${imagensGaleria}"
-             class="group relative bg-white border-2 border-black cursor-pointer hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#000] transition-all duration-100"
-             th:attr="onclick='vincularImagem(\'' + ${caminho} + '\', ' + ${questaoId} + ', \'' + ${tagAlvo} + '\')'">
+          class="group relative bg-white border-2 border-black cursor-pointer hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#000] transition-all duration-100"
+          th:attr="onclick='vincularImagem(\'' + ${caminho} + '\', ' + ${questaoId} + ', \'' + ${tagAlvo} + '\')'">
 
-          <div class="h-40 bg-gray-100 flex items-center justify-center border-b-2 border-black overflow-hidden p-2 relative">
-            <img th:src="@{'/media/' + ${caminho}}"
-                 class="max-h-full max-w-full object-contain z-10 block"
-                 loading="lazy"
-                 onerror="this.onerror=null; this.src='https://placehold.co/400x400?text=Erro+Imagem';">
+          <div
+            class="h-40 bg-gray-100 flex items-center justify-center border-b-2 border-black overflow-hidden p-2 relative">
+            <img th:src="@{'/media/' + ${caminho}}" class="max-h-full max-w-full object-contain z-10 block"
+              loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/400x400?text=Erro+Imagem';">
           </div>
 
           <div class="p-2 bg-white h-10 flex items-center justify-center">
-            <p class="text-[10px] font-mono truncate text-gray-600 group-hover:text-black group-hover:font-bold" th:text="${#strings.substringAfter(caminho, '/')}">nome.png</p>
+            <p class="text-[10px] font-mono truncate text-gray-600 group-hover:text-black group-hover:font-bold"
+              th:text="${#strings.substringAfter(caminho, '/')}">nome.png</p>
           </div>
 
-          <div class="absolute inset-0 bg-yellow-300/90 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity z-20">
-            <span class="text-black font-black uppercase text-xs tracking-widest border-2 border-black px-2 py-1 bg-white shadow-[2px_2px_0px_0px_#000]">Vincular</span>
+          <div
+            class="absolute inset-0 bg-yellow-300/90 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity z-20">
+            <span
+              class="text-black font-black uppercase text-xs tracking-widest border-2 border-black px-2 py-1 bg-white shadow-[2px_2px_0px_0px_#000]">Vincular</span>
           </div>
         </div>
       </div>
 
-      <div th:if="${imagensGaleria.isEmpty()}" class="flex flex-col items-center justify-center h-full opacity-50 space-y-4">
+      <div th:if="${imagensGaleria.isEmpty()}"
+        class="flex flex-col items-center justify-center h-full opacity-50 space-y-4">
         <i data-lucide="image-off" class="w-16 h-16"></i>
         <div class="text-center">
           <p class="font-bold text-xl uppercase">Nenhuma imagem encontrada</p>
-          <p class="text-sm font-mono mt-1">Pasta física: .../output_images/<span th:text="${pasta}"></span></p>
-          <p class="text-xs text-red-600 mt-2 font-bold">DICA: Verifique o console do Java para ver o erro exato.</p>
+          <p class="text-sm font-mono mt-1">Use o upload acima para adicionar imagens do seu PC</p>
         </div>
       </div>
 
     </div>
   </div>
+
+  <!-- Script para upload -->
+  <script>
+    function handleFileSelect(input) {
+      const btn = document.getElementById('btn-upload');
+      const status = document.getElementById('upload-status');
+      if (input.files && input.files[0]) {
+        btn.disabled = false;
+        status.textContent = 'Arquivo selecionado: ' + input.files[0].name;
+        status.className = 'mt-2 text-xs font-mono text-green-700 font-bold';
+      } else {
+        btn.disabled = true;
+        status.className = 'mt-2 text-xs font-mono hidden';
+      }
+    }
+
+    function uploadFile() {
+      const form = document.getElementById('upload-form');
+      const formData = new FormData(form);
+      const status = document.getElementById('upload-status');
+      const btn = document.getElementById('btn-upload');
+
+      btn.disabled = true;
+      btn.textContent = 'ENVIANDO...';
+      status.textContent = 'Fazendo upload...';
+      status.className = 'mt-2 text-xs font-mono text-blue-600 font-bold';
+
+      fetch('/cms/upload-tag', {
+        method: 'POST',
+        body: formData
+      }).then(response => {
+        if (response.ok) {
+          status.textContent = 'Upload concluído! Recarregando...';
+          status.className = 'mt-2 text-xs font-mono text-green-700 font-bold';
+          setTimeout(() => window.location.reload(), 500);
+        } else {
+          throw new Error('Erro no upload');
+        }
+      }).catch(err => {
+        status.textContent = 'Erro no upload: ' + err.message;
+        status.className = 'mt-2 text-xs font-mono text-red-600 font-bold';
+        btn.disabled = false;
+        btn.textContent = 'ENVIAR';
+      });
+    }
+
+    // Drag and Drop
+    const dropZone = document.getElementById('drop-zone');
+    if (dropZone) {
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-black', 'bg-yellow-100');
+      });
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-black', 'bg-yellow-100');
+      });
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-black', 'bg-yellow-100');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          document.getElementById('file-input').files = files;
+          handleFileSelect(document.getElementById('file-input'));
+        }
+      });
+    }
+
+    // Reativar Lucide icons no modal
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  </script>
 </div>

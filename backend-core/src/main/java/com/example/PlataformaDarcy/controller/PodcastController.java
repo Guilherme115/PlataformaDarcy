@@ -15,7 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
  * Permite gerar podcasts educativos a partir de PDFs de obras literárias.
  */
 @Controller
-@RequestMapping("/podcastfy")
+@RequestMapping("/aluno/podcast")
+@org.springframework.security.access.prepost.PreAuthorize("hasRole('PRO')")
 public class PodcastController {
 
     @Autowired

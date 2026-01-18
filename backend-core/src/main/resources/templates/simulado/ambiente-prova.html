@@ -1,367 +1,462 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}"
-      th:with="bodyClass='h-screen flex flex-col bg-[#e5e5e5] text-black overflow-hidden font-sans'">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base}"
+  th:with="bodyClass='h-screen flex flex-col bg-[#e5e5e5] text-black overflow-hidden font-sans'">
 
 <head>
   <title>Ambiente de Prova - Darcy</title>
 
   <th:block layout:fragment="head-extras">
     <!-- Fontes da Identidade Visual -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:ital,wght@0,700;1,900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:ital,wght@0,700;1,900&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet">
 
     <script>
       tailwind.config = {
-          theme: {
-              extend: {
-                  fontFamily: {
-                      'headline': ['"Playfair Display"', 'serif'],
-                      'tech': ['"JetBrains Mono"', 'monospace'],
-                      'sans': ['"Inter"', 'sans-serif'],
-                  },
-                  colors: {
-                      'darcy-yellow': '#facc15',
-                      'darcy-red': '#dc2626',
-                      'darcy-black': '#0a0a0a',
-                      'paper': '#fdfdfd',
-                  },
-                  boxShadow: {
-                      'brutal': '6px 6px 0px 0px rgba(0,0,0,1)',
-                      'brutal-sm': '3px 3px 0px 0px rgba(0,0,0,1)',
-                      'brutal-hover': '8px 8px 0px 0px rgba(0,0,0,1)',
-                  }
-              }
+        theme: {
+          extend: {
+            fontFamily: {
+              'headline': ['"Playfair Display"', 'serif'],
+              'tech': ['"JetBrains Mono"', 'monospace'],
+              'sans': ['"Inter"', 'sans-serif'],
+            },
+            colors: {
+              'darcy-yellow': '#facc15',
+              'darcy-red': '#dc2626',
+              'darcy-black': '#0a0a0a',
+              'paper': '#fdfdfd',
+            },
+            boxShadow: {
+              'brutal': '6px 6px 0px 0px rgba(0,0,0,1)',
+              'brutal-sm': '3px 3px 0px 0px rgba(0,0,0,1)',
+              'brutal-hover': '8px 8px 0px 0px rgba(0,0,0,1)',
+            }
           }
+        }
       }
     </script>
 
     <style>
       /* Textura de Fundo Global */
       body {
-          background-color: #e5e5e5;
-          background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+        background-color: #e5e5e5;
+        background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
       }
 
       /* Estilos de Risco (Ferramenta de Eliminação) */
       .scratched {
-          text-decoration: line-through;
-          text-decoration-color: #dc2626;
-          text-decoration-thickness: 3px;
-          opacity: 0.6;
+        text-decoration: line-through;
+        text-decoration-color: #dc2626;
+        text-decoration-thickness: 3px;
+        opacity: 0.6;
       }
 
-      /* Botão de Opção Brutalista (Radio) */
-      .radio-hidden:checked + div {
-          background-color: var(--darcy-black);
-          color: var(--darcy-yellow);
-          border-color: var(--darcy-black);
-          transform: translate(2px, 2px);
-          box-shadow: 0px 0px 0px 0px black;
+      /* Botão de Opção Brutalista (Radio) - PEER CHECKED LOGIC */
+      .peer:checked+div {
+        background-color: var(--darcy-black);
+        color: var(--darcy-yellow);
+        border-color: var(--darcy-black);
+        transform: translate(2px, 2px);
+        box-shadow: 0px 0px 0px 0px black;
+      }
+
+      .peer:checked+div .check-icon {
+        display: block;
       }
 
       /* Custom Scrollbar para manter o look técnico */
-      .custom-scroll::-webkit-scrollbar { width: 8px; }
-      .custom-scroll::-webkit-scrollbar-track { background: #d4d4d4; border-left: 2px solid black; }
-      .custom-scroll::-webkit-scrollbar-thumb { background: #000; border: 2px solid #d4d4d4; }
-      .custom-scroll::-webkit-scrollbar-thumb:hover { background: #333; }
+      .custom-scroll::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .custom-scroll::-webkit-scrollbar-track {
+        background: #d4d4d4;
+        border-left: 2px solid black;
+      }
+
+      .custom-scroll::-webkit-scrollbar-thumb {
+        background: #000;
+        border: 2px solid #d4d4d4;
+      }
+
+      .custom-scroll::-webkit-scrollbar-thumb:hover {
+        background: #333;
+      }
 
       /* Efeito de papel timbrado */
       .paper-sheet {
-          background-color: #fff;
-          background-image: url("https://www.transparenttextures.com/patterns/paper.png");
+        background-color: #fff;
+        background-image: url("https://www.transparenttextures.com/patterns/paper.png");
       }
     </style>
   </th:block>
 </head>
 
 <body>
-<div layout:fragment="content" class="flex flex-col w-full h-full relative">
+  <div layout:fragment="content" class="flex flex-col w-full h-full relative">
 
-  <!-- HEADER: MESA DE COMANDO -->
-  <header class="h-20 bg-white border-b-4 border-black shrink-0 z-50 flex justify-between items-center px-6 relative shadow-brutal mx-4 mt-4">
+    <!-- HEADER: MESA DE COMANDO -->
+    <header
+      class="h-20 bg-white border-b-4 border-black shrink-0 z-50 flex justify-between items-center px-6 relative shadow-brutal mx-4 mt-4 select-none">
 
-    <!-- Identidade da Prova -->
-    <div class="flex items-center gap-4">
-      <div class="w-12 h-12 bg-darcy-yellow border-4 border-black flex items-center justify-center font-headline font-black text-3xl italic">D.</div>
-      <div class="flex flex-col">
-        <span class="font-tech text-[10px] font-bold uppercase tracking-widest text-gray-500 bg-gray-100 px-1 w-fit border border-gray-300">Modo Exame</span>
-        <h1 class="font-headline font-black text-xl uppercase tracking-tight leading-none mt-1" th:text="${simulado.titulo}">SIMULADO PAS 3</h1>
+      <!-- Identidade da Prova -->
+      <div class="flex items-center gap-4">
+        <div
+          class="w-12 h-12 bg-darcy-yellow border-4 border-black flex items-center justify-center font-headline font-black text-3xl italic">
+          D.</div>
+        <div class="flex flex-col">
+          <span
+            class="font-tech text-[10px] font-bold uppercase tracking-widest text-gray-500 bg-gray-100 px-1 w-fit border border-gray-300">Modo
+            Exame</span>
+          <h1 class="font-headline font-black text-xl uppercase tracking-tight leading-none mt-1"
+            th:text="${simulado.titulo}">SIMULADO PAS 3</h1>
+        </div>
+      </div>
+
+      <!-- Cronômetro Central -->
+      <div
+        class="absolute left-1/2 transform -translate-x-1/2 hidden md:flex flex-col items-center bg-black text-white px-6 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(200,200,200,1)]">
+        <span class="text-[9px] font-bold uppercase text-gray-400 tracking-[0.2em] mb-1">Tempo Restante</span>
+        <div class="flex items-center gap-3 font-tech text-2xl font-bold tracking-widest text-darcy-yellow">
+          <i data-lucide="clock" class="w-5 h-5 text-white animate-pulse"></i>
+          <span id="exam-timer">00:00:00</span>
+        </div>
+      </div>
+
+      <!-- Ações Rápidas -->
+      <div class="flex items-center gap-3">
+        <!-- Botão Mapa agora carrega via HTMX -->
+        <button onclick="toggleMapa()" th:attr="hx-get=@{/simulado/{id}/mapa(id=${simulado.id})}"
+          hx-target="#grid-mapa-container" hx-swap="innerHTML" hx-trigger="click"
+          class="font-tech text-xs font-bold uppercase border-2 border-black bg-white px-4 py-2 hover:bg-black hover:text-white transition shadow-[2px_2px_0px_0px_black] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] flex items-center gap-2 cursor-pointer">
+          <i data-lucide="grid" class="w-4 h-4"></i> Mapa Geral
+        </button>
+
+        <form th:action="@{/simulado/{id}/finalizar(id=${simulado.id})}" method="post"
+          onsubmit="return confirm('Atenção: A lógica CESPE (Uma errada anula uma certa) será aplicada. Deseja entregar?');">
+          <button type="submit"
+            class="font-tech text-xs font-bold uppercase bg-darcy-red text-white border-2 border-black px-4 py-2 hover:bg-red-700 transition shadow-[2px_2px_0px_0px_black] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] flex items-center gap-2 cursor-pointer">
+            <i data-lucide="check-square" class="w-4 h-4"></i> Entregar Prova
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <!-- ÁREA DE TRABALHO (SPLIT SCREEN) -->
+    <div class="flex-1 p-4 overflow-hidden">
+      <div id="container-prova" class="w-full h-full flex flex-col lg:flex-row gap-4">
+
+        <!-- FRAGMENTO DINÂMICO (HTMX Target) -->
+        <div id="conteudo-questao" class="contents" th:fragment="conteudoQuestao">
+
+          <!-- COLUNA 1: MATERIAL DE APOIO (Texto/Imagem) -->
+          <section
+            class="w-full lg:w-1/2 h-full paper-sheet border-4 border-black shadow-brutal flex flex-col overflow-hidden relative">
+
+            <!-- Header do Texto -->
+            <div class="bg-gray-100 border-b-2 border-black p-3 flex justify-between items-center shrink-0">
+              <span class="font-tech text-xs font-bold uppercase bg-black text-white px-2 py-1">Texto de
+                Referência</span>
+              <div class="flex gap-2">
+                <button onclick="changeFontSize(-1)"
+                  class="w-6 h-6 border-2 border-black flex items-center justify-center font-serif font-bold hover:bg-black hover:text-white transition text-xs cursor-pointer">A-</button>
+                <button onclick="changeFontSize(1)"
+                  class="w-6 h-6 border-2 border-black flex items-center justify-center font-serif font-bold hover:bg-black hover:text-white transition text-xs cursor-pointer">A+</button>
+              </div>
+            </div>
+
+            <!-- Conteúdo Scrollável -->
+            <div class="flex-1 overflow-y-auto custom-scroll p-6 md:p-10 content-text select-text">
+
+              <!-- Texto Base -->
+              <div th:if="${r.questao.bloco != null and r.questao.bloco.textoBase != null}"
+                class="font-serif text-lg leading-loose text-justify text-gray-900 mb-8 selection:bg-darcy-yellow selection:text-black">
+                <p th:utext="${r.questao.bloco.textoBase}"
+                  class="whitespace-pre-line cursor-text hover:bg-yellow-50 transition" onclick="toggleScratch(this)"
+                  title="Clique para riscar/destacar"></p>
+              </div>
+
+              <!-- Imagens -->
+              <div th:if="${r.questao.bloco != null and r.questao.bloco.caminhoImagem != null}"
+                class="mb-8 border-4 border-black bg-white p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] relative group">
+                <div class="absolute top-2 left-2 bg-black text-white text-[9px] font-bold px-1 font-tech">FIGURA I
+                </div>
+                <img th:src="@{'/images/' + ${r.questao.bloco.caminhoImagem}}"
+                  class="w-full h-auto block grayscale contrast-125 group-hover:grayscale-0 transition duration-500 cursor-zoom-in"
+                  onclick="window.open(this.src, '_blank')">
+              </div>
+
+              <div th:each="img : ${r.questao.imagens}" class="mb-8 border-4 border-black bg-white p-2 shadow-sm">
+                <img th:src="@{'/images/' + ${img.caminhoArquivo}}" class="w-full h-auto block cursor-zoom-in"
+                  onclick="window.open(this.src, '_blank')">
+              </div>
+
+              <!-- Fonte/Créditos -->
+              <div class="mt-8 pt-4 border-t-2 border-dashed border-gray-400 text-right">
+                <p class="font-tech text-[10px] text-gray-500 uppercase">Fonte Original: Prova Oficial Digitalizada</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- COLUNA 2: O ITEM (Questão) -->
+          <section class="w-full lg:w-1/2 h-full flex flex-col gap-4">
+
+            <!-- Card da Questão -->
+            <div
+              class="flex-1 bg-white border-4 border-black shadow-brutal p-6 md:p-10 flex flex-col overflow-y-auto custom-scroll relative">
+
+              <!-- Selo de Dificuldade (Visual) -->
+              <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none text-black select-none">
+                <i data-lucide="crosshair" class="w-32 h-32"></i>
+              </div>
+
+              <!-- Cabeçalho do Item -->
+              <div class="flex items-baseline gap-4 mb-6 border-b-4 border-black pb-4 select-none">
+                <span class="font-headline font-black text-6xl italic text-darcy-black leading-none"
+                  th:text="${r.questao.numero}">01</span>
+                <div class="flex flex-col">
+                  <span class="font-tech text-xs font-bold uppercase text-gray-500">Julgue o Item</span>
+                  <span class="font-sans text-xs font-bold bg-darcy-yellow px-1 border border-black w-fit">Tipo <span
+                      th:text="${r.questao.tipo}">C</span></span>
+                </div>
+              </div>
+
+              <!-- Enunciado -->
+              <div class="font-serif text-xl leading-relaxed text-black mb-8 relative z-10 selection:bg-darcy-yellow">
+                <span th:utext="${r.enunciadoDinamico != null ? r.enunciadoDinamico : r.questao.enunciado}"
+                  class="cursor-text hover:text-gray-700 transition" onclick="toggleScratch(this)"></span>
+              </div>
+
+              <!-- Área de Resposta (Footer Sticky no Card) -->
+              <div class="mt-auto pt-6 select-none">
+
+                <!-- Opção de Chute -->
+                <div class="flex justify-end mb-4">
+                  <label
+                    class="flex items-center gap-2 cursor-pointer group select-none hover:bg-gray-100 p-2 border border-transparent hover:border-black transition">
+                    <span
+                      class="font-tech text-[10px] font-bold uppercase text-gray-400 group-hover:text-darcy-red transition">Marcar
+                      como Chute (Não pontuará)</span>
+                    <div class="relative">
+                      <input type="checkbox" name="feedback" value="CHUTE" class="peer sr-only">
+                      <div
+                        class="w-5 h-5 border-2 border-gray-400 peer-checked:bg-darcy-red peer-checked:border-black transition">
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Botões Tipo A (Certo/Errado) - REVISADO -->
+                <div th:if="${#strings.toString(r.questao.tipo) == 'A'}" class="grid grid-cols-2 gap-4">
+
+                  <label class="cursor-pointer group relative">
+                    <input type="radio" name="resposta" value="C" th:checked="${r.respostaAluno == 'C'}"
+                      class="peer sr-only" th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}"
+                      hx-include="[name='feedback']" hx-swap="none">
+                    <div
+                      class="border-4 border-black p-6 text-center transition hover:shadow-brutal-sm group-hover:-translate-y-1 bg-white flex items-center justify-center gap-3">
+                      <span class="font-headline font-black text-2xl uppercase">Certo</span>
+                      <i data-lucide="check" class="check-icon w-6 h-6 hidden"></i>
+                    </div>
+                  </label>
+
+                  <label class="cursor-pointer group relative">
+                    <input type="radio" name="resposta" value="E" th:checked="${r.respostaAluno == 'E'}"
+                      class="peer sr-only" th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}"
+                      hx-include="[name='feedback']" hx-swap="none">
+                    <div
+                      class="border-4 border-black p-6 text-center transition hover:shadow-brutal-sm group-hover:-translate-y-1 bg-white flex items-center justify-center gap-3">
+                      <span class="font-headline font-black text-2xl uppercase">Errado</span>
+                      <i data-lucide="x" class="check-icon w-6 h-6 hidden"></i>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Botões Tipo C (Múltipla Escolha) - REVISADO -->
+                <div th:if="${#strings.toString(r.questao.tipo) == 'C'}" class="space-y-3">
+                  <label class="cursor-pointer group block relative"
+                    th:each="letra : ${#strings.arraySplit('A,B,C,D', ',')}">
+                    <input type="radio" name="resposta" th:value="${letra}" th:checked="${r.respostaAluno == letra}"
+                      class="peer sr-only" th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}"
+                      hx-include="[name='feedback']" hx-swap="none">
+                    <div
+                      class="border-2 border-black p-4 flex items-center gap-4 transition hover:shadow-[4px_4px_0px_0px_black] hover:-translate-y-1 bg-white">
+                      <div
+                        class="w-8 h-8 flex items-center justify-center font-black font-headline text-lg border-2 border-black transition-colors"
+                        th:text="${letra}">A</div>
+                      <div class="font-serif text-sm flex-1 font-medium" th:text="${r.questao.getAltTexto(letra)}">Texto
+                        da alternativa...</div>
+                      <i data-lucide="check-circle" class="check-icon w-5 h-5 hidden"></i>
+                    </div>
+                  </label>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Navegação Rápida -->
+            <div
+              class="bg-black text-white p-3 border-2 border-black shadow-brutal flex justify-between items-center select-none">
+              <div class="flex items-center gap-3">
+                <span class="font-tech text-[10px] font-bold uppercase text-gray-500">Progresso</span>
+                <span class="font-mono text-lg font-bold"><span th:text="${indiceAtual + 1}">1</span>/<span
+                    th:text="${resolucoes.size()}">100</span></span>
+              </div>
+
+              <div class="flex gap-2">
+                <button th:if="${indiceAtual > 0}"
+                  th:attr="hx-get=@{/simulado/{sid}/questao/{idx}(sid=${simulado.id}, idx=${indiceAtual - 1})}"
+                  hx-target="#conteudo-questao" hx-swap="outerHTML"
+                  class="w-10 h-10 border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition cursor-pointer">
+                  <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <button th:if="${indiceAtual < resolucoes.size() - 1}"
+                  th:attr="hx-get=@{/simulado/{sid}/questao/{idx}(sid=${simulado.id}, idx=${indiceAtual + 1})}"
+                  hx-target="#conteudo-questao" hx-swap="outerHTML"
+                  class="bg-darcy-yellow text-black border-2 border-black px-6 py-2 font-tech font-bold uppercase hover:bg-white transition flex items-center gap-2 shadow-[2px_2px_0px_0px_white] active:translate-y-1 active:shadow-none cursor-pointer">
+                  Próxima <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+          </section>
+
+        </div> <!-- Fim Fragmento -->
+
       </div>
     </div>
 
-    <!-- Cronômetro Central -->
-    <div class="absolute left-1/2 transform -translate-x-1/2 hidden md:flex flex-col items-center bg-black text-white px-6 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(200,200,200,1)]">
-      <span class="text-[9px] font-bold uppercase text-gray-400 tracking-[0.2em] mb-1">Tempo Restante</span>
-      <div class="flex items-center gap-3 font-tech text-2xl font-bold tracking-widest text-darcy-yellow">
-        <i data-lucide="clock" class="w-5 h-5 text-white animate-pulse"></i>
-        <span id="exam-timer">04:29:12</span>
-      </div>
-    </div>
-
-    <!-- Ações Rápidas -->
-    <div class="flex items-center gap-3">
-      <button onclick="toggleMapa()" class="font-tech text-xs font-bold uppercase border-2 border-black bg-white px-4 py-2 hover:bg-black hover:text-white transition shadow-[2px_2px_0px_0px_black] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] flex items-center gap-2">
-        <i data-lucide="grid" class="w-4 h-4"></i> Mapa
+    <!-- Botões Flutuantes -->
+    <div class="fixed bottom-6 right-6 flex flex-col gap-4 z-40 select-none">
+      <!-- Caderno de Rascunho -->
+      <button onclick="toggleCaderno()" id="btn-caderno"
+        class="w-14 h-14 bg-white border-4 border-black shadow-brutal flex items-center justify-center hover:bg-darcy-black hover:text-white transition group cursor-pointer"
+        title="Abrir Excalidraw (Rascunho)">
+        <i data-lucide="pen-tool" class="w-6 h-6 group-hover:scale-110 transition"></i>
       </button>
-
-      <form th:action="@{/simulado/{id}/finalizar(id=${simulado.id})}" method="post" onsubmit="return confirm('Atenção: A lógica CESPE (Uma errada anula uma certa) será aplicada. Deseja entregar?');">
-        <button type="submit" class="font-tech text-xs font-bold uppercase bg-darcy-red text-white border-2 border-black px-4 py-2 hover:bg-red-700 transition shadow-[2px_2px_0px_0px_black] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] flex items-center gap-2">
-          <i data-lucide="check-square" class="w-4 h-4"></i> Entregar
-        </button>
-      </form>
     </div>
-  </header>
 
-  <!-- ÁREA DE TRABALHO (SPLIT SCREEN) -->
-  <div class="flex-1 p-4 overflow-hidden">
-    <div id="container-prova" class="w-full h-full flex flex-col lg:flex-row gap-4">
-
-      <!-- FRAGMENTO DINÂMICO (HTMX Target) -->
-      <div id="conteudo-questao" class="contents" th:fragment="conteudoQuestao">
-
-        <!-- COLUNA 1: MATERIAL DE APOIO (Texto/Imagem) -->
-        <section class="w-full lg:w-1/2 h-full paper-sheet border-4 border-black shadow-brutal flex flex-col overflow-hidden relative">
-
-          <!-- Header do Texto -->
-          <div class="bg-gray-100 border-b-2 border-black p-3 flex justify-between items-center shrink-0">
-            <span class="font-tech text-xs font-bold uppercase bg-black text-white px-2 py-1">Texto de Referência</span>
-            <div class="flex gap-2">
-              <button onclick="changeFontSize(-1)" class="w-6 h-6 border-2 border-black flex items-center justify-center font-serif font-bold hover:bg-black hover:text-white transition text-xs">A-</button>
-              <button onclick="changeFontSize(1)" class="w-6 h-6 border-2 border-black flex items-center justify-center font-serif font-bold hover:bg-black hover:text-white transition text-xs">A+</button>
-            </div>
-          </div>
-
-          <!-- Conteúdo Scrollável -->
-          <div class="flex-1 overflow-y-auto custom-scroll p-6 md:p-10 content-text">
-
-            <!-- Texto Base -->
-            <div th:if="${r.questao.bloco != null and r.questao.bloco.textoBase != null}" class="font-serif text-lg leading-loose text-justify text-gray-900 mb-8 selection:bg-darcy-yellow selection:text-black">
-              <p th:utext="${r.questao.bloco.textoBase}" class="whitespace-pre-line cursor-text" onclick="toggleScratch(this)" title="Clique para riscar"></p>
-            </div>
-
-            <!-- Imagens -->
-            <div th:if="${r.questao.bloco != null and r.questao.bloco.caminhoImagem != null}" class="mb-8 border-4 border-black bg-white p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] relative group">
-              <div class="absolute top-2 left-2 bg-black text-white text-[9px] font-bold px-1 font-tech">FIGURA I</div>
-              <img th:src="@{'/images/' + ${r.questao.bloco.caminhoImagem}}" class="w-full h-auto block grayscale contrast-125 group-hover:grayscale-0 transition duration-500 cursor-zoom-in">
-            </div>
-
-            <div th:each="img : ${r.questao.imagens}" class="mb-8 border-4 border-black bg-white p-2 shadow-sm">
-              <img th:src="@{'/images/' + ${img.caminhoArquivo}}" class="w-full h-auto block">
-            </div>
-
-            <!-- Fonte/Créditos -->
-            <div class="mt-8 pt-4 border-t-2 border-dashed border-gray-400 text-right">
-              <p class="font-tech text-[10px] text-gray-500 uppercase">Fonte Original: Prova Oficial Digitalizada</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- COLUNA 2: O ITEM (Questão) -->
-        <section class="w-full lg:w-1/2 h-full flex flex-col gap-4">
-
-          <!-- Card da Questão -->
-          <div class="flex-1 bg-white border-4 border-black shadow-brutal p-6 md:p-10 flex flex-col overflow-y-auto custom-scroll relative">
-
-            <!-- Selo de Dificuldade (Visual) -->
-            <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-              <i data-lucide="crosshair" class="w-32 h-32"></i>
-            </div>
-
-            <!-- Cabeçalho do Item -->
-            <div class="flex items-baseline gap-4 mb-6 border-b-4 border-black pb-4">
-              <span class="font-headline font-black text-6xl italic text-darcy-black leading-none" th:text="${r.questao.numero}">01</span>
-              <div class="flex flex-col">
-                <span class="font-tech text-xs font-bold uppercase text-gray-500">Julgue o Item</span>
-                <span class="font-sans text-xs font-bold bg-darcy-yellow px-1 border border-black w-fit">Tipo <span th:text="${r.questao.tipo}">C</span></span>
-              </div>
-            </div>
-
-            <!-- Enunciado -->
-            <div class="font-serif text-xl leading-relaxed text-black mb-8 relative z-10 selection:bg-darcy-yellow">
-                            <span th:utext="${r.enunciadoDinamico != null ? r.enunciadoDinamico : r.questao.enunciado}"
-                                  class="cursor-text"
-                                  onclick="toggleScratch(this)"></span>
-            </div>
-
-            <!-- Área de Resposta (Footer Sticky no Card) -->
-            <div class="mt-auto pt-6">
-
-              <!-- Opção de Chute -->
-              <div class="flex justify-end mb-4">
-                <label class="flex items-center gap-2 cursor-pointer group select-none">
-                  <span class="font-tech text-[10px] font-bold uppercase text-gray-400 group-hover:text-darcy-red transition">Marcar como Chute</span>
-                  <div class="relative">
-                    <input type="checkbox" name="feedback" value="CHUTE" class="peer sr-only">
-                    <div class="w-4 h-4 border-2 border-gray-400 peer-checked:bg-darcy-red peer-checked:border-black transition"></div>
-                  </div>
-                </label>
-              </div>
-
-              <!-- Botões Tipo A (Certo/Errado) -->
-              <div th:if="${#strings.toString(r.questao.tipo) == 'A'}" class="grid grid-cols-2 gap-4">
-                <label class="cursor-pointer group">
-                  <input type="radio" name="resposta" value="C"
-                         th:checked="${r.respostaAluno == 'C'}"
-                         class="radio-hidden hidden"
-                         th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}"
-                         hx-include="[name='feedback']"
-                         hx-swap="none">
-                  <div class="border-4 border-black p-4 text-center transition hover:shadow-brutal-sm group-hover:-translate-y-1 bg-white group-hover:bg-green-50">
-                    <span class="font-headline font-black text-2xl uppercase block group-hover:text-green-700">Certo</span>
-                  </div>
-                </label>
-                <label class="cursor-pointer group">
-                  <input type="radio" name="resposta" value="E"
-                         th:checked="${r.respostaAluno == 'E'}"
-                         class="radio-hidden hidden"
-                         th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}"
-                         hx-include="[name='feedback']"
-                         hx-swap="none">
-                  <div class="border-4 border-black p-4 text-center transition hover:shadow-brutal-sm group-hover:-translate-y-1 bg-white group-hover:bg-red-50">
-                    <span class="font-headline font-black text-2xl uppercase block group-hover:text-red-700">Errado</span>
-                  </div>
-                </label>
-              </div>
-
-              <!-- Botões Tipo C (Múltipla Escolha) -->
-              <div th:if="${#strings.toString(r.questao.tipo) == 'C'}" class="space-y-3">
-                <label class="cursor-pointer group block" th:each="letra : ${#strings.arraySplit('A,B,C,D', ',')}">
-                  <input type="radio" name="resposta" th:value="${letra}" th:checked="${r.respostaAluno == letra}" class="radio-hidden hidden" th:attr="hx-post=@{/simulado/responder/{id}(id=${r.id})}" hx-include="[name='feedback']" hx-swap="none">
-                  <div class="border-2 border-black p-3 flex items-center gap-4 transition hover:shadow-[4px_4px_0px_0px_black] hover:-translate-y-1 bg-white">
-                    <div class="w-8 h-8 bg-black text-white flex items-center justify-center font-black font-headline text-lg border-2 border-black group-hover:bg-darcy-yellow group-hover:text-black transition-colors" th:text="${letra}">A</div>
-                    <div class="font-serif text-sm" th:text="${r.questao.getAltTexto(letra)}">Texto da alternativa...</div>
-                  </div>
-                </label>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Navegação Rápida -->
-          <div class="bg-black text-white p-3 border-2 border-black shadow-brutal flex justify-between items-center">
-            <div class="flex items-center gap-3">
-              <span class="font-tech text-[10px] font-bold uppercase text-gray-500">Progresso</span>
-              <span class="font-mono text-lg font-bold"><span th:text="${indiceAtual + 1}">1</span>/<span th:text="${resolucoes.size()}">100</span></span>
-            </div>
-
-            <div class="flex gap-2">
-              <button th:if="${indiceAtual > 0}"
-                      th:attr="hx-get=@{/simulado/{sid}/questao/{idx}(sid=${simulado.id}, idx=${indiceAtual - 1})}"
-                      hx-target="#conteudo-questao"
-                      hx-swap="outerHTML"
-                      class="w-10 h-10 border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition">
-                <i data-lucide="arrow-left" class="w-5 h-5"></i>
-              </button>
-              <button th:if="${indiceAtual < resolucoes.size() - 1}"
-                      th:attr="hx-get=@{/simulado/{sid}/questao/{idx}(sid=${simulado.id}, idx=${indiceAtual + 1})}"
-                      hx-target="#conteudo-questao"
-                      hx-swap="outerHTML"
-                      class="bg-darcy-yellow text-black border-2 border-black px-6 py-2 font-tech font-bold uppercase hover:bg-white transition flex items-center gap-2 shadow-[2px_2px_0px_0px_white] active:translate-y-1 active:shadow-none">
-                Próxima <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </button>
-            </div>
-          </div>
-
-        </section>
-
-      </div> <!-- Fim Fragmento -->
-
-    </div>
-  </div>
-
-  <!-- Botões Flutuantes -->
-  <div class="fixed bottom-6 right-6 flex flex-col gap-4 z-40">
-    <!-- Caderno de Rascunho -->
-    <button onclick="toggleCaderno()" id="btn-caderno" class="w-14 h-14 bg-white border-4 border-black shadow-brutal flex items-center justify-center hover:bg-darcy-black hover:text-white transition group" title="Rascunho">
-      <i data-lucide="pen-tool" class="w-6 h-6 group-hover:scale-110 transition"></i>
-    </button>
-  </div>
-
-  <!-- PAINEL DESLIZANTE (RASCUNHO) -->
-  <div id="container-caderno" class="fixed right-0 top-0 bottom-0 bg-paper border-l-4 border-black z-50 transition-transform duration-300 translate-x-full w-full md:w-1/2 shadow-2xl flex flex-col pt-20">
-    <div class="absolute top-4 left-4 right-4 flex justify-between items-center border-b-2 border-black pb-2">
-      <h3 class="font-headline font-black text-xl uppercase">Rascunho</h3>
-      <button onclick="toggleCaderno()" class="hover:rotate-90 transition duration-300"><i data-lucide="x" class="w-8 h-8"></i></button>
-    </div>
-    <div class="flex-1 p-6">
-      <textarea class="w-full h-full p-4 font-hand text-blue-900 text-lg bg-transparent border-2 border-dashed border-gray-300 focus:border-black outline-none resize-none leading-loose" placeholder="Use este espaço para cálculos ou anotações..."></textarea>
-    </div>
-  </div>
-
-  <!-- MODAL MAPA DA PROVA -->
-  <div id="modal-mapa" class="fixed inset-0 z-[100] bg-darcy-black/90 hidden backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-[#e5e5e5] w-full max-w-6xl h-[90vh] border-4 border-white shadow-[10px_10px_0px_black] flex flex-col relative">
-      <div class="bg-black text-white p-6 flex justify-between items-center border-b-4 border-black">
-        <h2 class="font-headline text-3xl font-black uppercase italic tracking-wider">Mapa Tático</h2>
-        <button onclick="toggleMapa()" class="hover:text-darcy-yellow transition"><i data-lucide="x" class="w-8 h-8"></i></button>
+    <!-- PAINEL DESLIZANTE (EXCALIDRAW) -->
+    <div id="container-caderno"
+      class="fixed right-0 top-0 bottom-0 bg-white border-l-4 border-black z-50 transition-transform duration-300 translate-x-full w-full md:w-3/4 shadow-2xl flex flex-col pt-16">
+      <div
+        class="absolute top-0 left-0 right-0 h-16 bg-black flex justify-between items-center px-6 border-b-4 border-black">
+        <div class="flex items-center gap-3">
+          <i data-lucide="pen-tool" class="text-white w-6 h-6"></i>
+          <h3 class="font-headline font-black text-xl uppercase text-white italic">Rascunho Excalidraw</h3>
+        </div>
+        <button onclick="toggleCaderno()"
+          class="text-white hover:text-darcy-yellow transition duration-300 cursor-pointer"><i data-lucide="x"
+            class="w-8 h-8"></i></button>
       </div>
+      <div class="flex-1 bg-white relative">
+        <!-- Excalidraw via IFrame público -->
+        <iframe src="https://excalidraw.com/?sidebar=0&theme=light" class="w-full h-full border-0"
+          title="Excalidraw Whiteboard"></iframe>
+      </div>
+    </div>
 
-      <div class="p-8 overflow-y-auto grid grid-cols-5 sm:grid-cols-10 gap-4 content-start bg-paper">
-        <button th:each="resItem, stat : ${resolucoes}"
+    <!-- MODAL MAPA DA PROVA -->
+    <div id="modal-mapa"
+      class="fixed inset-0 z-[100] bg-darcy-black/90 hidden backdrop-blur-md flex items-center justify-center p-4">
+      <div
+        class="bg-[#e5e5e5] w-full max-w-6xl h-[90vh] border-4 border-white shadow-[10px_10px_0px_black] flex flex-col relative">
+        <div class="bg-black text-white p-6 flex justify-between items-center border-b-4 border-black shrink-0">
+          <h2 class="font-headline text-3xl font-black uppercase italic tracking-wider">Mapa Tático</h2>
+          <button onclick="toggleMapa()" class="hover:text-darcy-yellow transition cursor-pointer"><i data-lucide="x"
+              class="w-8 h-8"></i></button>
+        </div>
+
+        <!-- Container do Grid para atualização via HTMX -->
+        <div id="grid-mapa-container" class="contents">
+          <!-- FRAGMENTO DO GRID (Carregado inicialmente ou via HTMX) -->
+          <div th:fragment="mapaGrid" class="contents">
+            <div
+              class="p-8 overflow-y-auto grid grid-cols-5 sm:grid-cols-10 gap-4 content-start bg-paper h-full custom-scroll">
+              <button th:each="resItem, stat : ${resolucoes}"
                 th:attr="hx-get=@{/simulado/{sid}/questao/{idx}(sid=${simulado.id}, idx=${stat.index})}"
-                hx-target="#conteudo-questao"
-                hx-swap="outerHTML"
-                onclick="toggleMapa()"
-                class="aspect-square flex flex-col items-center justify-center border-2 border-black font-headline font-black text-xl shadow-[3px_3px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition bg-white relative group"
+                hx-target="#conteudo-questao" hx-swap="outerHTML" onclick="toggleMapa()"
+                class="aspect-square flex flex-col items-center justify-center border-2 border-black font-headline font-black text-xl shadow-[3px_3px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition bg-white relative group cursor-pointer"
                 th:classappend="${resItem.respostaAluno != null} ? 'bg-darcy-black text-white border-darcy-black' : 'bg-white text-black'">
-          <span th:text="${resItem.questao.numero}">1</span>
-          <!-- Marcador visual -->
-          <div th:if="${resItem.respostaAluno != null}" class="absolute top-1 right-1 w-2 h-2 bg-darcy-yellow rounded-full"></div>
-        </button>
-      </div>
+                <span th:text="${resItem.questao.numero}">1</span>
+                <!-- Marcador visual -->
+                <div th:if="${resItem.respostaAluno != null}"
+                  class="absolute top-1 right-1 w-2 h-2 bg-darcy-yellow rounded-full"></div>
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <div class="p-4 bg-darcy-yellow border-t-4 border-black text-xs font-mono font-bold flex gap-6 justify-center uppercase text-black">
-        <div class="flex items-center gap-2"><div class="w-4 h-4 bg-white border-2 border-black shadow-sm"></div> Pendente</div>
-        <div class="flex items-center gap-2"><div class="w-4 h-4 bg-black border-2 border-black shadow-sm"></div> Respondida</div>
+        <div
+          class="p-4 bg-darcy-yellow border-t-4 border-black text-xs font-mono font-bold flex gap-6 justify-center uppercase text-black shrink-0">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 bg-white border-2 border-black shadow-sm"></div> Pendente
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 bg-black border-2 border-black shadow-sm"></div> Respondida
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 
-</div>
+  <th:block layout:fragment="page-scripts">
+    <script>
+      lucide.createIcons();
 
-<th:block layout:fragment="page-scripts">
-  <script>
-    lucide.createIcons();
-
-    // Risco (Scratch)
-    function toggleScratch(element) {
+      // Risco (Scratch)
+      function toggleScratch(element) {
         element.classList.toggle('scratched');
-    }
+      }
 
-    // Acessibilidade Fonte
-    let currentSize = 100;
-    function changeFontSize(direction) {
+      // Acessibilidade Fonte
+      let currentSize = 100;
+      function changeFontSize(direction) {
         const content = document.querySelector('.content-text');
-        if(!content) return;
+        if (!content) return;
         currentSize += direction * 10;
         if (currentSize < 80) currentSize = 80;
         if (currentSize > 150) currentSize = 150;
         content.style.fontSize = currentSize + '%';
-    }
+      }
 
-    // Toggle Caderno
-    function toggleCaderno() {
+      // Toggle Caderno (Excalidraw)
+      function toggleCaderno() {
         const container = document.getElementById('container-caderno');
         const btn = document.getElementById('btn-caderno');
 
         if (container.classList.contains('translate-x-full')) {
-            container.classList.remove('translate-x-full');
-            btn.classList.add('bg-darcy-yellow', 'text-black');
-            btn.classList.remove('bg-white', 'text-black');
+          container.classList.remove('translate-x-full');
+          btn.classList.add('bg-darcy-yellow', 'text-black');
+          btn.classList.remove('bg-white', 'text-black');
         } else {
-            container.classList.add('translate-x-full');
-            btn.classList.remove('bg-darcy-yellow', 'text-black');
-            btn.classList.add('bg-white', 'text-black');
+          container.classList.add('translate-x-full');
+          btn.classList.remove('bg-darcy-yellow', 'text-black');
+          btn.classList.add('bg-white', 'text-black');
         }
-    }
+      }
 
-    // Toggle Mapa
-    function toggleMapa() {
+      // Toggle Mapa
+      function toggleMapa() {
         const modal = document.getElementById('modal-mapa');
         modal.classList.toggle('hidden');
-    }
-  </script>
-</th:block>
+      }
+
+      // Timer Mock
+      let totalSeconds = 4 * 3600 + 30 * 60; // 4h 30m
+      setInterval(() => {
+        totalSeconds--;
+        if (totalSeconds < 0) totalSeconds = 0;
+        const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (totalSeconds % 60).toString().padStart(2, '0');
+        const timerEl = document.getElementById('exam-timer');
+        if (timerEl) timerEl.innerText = `${h}:${m}:${s}`;
+      }, 1000);
+    </script>
+  </th:block>
 </body>
+
 </html>

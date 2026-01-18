@@ -197,4 +197,75 @@ public class PerfilService {
             u.setEtapaAlvo(etapaAlvo);
         return usuarioRepo.save(u);
     }
+
+    /**
+     * Exporta todos os dados do usuário para conformidade LGPD
+     */
+    public Map<String, Object> exportarDados(Usuario usuario) {
+        Map<String, Object> dados = new LinkedHashMap<>();
+
+        // 1. Dados Pessoais
+        Map<String, Object> pessoal = new LinkedHashMap<>();
+        pessoal.put("matricula", usuario.getMatricula());
+        pessoal.put("nome", usuario.getNome());
+        pessoal.put("email", usuario.getEmail());
+        pessoal.put("regiao", usuario.getRegiao());
+        pessoal.put("etapa_alvo", usuario.getEtapaAlvo());
+        pessoal.put("perfil", usuario.getPerfil());
+        pessoal.put("plano", usuario.getPlano());
+        pessoal.put("data_expiracao_plano", usuario.getDataExpiracaoPlano());
+        dados.put("dados_pessoais", pessoal);
+
+        // 2. Histórico de Simulados
+        List<Map<String, Object>> simuladosExport = new ArrayList<>();
+        List<Simulado> simulados = simuladoRepo.findByUsuarioOrderByDataInicioDesc(usuario);
+        for (Simulado s : simulados) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", s.getId());
+            map.put("titulo", s.getTitulo());
+            map.put("data", s.getDataInicio());
+            map.put("nota_final", s.getNotaFinal());
+            if (s.getDataInicio() != null && s.getDataFim() != null) {
+                map.put("tempo_gasto_segundos",
+                        java.time.Duration.between(s.getDataInicio(), s.getDataFim()).toSeconds());
+            } else {
+                map.put("tempo_gasto_segundos", null);
+            }
+            simuladosExport.add(map);
+        }
+        dados.put("historico_simulados", simuladosExport);
+
+        // 3. Registro de Erros
+        List<Map<String, Object>> errosExport = new ArrayList<>();
+        List<RegistroErro> erros = erroRepo.findByUsuarioOrderByTemperaturaDesc(usuario);
+        for (RegistroErro e : erros) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", e.getId());
+            map.put("que_estao", e.getQuestaoOriginal() != null ? e.getQuestaoOriginal().getId() : "N/A");
+            map.put("causa", e.getCausa());
+            map.put("temperatura", e.getTemperatura());
+            map.put("status", e.getStatus());
+            errosExport.add(map);
+        }
+        dados.put("registro_erros", errosExport);
+
+        // 4. Contribuições Wiki
+        List<Map<String, Object>> wikiExport = new ArrayList<>();
+        List<WikiPost> posts = wikiPostRepo.findByAutorOrderByDataCriacaoDesc(usuario);
+        for (WikiPost p : posts) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", p.getId());
+            map.put("titulo", p.getTitulo());
+            map.put("etapa", p.getEtapa());
+            map.put("disciplina", p.getDisciplina());
+            map.put("topico", p.getTopico());
+            map.put("tipo", p.getTipoConteudo());
+            map.put("data_criacao", p.getDataCriacao());
+            map.put("curtidas", p.getCurtidas());
+            wikiExport.add(map);
+        }
+        dados.put("contribuicoes_wiki", wikiExport);
+
+        return dados;
+    }
 }

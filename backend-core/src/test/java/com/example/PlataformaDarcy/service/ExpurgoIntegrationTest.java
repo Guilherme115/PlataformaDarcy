@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ExpurgoIntegrationTest {
+class   ExpurgoIntegrationTest {
 
     @Autowired private AlgoritmoService algoritmoService;
     @Autowired private GeminiService geminiService;

@@ -1,0 +1,616 @@
+[
+    {
+        "id": "mus_frevo_mulher",
+        "titulo": "Frevo Mulher (Zé Ramalho)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Canção que exalta a sensualidade e força da mulher nordestina através do frevo. Conecta-se com a cultura popular do Nordeste, o Carnaval de Pernambuco e a valorização regional. Pode relacionar-se com Geografia Regional e Sociologia (gênero e cultura).",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "GEOGRAFIA",
+            "CULTURA"
+        ]
+    },
+    {
+        "id": "mus_suplica_cearense",
+        "titulo": "Súplica Cearense (O Rappa)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Versão que aborda a seca nordestina e o êxodo rural. Conecta-se com Geografia Agrária, questões climáticas do semiárido brasileiro e desigualdade regional. Crítica social sobre abandono das populações rurais.",
+        "tags": [
+            "MUSICAL",
+            "GEOGRAFIA",
+            "SOCIOLOGIA",
+            "MEIO_AMBIENTE"
+        ]
+    },
+    {
+        "id": "mus_habanera_carmen",
+        "titulo": "Ária Habanera da Ópera Carmen (Janette Dornellas)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Ária famosa da ópera de Bizet que retrata a personagem Carmen, cigana sedutora. Representa o Romantismo musical europeu do século XIX, com elementos de exotismo e paixão. Conecta-se com História da Arte e movimentos artísticos do período.",
+        "tags": [
+            "MUSICAL",
+            "HISTORIA",
+            "LITERATURA",
+            "ROMANTISMO"
+        ]
+    },
+    {
+        "id": "mus_matanca",
+        "titulo": "Matança",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Música que aborda temas de violência e brutalidade. Pode ser analisada sob perspectivas sociológicas de conflito e criminalidade, além de questões éticas e filosóficas sobre a condição humana.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "FILOSOFIA"
+        ]
+    },
+    {
+        "id": "mus_concerto_violoncelo",
+        "titulo": "Concerto para Violoncelo nº 1 em Dó Maior – 1º movimento",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Obra clássica que demonstra a estrutura do concerto como forma musical. Relaciona-se com Física (acústica, ondas sonoras, frequências) e Matemática (proporções, progressões). Exemplo de música erudita do período clássico/romântico.",
+        "tags": [
+            "MUSICAL",
+            "FISICA",
+            "MATEMATICA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "mus_queda_gloria",
+        "titulo": "A Queda (Gloria Groove)",
+        "tipo": "MUSICAL",
+        "url_midia": "",
+        "texto_contexto": "Música pop brasileira contemporânea que aborda temas de superação e identidade. Gloria Groove representa a diversidade e visibilidade LGBTQIA+ na música brasileira atual. Conecta-se com Sociologia (identidade, gênero) e cultura de massa.",
+        "tags": [
+            "MUSICAL",
+            "SOCIOLOGIA",
+            "CULTURA"
+        ]
+    },
+    {
+        "id": "aud_cidade_uma_so",
+        "titulo": "A Cidade é Uma Só? (Adirley Queirós)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Documentário sobre a Ceilândia e a remoção de favelas em Brasília nos anos 70. Aborda segregação socioespacial, urbanização excludente e memória das periferias. Fundamental para entender Geografia Urbana e desigualdade no DF.",
+        "tags": [
+            "AUDIOVISUAL",
+            "GEOGRAFIA",
+            "SOCIOLOGIA",
+            "HISTORIA",
+            "URBANIZACAO"
+        ]
+    },
+    {
+        "id": "aud_quilombos_xxi",
+        "titulo": "Quilombos do Século XXI (Rádio e TV Justiça)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Documentário sobre comunidades quilombolas contemporâneas e a luta por reconhecimento e titulação de terras. Conecta-se com História do Brasil (escravidão e resistência), Geografia Agrária e Sociologia (movimentos sociais).",
+        "tags": [
+            "AUDIOVISUAL",
+            "HISTORIA",
+            "GEOGRAFIA",
+            "SOCIOLOGIA",
+            "BRASIL"
+        ]
+    },
+    {
+        "id": "aud_fome_brasil",
+        "titulo": "Histórias da Fome no Brasil (ONU Brasil)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Documentário da ONU sobre insegurança alimentar no Brasil. Aborda desigualdade social, políticas públicas, agricultura e distribuição de renda. Conecta-se com Geografia Agrária, Sociologia e Biologia (nutrição).",
+        "tags": [
+            "AUDIOVISUAL",
+            "GEOGRAFIA",
+            "SOCIOLOGIA",
+            "BIOLOGIA"
+        ]
+    },
+    {
+        "id": "aud_amazonia_garimpo",
+        "titulo": "Amazônia Sem Garimpo",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Documentário sobre os impactos ambientais e sociais do garimpo ilegal na Amazônia. Aborda contaminação por mercúrio (Química), destruição de ecossistemas (Biologia/Ecologia) e conflitos territoriais com povos indígenas.",
+        "tags": [
+            "AUDIOVISUAL",
+            "GEOGRAFIA",
+            "QUIMICA",
+            "BIOLOGIA",
+            "MEIO_AMBIENTE"
+        ]
+    },
+    {
+        "id": "aud_peco_deus",
+        "titulo": "Eu Só Peço a Deus (Inquérito)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Clipe que mescla rap com crítica social. Aborda questões de violência, desigualdade e esperança nas periferias brasileiras. Conecta-se com Sociologia (juventude, violência urbana) e Literatura (poesia contemporânea).",
+        "tags": [
+            "AUDIOVISUAL",
+            "SOCIOLOGIA",
+            "LITERATURA",
+            "CULTURA"
+        ]
+    },
+    {
+        "id": "aud_krenak_girar",
+        "titulo": "Vinte Ideias para Girar o Mundo (Ailton Krenak)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Palestra do líder indígena Ailton Krenak propondo uma nova relação com a natureza e questionando o modelo de desenvolvimento. Conecta-se com Filosofia, Ecologia e crítica ao antropocentrismo.",
+        "tags": [
+            "AUDIOVISUAL",
+            "FILOSOFIA",
+            "BIOLOGIA",
+            "GEOGRAFIA",
+            "MEIO_AMBIENTE"
+        ]
+    },
+    {
+        "id": "aud_fake_news",
+        "titulo": "Como se Espalham as Notícias Falsas (Noah Tavlin)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo educativo sobre desinformação e viralização de fake news. Conecta-se com Sociologia (mídia e manipulação), Português (análise de discurso) e ética na era digital.",
+        "tags": [
+            "AUDIOVISUAL",
+            "SOCIOLOGIA",
+            "PORTUGUES",
+            "FILOSOFIA"
+        ]
+    },
+    {
+        "id": "aud_artes_matematica",
+        "titulo": "Artes & Matemática – Música nas Esferas (TV Escola)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Programa educativo que explora a relação entre música e matemática, desde Pitágoras até a música contemporânea. Aborda proporções, frequências, escalas e geometria na composição musical.",
+        "tags": [
+            "AUDIOVISUAL",
+            "MATEMATICA",
+            "FISICA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "aud_vacina_eficacia",
+        "titulo": "Como se Calcula a Taxa de Eficácia de uma Vacina",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo explicando estatística aplicada à saúde pública. Aborda conceitos de probabilidade, amostragem e interpretação de dados científicos. Fundamental para Matemática (Estatística) e Biologia.",
+        "tags": [
+            "AUDIOVISUAL",
+            "MATEMATICA",
+            "BIOLOGIA",
+            "ESTATISTICA"
+        ]
+    },
+    {
+        "id": "aud_motor_carro",
+        "titulo": "Entenda de Vez Como Funciona o Motor do Carro (Manual do Mundo)",
+        "tipo": "AUDIOVISUAL",
+        "url_midia": "",
+        "texto_contexto": "Vídeo explicando o funcionamento de motores a combustão interna. Aborda Termodinâmica (ciclos térmicos, transformações de energia), Química (combustão) e Física (trabalho mecânico).",
+        "tags": [
+            "AUDIOVISUAL",
+            "FISICA",
+            "QUIMICA",
+            "TERMOLOGIA"
+        ]
+    },
+    {
+        "id": "vis_santa_ceia_aleijadinho",
+        "titulo": "Estação Capela da Santa Ceia (Aleijadinho)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Conjunto escultórico de Aleijadinho em Congonhas (MG), representando a Última Ceia. Arte barroca brasileira do período colonial, esculpida em madeira. Conecta-se com História do Brasil Colonial e o Ciclo do Ouro em Minas Gerais.",
+        "tags": [
+            "VISUAL",
+            "HISTORIA",
+            "LITERATURA",
+            "BRASIL"
+        ]
+    },
+    {
+        "id": "vis_suzana_ancioes",
+        "titulo": "Suzana e os Anciãos (Artemisia Gentileschi, 1610)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Pintura barroca de Artemisia Gentileschi retratando a história bíblica de Suzana. A artista representa a perspectiva feminina sobre assédio e violência. Conecta-se com História da Arte, discussões de gênero e o Barroco europeu.",
+        "tags": [
+            "VISUAL",
+            "HISTORIA",
+            "SOCIOLOGIA",
+            "BARROCO"
+        ]
+    },
+    {
+        "id": "vis_debret_punicao",
+        "titulo": "Execução de Punição e Açoitamento (Jean-Baptiste Debret, 1830)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Aquarela de Debret documentando a violência da escravidão no Brasil Império. Obra fundamental para estudar o sistema escravista, a Missão Artística Francesa e a sociedade imperial brasileira.",
+        "tags": [
+            "VISUAL",
+            "HISTORIA",
+            "SOCIOLOGIA",
+            "BRASIL",
+            "IMPERIO"
+        ]
+    },
+    {
+        "id": "vis_torre_eiffel_seurat",
+        "titulo": "Torre Eiffel (Georges Seurat, 1889)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Pintura pontilhista de Seurat representando a Torre Eiffel. Demonstra a técnica do Pontilhismo e a relação entre ciência óptica e arte. Conecta-se com Física (Óptica, decomposição da luz) e a Revolução Industrial.",
+        "tags": [
+            "VISUAL",
+            "FISICA",
+            "HISTORIA",
+            "OPTICA"
+        ]
+    },
+    {
+        "id": "vis_balsa_medusa",
+        "titulo": "A Balsa da Medusa (Théodore Géricault)",
+        "tipo": "VISUAL",
+        "url_midia": "",
+        "texto_contexto": "Pintura romântica que retrata o naufrágio da fragata Méduse em 1816. Crítica política ao governo francês da Restauração. Representa o Romantismo na pintura com dramaticidade e uso intenso de claro-escuro.",
+        "tags": [
+            "VISUAL",
+            "HISTORIA",
+            "LITERATURA",
+            "ROMANTISMO"
+        ]
+    },
+    {
+        "id": "txt_industria_cultural",
+        "titulo": "A Indústria Cultural (T. Adorno e M. Horkheimer)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto filosófico da Escola de Frankfurt que critica a massificação da cultura pelo capitalismo. Conceito fundamental para entender mídia, consumo e alienação cultural. Conecta-se com Filosofia e Sociologia.",
+        "tags": [
+            "TEXTO",
+            "FILOSOFIA",
+            "SOCIOLOGIA",
+            "CULTURA"
+        ]
+    },
+    {
+        "id": "txt_kant_esclarecimento",
+        "titulo": "Resposta à Pergunta: O que é o Esclarecimento? (Immanuel Kant)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto iluminista de Kant definindo o Esclarecimento como a saída do homem de sua menoridade intelectual. Fundamental para Filosofia Moderna e compreensão do Iluminismo e seus desdobramentos nas Revoluções.",
+        "tags": [
+            "TEXTO",
+            "FILOSOFIA",
+            "HISTORIA",
+            "ILUMINISMO"
+        ]
+    },
+    {
+        "id": "txt_resenha_energetica",
+        "titulo": "Resenha Energética Brasileira (Ministério de Minas e Energia)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Documento oficial sobre a matriz energética do Brasil. Aborda fontes de energia (hidrelétrica, eólica, solar, fósseis), políticas energéticas e sustentabilidade. Conecta-se com Geografia e Física (Termologia).",
+        "tags": [
+            "TEXTO",
+            "GEOGRAFIA",
+            "FISICA",
+            "QUIMICA",
+            "ENERGIA"
+        ]
+    },
+    {
+        "id": "txt_cerrado_morrendo",
+        "titulo": "O Cerrado Está Morrendo (Revista Darcy)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem sobre a degradação do bioma Cerrado. Aborda desmatamento, agronegócio, perda de biodiversidade e recursos hídricos. Conecta-se com Geografia Ambiental, Biologia (Ecologia) e Química (agrotóxicos).",
+        "tags": [
+            "TEXTO",
+            "GEOGRAFIA",
+            "BIOLOGIA",
+            "QUIMICA",
+            "MEIO_AMBIENTE"
+        ]
+    },
+    {
+        "id": "txt_colonizadores_indios",
+        "titulo": "Como Colonizadores Infectaram Milhares de Índios no Brasil (BBC)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem sobre epidemias trazidas pelos colonizadores e seu impacto nas populações indígenas. Conecta-se com História do Brasil Colonial, Biologia (Microbiologia, imunidade) e Sociologia (genocídio indígena).",
+        "tags": [
+            "TEXTO",
+            "HISTORIA",
+            "BIOLOGIA",
+            "SOCIOLOGIA",
+            "MICROBIOLOGIA"
+        ]
+    },
+    {
+        "id": "txt_biosseguranca_frigorificos",
+        "titulo": "Biossegurança no Trabalho em Frigoríficos",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto técnico sobre condições de trabalho e riscos biológicos em frigoríficos. Aborda Microbiologia (contaminação, patógenos), Química (higienização) e Sociologia (precarização do trabalho).",
+        "tags": [
+            "TEXTO",
+            "BIOLOGIA",
+            "QUIMICA",
+            "SOCIOLOGIA",
+            "MICROBIOLOGIA"
+        ]
+    },
+    {
+        "id": "txt_fome_atravessa",
+        "titulo": "A Fome que Nos Atravessa (Revista Darcy)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem investigativa sobre a fome no Brasil contemporâneo. Aborda insegurança alimentar, políticas públicas, desigualdade e saúde. Conecta-se com Geografia, Sociologia e Biologia (nutrição).",
+        "tags": [
+            "TEXTO",
+            "GEOGRAFIA",
+            "SOCIOLOGIA",
+            "BIOLOGIA"
+        ]
+    },
+    {
+        "id": "txt_raizes_conhecimento",
+        "titulo": "Raízes do Conhecimento (Revista Fapesp)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto científico sobre conhecimentos tradicionais e pesquisa acadêmica. Aborda Botânica (plantas medicinais), saberes indígenas e quilombolas, e a relação entre ciência e tradição.",
+        "tags": [
+            "TEXTO",
+            "BIOLOGIA",
+            "QUIMICA",
+            "SOCIOLOGIA",
+            "BOTANICA"
+        ]
+    },
+    {
+        "id": "txt_oceano_turbulento",
+        "titulo": "Oceano Turbulento (Revista Darcy)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Reportagem sobre mudanças climáticas e seus efeitos nos oceanos. Aborda aquecimento global, acidificação, correntes marítimas e impactos na biodiversidade. Conecta-se com Geografia, Biologia e Química.",
+        "tags": [
+            "TEXTO",
+            "GEOGRAFIA",
+            "BIOLOGIA",
+            "QUIMICA",
+            "MEIO_AMBIENTE"
+        ]
+    },
+    {
+        "id": "txt_maria_penha",
+        "titulo": "Lei Maria da Penha",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Legislação brasileira de combate à violência doméstica contra a mulher. Texto normativo fundamental para Sociologia (gênero, violência), Português (gêneros textuais jurídicos) e cidadania.",
+        "tags": [
+            "TEXTO",
+            "SOCIOLOGIA",
+            "PORTUGUES",
+            "LEGISLACAO"
+        ]
+    },
+    {
+        "id": "txt_geometria_virus",
+        "titulo": "A Geometria e sua Relação com as Estruturas dos Vírus",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto interdisciplinar sobre a estrutura geométrica dos vírus. Conecta Matemática (Geometria Espacial, poliedros) com Biologia (Microbiologia, estrutura viral) e Química (proteínas).",
+        "tags": [
+            "TEXTO",
+            "MATEMATICA",
+            "BIOLOGIA",
+            "MICROBIOLOGIA",
+            "GEOMETRIA"
+        ]
+    },
+    {
+        "id": "txt_terra_redonda",
+        "titulo": "A Terra é Redonda (Marco Moriconi)",
+        "tipo": "TEXTO",
+        "url_midia": "",
+        "texto_contexto": "Texto científico combatendo o terraplanismo com evidências da esfericidade terrestre. Aborda método científico, Física (gravitação, óptica) e Geografia (cartografia).",
+        "tags": [
+            "TEXTO",
+            "FISICA",
+            "GEOGRAFIA",
+            "CIENCIA"
+        ]
+    },
+    {
+        "id": "lit_mal_secreto",
+        "titulo": "Mal Secreto (Raimundo Correia)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema parnasiano de Raimundo Correia com linguagem refinada e forma impecável. Representa o rigor formal do Parnasianismo brasileiro e a busca pela perfeição estética.",
+        "tags": [
+            "LITERATURA",
+            "PARNASIANISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_ismalia",
+        "titulo": "Ismália (Alphonsus de Guimaraens)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema simbolista sobre loucura e transcendência. Representa o Simbolismo brasileiro com atmosfera onírica, musicalidade e temática metafísica. Conecta-se com Filosofia e análise de figuras de linguagem.",
+        "tags": [
+            "LITERATURA",
+            "SIMBOLISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_lembranca_morrer",
+        "titulo": "Lembrança de Morrer (Álvares de Azevedo)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema ultrarromântico que aborda a morte de forma idealizada. Representa a 2ª geração do Romantismo brasileiro (mal-do-século), com pessimismo, melancolia e obsessão pela morte.",
+        "tags": [
+            "LITERATURA",
+            "ROMANTISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_profissao_fe",
+        "titulo": "Profissão de Fé (Olavo Bilac)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema-manifesto do Parnasianismo brasileiro. Bilac compara o poeta a um ourives que lapida palavras. Representa o culto à forma, a arte pela arte e o rigor métrico parnasiano.",
+        "tags": [
+            "LITERATURA",
+            "PARNASIANISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_assinalado",
+        "titulo": "O Assinalado (Cruz e Sousa)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema simbolista de Cruz e Sousa abordando a condição do poeta como ser diferenciado. Representa o Simbolismo brasileiro com linguagem sinestésica e temática da transcendência.",
+        "tags": [
+            "LITERATURA",
+            "SIMBOLISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_cancao_africano",
+        "titulo": "A Canção do Africano (Castro Alves)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema condoreiro de Castro Alves denunciando a escravidão. Representa a 3ª geração do Romantismo brasileiro (Condoreirismo) com poesia social e abolicionista.",
+        "tags": [
+            "LITERATURA",
+            "ROMANTISMO",
+            "POESIA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "lit_remorso_postumo",
+        "titulo": "Remorso Póstumo (Charles Baudelaire)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema de Baudelaire sobre morte e sensualidade. Autor de 'As Flores do Mal', precursor do Simbolismo francês. Conecta-se com Simbolismo e a transição para a poesia moderna.",
+        "tags": [
+            "LITERATURA",
+            "SIMBOLISMO",
+            "POESIA",
+            "LINGUAS"
+        ]
+    },
+    {
+        "id": "lit_sonhos_bocage",
+        "titulo": "Sonhos (Manuel Maria Barbosa du Bocage)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema do poeta português pré-romântico Bocage. Representa a transição do Arcadismo para o Romantismo em Portugal, com elementos de sensualidade e angústia existencial.",
+        "tags": [
+            "LITERATURA",
+            "ROMANTISMO",
+            "POESIA",
+            "LINGUAS"
+        ]
+    },
+    {
+        "id": "lit_canto_piaga",
+        "titulo": "Canto do Piaga (Gonçalves Dias)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Poema indianista de Gonçalves Dias sobre a profecia de um pajé sobre a chegada dos colonizadores. Representa a 1ª geração do Romantismo brasileiro (Indianismo) e a busca por identidade nacional.",
+        "tags": [
+            "LITERATURA",
+            "ROMANTISMO",
+            "POESIA",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "lit_cartomante",
+        "titulo": "A Cartomante (Machado de Assis)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Conto realista de Machado de Assis sobre adultério e superstição. Representa o Realismo brasileiro com ironia, crítica social e análise psicológica dos personagens.",
+        "tags": [
+            "LITERATURA",
+            "REALISMO",
+            "CONTO"
+        ]
+    },
+    {
+        "id": "lit_bras_cubas",
+        "titulo": "Memórias Póstumas de Brás Cubas (Machado de Assis)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Romance inaugural do Realismo brasileiro, narrado por um defunto autor. Crítica irônica à sociedade imperial brasileira, escravidão e hipocrisia social. Obra-prima de Machado de Assis.",
+        "tags": [
+            "LITERATURA",
+            "REALISMO",
+            "ROMANCE",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "lit_quadrilha_patacho",
+        "titulo": "A Quadrilha de Jacob Patacho (Inglês de Souza)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Conto naturalista de Inglês de Souza ambientado na Amazônia. Representa o Naturalismo brasileiro com determinismo social e descrição do ambiente regional.",
+        "tags": [
+            "LITERATURA",
+            "NATURALISMO",
+            "CONTO"
+        ]
+    },
+    {
+        "id": "lit_caso_vara",
+        "titulo": "O Caso da Vara (Machado de Assis)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Conto realista de Machado de Assis sobre o dilema moral de um seminarista diante da violência contra uma escravizada. Crítica à escravidão e à omissão da classe média.",
+        "tags": [
+            "LITERATURA",
+            "REALISMO",
+            "CONTO",
+            "HISTORIA"
+        ]
+    },
+    {
+        "id": "lit_escrava",
+        "titulo": "A Escrava (Maria Firmina dos Reis)",
+        "tipo": "LITERATURA",
+        "url_midia": "",
+        "texto_contexto": "Conto abolicionista de Maria Firmina dos Reis, primeira romancista brasileira. Narra a história de mulheres escravizadas com perspectiva humanizadora. Pioneira da literatura afro-brasileira.",
+        "tags": [
+            "LITERATURA",
+            "ROMANTISMO",
+            "CONTO",
+            "HISTORIA"
+        ]
+    }
+]

@@ -26,7 +26,8 @@ public class GeminiService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // ==================================================================================
-    // FUNCIONALIDADE 1: EXPURGO (Mantendo sua lógica Mock/Refatoração para os testes)
+    // FUNCIONALIDADE 1: EXPURGO (Mantendo sua lógica Mock/Refatoração para os
+    // testes)
     // ==================================================================================
     public Questao refatorarQuestao(Questao original) {
         // Clona a questão para não alterar o objeto original na memória
@@ -55,13 +56,13 @@ public class GeminiService {
 
         // Gera o texto modificado
         String novoTexto = """
-            [PROTOCOLO DE EXPURGO ATIVO]
-            %s
-            ----------------------------------------
-            ENUNCIADO REFATORADO:
-            
-            %s
-            """.formatted(aviso, original.getEnunciado());
+                [PROTOCOLO DE EXPURGO ATIVO]
+                %s
+                ----------------------------------------
+                ENUNCIADO REFATORADO:
+
+                %s
+                """.formatted(aviso, original.getEnunciado());
 
         mutante.setEnunciado(novoTexto);
 
@@ -73,7 +74,8 @@ public class GeminiService {
     // ==================================================================================
 
     /**
-     * Gera um bloco completo (Texto Base + Questões) chamando a API do Google Gemini.
+     * Gera um bloco completo (Texto Base + Questões) chamando a API do Google
+     * Gemini.
      */
     public String gerarConteudoBloco(String contexto, String instrucao, int qtdItens) {
         try {
@@ -82,18 +84,17 @@ public class GeminiService {
             // Corpo da requisição para o Google Gemini
             Map<String, Object> requestBody = Map.of(
                     "contents", List.of(
-                            Map.of("parts", List.of(Map.of("text", promptFinal)))
-                    ),
+                            Map.of("parts", List.of(Map.of("text", promptFinal)))),
                     "generationConfig", Map.of(
                             "temperature", 0.4, // Baixa temperatura para ser mais preciso
                             "response_mime_type", "application/json" // Força resposta JSON
-                    )
-            );
+                    ));
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            // Adiciona a API Key na URL se ela não estiver vazia (evita erro em dev sem chave)
+            // Adiciona a API Key na URL se ela não estiver vazia (evita erro em dev sem
+            // chave)
             String urlComKey = apiUrl;
             if (apiKey != null && !apiKey.isEmpty()) {
                 urlComKey += "?key=" + apiKey;
@@ -101,7 +102,8 @@ public class GeminiService {
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-            // Se não tiver chave configurada, retorna um mock para não travar o desenvolvimento
+            // Se não tiver chave configurada, retorna um mock para não travar o
+            // desenvolvimento
             if (apiKey == null || apiKey.isEmpty() || apiKey.contains("SUA_CHAVE")) {
                 System.out.println("⚠️ AVISO: API Key não configurada. Retornando Mock JSON.");
                 return gerarMockJson(qtdItens);
@@ -122,34 +124,77 @@ public class GeminiService {
         }
     }
 
+    /**
+     * Gera um texto genérico chamando a API do Google Gemini.
+     */
+    public String gerarTexto(String prompt) {
+        try {
+            // Corpo da requisição para o Google Gemini
+            Map<String, Object> requestBody = Map.of(
+                    "contents", List.of(
+                            Map.of("parts", List.of(Map.of("text", prompt)))),
+                    "generationConfig", Map.of(
+                            "temperature", 0.2 // Baixa temperatura para ser mais preciso
+                    ));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            // Adiciona a API Key na URL
+            String urlComKey = apiUrl;
+            if (apiKey != null && !apiKey.isEmpty()) {
+                urlComKey += "?key=" + apiKey;
+            }
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+            // Mock se não tiver chave
+            if (apiKey == null || apiKey.isEmpty() || apiKey.contains("SUA_CHAVE")) {
+                return "GERAL, TESTE, MOCK";
+            }
+
+            ResponseEntity<String> response = restTemplate.postForEntity(urlComKey, entity, String.class);
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return extrairTextoDaResposta(response.getBody());
+            } else {
+                throw new RuntimeException("Erro na API Gemini: " + response.getStatusCode());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ERRO, AO, GERAR";
+        }
+    }
+
     // --- Métodos Auxiliares Privados ---
 
     private String montarPrompt(String contexto, String instrucao, int qtd) {
         return """
-            Você é um examinador oficial da banca CEBRASPE (UnB).
-            
-            CONTEXTO DE BASE (Obra/Tema):
-            %s
-            
-            SUA TAREFA:
-            %s
-            
-            FORMATO DE SAÍDA OBRIGATÓRIO (JSON PURO):
-            {
-              "texto_base_gerado": "Escreva aqui um texto de suporte curto e denso...",
-              "itens": [
+                Você é um examinador oficial da banca CEBRASPE (UnB).
+
+                CONTEXTO DE BASE (Obra/Tema):
+                %s
+
+                SUA TAREFA:
+                %s
+
+                FORMATO DE SAÍDA OBRIGATÓRIO (JSON PURO):
                 {
-                  "numero": 1,
-                  "tipo": "A",
-                  "enunciado": "Afirmação no estilo Certo/Errado...",
-                  "gabarito": "C",
-                  "justificativa": "Explicação breve..."
+                  "texto_base_gerado": "Escreva aqui um texto de suporte curto e denso...",
+                  "itens": [
+                    {
+                      "numero": 1,
+                      "tipo": "A",
+                      "enunciado": "Afirmação no estilo Certo/Errado...",
+                      "gabarito": "C",
+                      "justificativa": "Explicação breve..."
+                    }
+                  ]
                 }
-              ]
-            }
-            
-            IMPORTANTE: Gere exatamente %d itens. O JSON deve ser válido.
-            """.formatted(contexto, instrucao, qtd);
+
+                IMPORTANTE: Gere exatamente %d itens. O JSON deve ser válido.
+                """.formatted(contexto, instrucao, qtd);
     }
 
     private String extrairTextoDaResposta(String jsonResponse) {
@@ -167,23 +212,23 @@ public class GeminiService {
         StringBuilder itens = new StringBuilder();
         for (int i = 1; i <= qtd; i++) {
             itens.append("""
-                {
-                  "numero": %d,
-                  "tipo": "A",
-                  "enunciado": "Este é um item gerado via MOCK porque a API Key não foi encontrada.",
-                  "gabarito": "C",
-                  "justificativa": "Mock de desenvolvimento."
-                }%s
-                """.formatted(i, i < qtd ? "," : ""));
+                    {
+                      "numero": %d,
+                      "tipo": "A",
+                      "enunciado": "Este é um item gerado via MOCK porque a API Key não foi encontrada.",
+                      "gabarito": "C",
+                      "justificativa": "Mock de desenvolvimento."
+                    }%s
+                    """.formatted(i, i < qtd ? "," : ""));
         }
 
         return """
-            {
-              "texto_base_gerado": "Texto Base Mockado para testes locais.",
-              "itens": [
-                %s
-              ]
-            }
-            """.formatted(itens.toString());
+                {
+                  "texto_base_gerado": "Texto Base Mockado para testes locais.",
+                  "itens": [
+                    %s
+                  ]
+                }
+                """.formatted(itens.toString());
     }
 }

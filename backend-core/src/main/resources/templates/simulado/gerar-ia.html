@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif p-8 bg-[#e5e5e5]'">
+
+<head>
+    <title>Gerar Lista com IA - Darcy</title>
+
+    <th:block layout:fragment="head-extras">
+        <style>
+            body {
+                background-color: #e5e5e5;
+                background-image: radial-gradient(#a3a3a3 1px, transparent 1px);
+                background-size: 20px 20px;
+            }
+
+            .card-config {
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+                background: white;
+            }
+
+            .btn-gerar {
+                background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
+                border: 3px solid black;
+                box-shadow: 4px 4px 0px 0px black;
+                transition: all 0.2s;
+            }
+
+            .btn-gerar:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px black;
+            }
+
+            .btn-gerar:active {
+                transform: translate(2px, 2px);
+                box-shadow: 2px 2px 0px 0px black;
+            }
+
+            .tag-chip {
+                background: #f5f5f5;
+                border: 2px solid #e5e5e5;
+                padding: 8px 16px;
+                cursor: pointer;
+                transition: all 0.15s;
+            }
+
+            .tag-chip:hover {
+                background: #fffbeb;
+                border-color: #facc15;
+            }
+
+            .tag-chip.selected {
+                background: black;
+                color: white;
+                border-color: black;
+            }
+
+            .range-slider {
+                -webkit-appearance: none;
+                width: 100%;
+                height: 12px;
+                background: #e5e5e5;
+                border: 2px solid black;
+            }
+
+            .range-slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 24px;
+                height: 24px;
+                background: #facc15;
+                border: 2px solid black;
+                cursor: pointer;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <header class="max-w-4xl mx-auto w-full mb-10 border-b-4 border-black pb-6 flex justify-between items-end">
+            <div>
+                <div
+                    class="bg-purple-500 text-white px-2 py-1 text-[10px] font-mono font-bold inline-block mb-2 uppercase border border-black">
+                    Gerador IA</div>
+                <h1 class="text-5xl font-black italic tracking-tighter leading-none mb-1">
+                    LISTA COM<br>INTELIGÊNCIA.
+                </h1>
+                <p class="font-mono text-xs text-gray-500 mt-2">
+                    A IA cria questões inéditas baseadas no estilo de provas anteriores.
+                </p>
+            </div>
+
+            <a href="/simulado"
+                class="text-xs font-mono font-bold uppercase hover:underline flex items-center gap-2 border-2 border-transparent hover:border-black px-3 py-1 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+            </a>
+        </header>
+
+        <main class="max-w-4xl mx-auto w-full">
+
+            <!-- Alerta de erro -->
+            <div th:if="${param.erro != null}"
+                class="mb-6 p-4 bg-red-100 border-l-4 border-red-600 text-red-800 font-bold font-mono text-sm uppercase">
+                <i data-lucide="alert-triangle" class="w-4 h-4 inline mr-2"></i>
+                Não foi possível gerar questões. Tente outra matéria.
+            </div>
+
+            <form action="/simulado/gerar-ia" method="post" class="card-config p-8 space-y-8">
+
+                <!-- Etapa Atual -->
+                <div class="flex items-center gap-4 pb-6 border-b-2 border-gray-200">
+                    <div
+                        class="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-xl border-2 border-black">
+                        <span th:text="${etapaAtual}">1</span>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-mono uppercase text-gray-500 font-bold">Sua Etapa Atual</div>
+                        <div class="font-black text-2xl">PAS <span th:text="${etapaAtual}">1</span></div>
+                    </div>
+                    <a href="/aluno/tutor"
+                        class="ml-auto text-[10px] font-mono font-bold uppercase text-purple-600 hover:underline">
+                        Alterar Etapa →
+                    </a>
+                </div>
+
+                <!-- Seleção de Matéria/Tag -->
+                <div>
+                    <label class="block font-black uppercase text-sm mb-4 flex items-center gap-2">
+                        <i data-lucide="tag" class="w-4 h-4"></i> Escolha a Matéria
+                    </label>
+
+                    <div class="flex flex-wrap gap-2" id="tags-container">
+                        <input type="hidden" name="tag" id="tag-input" required>
+
+                        <div th:each="t : ${tagsDisponiveis}" class="tag-chip font-mono text-xs font-bold uppercase"
+                            th:text="${t}" th:data-tag="${t}" onclick="selectTag(this)">
+                            TAG
+                        </div>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(tagsDisponiveis)}"
+                        class="p-4 bg-gray-100 border-2 border-dashed border-gray-300 text-center">
+                        <p class="font-mono text-xs text-gray-500">Nenhuma matéria disponível para esta etapa.</p>
+                    </div>
+                </div>
+
+                <!-- Quantidade de Questões -->
+                <div>
+                    <label class="block font-black uppercase text-sm mb-4 flex items-center gap-2">
+                        <i data-lucide="hash" class="w-4 h-4"></i> Quantidade de Questões
+                    </label>
+
+                    <div class="flex items-center gap-6">
+                        <input type="range" name="quantidade" id="quantidade-slider" min="1" max="10" value="5"
+                            class="range-slider flex-1" oninput="updateQuantidade(this.value)">
+                        <div
+                            class="w-16 h-16 bg-black text-white flex items-center justify-center font-black text-3xl border-2 border-black">
+                            <span id="quantidade-display">5</span>
+                        </div>
+                    </div>
+
+                    <p class="font-mono text-[10px] text-gray-400 mt-2">
+                        De 1 a 10 questões. A geração pode levar alguns segundos.
+                    </p>
+                </div>
+
+                <!-- Botão de Gerar -->
+                <div class="pt-6 border-t-2 border-gray-200">
+                    <button type="submit"
+                        class="btn-gerar w-full py-5 font-black text-xl uppercase flex items-center justify-center gap-3">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                        Gerar Lista com IA
+                        <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                    </button>
+
+                    <p class="font-mono text-[10px] text-center text-gray-400 mt-3">
+                        As questões serão geradas na hora e você poderá resolvê-las imediatamente.
+                    </p>
+                </div>
+
+            </form>
+
+            <!-- Explicação -->
+            <div class="mt-8 p-6 bg-white/50 border-2 border-dashed border-gray-300">
+                <h3 class="font-black uppercase text-sm mb-2 flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4"></i> Como Funciona?
+                </h3>
+                <ul class="font-mono text-xs text-gray-600 space-y-1">
+                    <li>• A IA analisa questões de provas anteriores com a mesma matéria</li>
+                    <li>• Gera novas questões inéditas seguindo o mesmo estilo e dificuldade</li>
+                    <li>• Você resolve as questões e recebe feedback imediato</li>
+                    <li>• Erros vão para o Caderno de Erros normalmente</li>
+                </ul>
+            </div>
+
+        </main>
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            function selectTag(el) {
+                document.querySelectorAll('.tag-chip').forEach(t => t.classList.remove('selected'));
+                el.classList.add('selected');
+                document.getElementById('tag-input').value = el.dataset.tag;
+            }
+
+            function updateQuantidade(val) {
+                document.getElementById('quantidade-display').textContent = val;
+            }
+
+            // Seleciona a primeira tag automaticamente
+            document.addEventListener('DOMContentLoaded', () => {
+                const firstTag = document.querySelector('.tag-chip');
+                if (firstTag) selectTag(firstTag);
+                lucide.createIcons();
+            });
+        </script>
+    </th:block>
+</body>
+
+</html>

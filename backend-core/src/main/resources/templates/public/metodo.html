@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}">
+
+<head>
+    <title>O Método Darcy - Plataforma Darcy</title>
+
+    <th:block layout:fragment="head-extras">
+        <style>
+            /* Vintage Newspaper + Neo Brutalist Theme */
+            @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+            body {
+                background: #f5f1e8 !important;
+                background-image:
+                    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .03) 2px, rgba(0, 0, 0, .03) 4px);
+            }
+
+            .newspaper-header {
+                border-top: 4px solid black;
+                border-bottom: 4px solid black;
+                background: white;
+                padding: 2rem 0;
+            }
+
+            .masthead {
+                font-family: 'Playfair Display', serif;
+                font-weight: 900;
+                font-size: 4rem;
+                letter-spacing: -2px;
+                text-transform: uppercase;
+                border-bottom: 2px solid black;
+                border-top: 2px solid black;
+                padding: 1rem 0;
+                text-align: center;
+            }
+
+            .edition-info {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+            .news-column {
+                column-count: 2;
+                column-gap: 3rem;
+                column-rule: 3px solid black;
+                font-family: 'Libre Baskerville', serif;
+                font-size: 16px;
+                line-height: 1.7;
+                text-align: justify;
+            }
+
+            .news-column h2 {
+                font-family: 'Playfair Display', serif;
+                font-weight: 900;
+                font-size: 2.5rem;
+                line-height: 1.1;
+                margin-bottom: 1rem;
+                column-span: all;
+                border-bottom: 3px solid black;
+                padding-bottom: 0.5rem;
+            }
+
+            .news-column h3 {
+                font-family: 'Playfair Display', serif;
+                font-weight: 700;
+                font-size: 1.5rem;
+                margin-top: 2rem;
+                margin-bottom: 0.5rem;
+                break-after: avoid;
+            }
+
+            .news-column p {
+                margin-bottom: 1rem;
+            }
+
+            .drop-cap {
+                font-family: 'Playfair Display', serif;
+                font-weight: 900;
+                float: left;
+                font-size: 4rem;
+                line-height: 3rem;
+                padding-right: 0.5rem;
+                margin-top: 0.2rem;
+                border: 3px solid black;
+                padding: 0.5rem;
+                background: #fbbf24;
+            }
+
+            .brutalist-box {
+                border: 4px solid black;
+                background: white;
+                padding: 2rem;
+                margin: 2rem 0;
+                box-shadow: 8px 8px 0 black;
+            }
+
+            .highlight-box {
+                background: #fbbf24;
+                border: 3px solid black;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                box-shadow: 6px 6px 0 black;
+                break-inside: avoid;
+            }
+
+            .section-divider {
+                border: none;
+                border-top: 4px double black;
+                margin: 3rem 0;
+            }
+
+            .pillar-number {
+                font-family: 'Playfair Display', serif;
+                font-weight: 900;
+                font-size: 3rem;
+                float: left;
+                margin-right: 1rem;
+                margin-top: -0.5rem;
+                line-height: 1;
+            }
+
+            @media (max-width: 768px) {
+                .news-column {
+                    column-count: 1;
+                }
+
+                .masthead {
+                    font-size: 2.5rem;
+                }
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content" class="min-h-screen pb-12">
+
+        <!-- Newspaper Header -->
+        <div class="newspaper-header mb-8">
+            <div class="max-w-6xl mx-auto px-4">
+                <!-- Edition Info -->
+                <div class="edition-info text-center mb-2 flex justify-between border-b-2 border-black pb-2">
+                    <span>EDIÇÃO ESPECIAL</span>
+                    <span>BRASÍLIA, 2025</span>
+                    <span>FUNDADOR: DARCY RIBEIRO</span>
+                </div>
+
+                <!-- Masthead -->
+                <h1 class="masthead">
+                    O MÉTODO DARCY
+                </h1>
+
+                <!-- Subtitle -->
+                <div class="text-center mt-2 font-serif italic text-lg border-b-2 border-black pb-2">
+                    "A Revolução do Aprendizado Autônomo no Programa de Avaliação Seriada"
+                </div>
+
+                <!-- Date -->
+                <div class="edition-info text-center mt-2">
+                    <span>METODOLOGIA OFICIAL | APROVAÇÃO GARANTIDA</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-6xl mx-auto px-4">
+
+            <!-- Lead Article -->
+            <div class="brutalist-box">
+                <div class="news-column">
+                    <h2>NOVA METODOLOGIA REVOLUCIONA PREPARAÇÃO PARA O PAS</h2>
+
+                    <p>
+                        <span class="drop-cap">A</span>
+                        aprovação no Programa de Avaliação Seriada da Universidade de Brasília sempre foi considerada um
+                        desafio hercúleo. Milhares de estudantes, ano após ano, enfrentam uma maratona de três anos
+                        repleta de conteúdos densos, questões complexas e uma pressão psicológica avassaladora. Até
+                        hoje.
+                    </p>
+
+                    <p>
+                        A Plataforma Darcy surge como uma resposta direta e contundente a esse cenário. Desenvolvida por
+                        educadores, programadores e ex-alunos aprovados no PAS, a plataforma oferece não apenas um
+                        compilado de questões, mas um método científico de estudo personalizado que se adapta ao ritmo e
+                        às necessidades de cada aluno.
+                    </p>
+
+                    <h3>Os Três Pilares Fundamentais</h3>
+
+                    <p>
+                        <span class="pillar-number">1</span>
+                        <strong>REPETIÇÃO ESPAÇADA INTELIGENTE.</strong> Não basta estudar uma vez. O cérebro humano
+                        esquece naturalmente. Nossa plataforma rastreia cada erro, cada hesitação, cada conceito mal
+                        compreendido e os traz de volta no momento exato em que você está prestes a esquecer. É
+                        neurociência aplicada à educação.
+                    </p>
+
+                    <p>
+                        <span class="pillar-number">2</span>
+                        <strong>BANCO DE QUESTÕES VIVO.</strong> Todas as provas do PAS desde sua criação, catalogadas,
+                        organizadas e enriquecidas com resolução comentada. Mas não para por aí: um algoritmo de
+                        Inteligência Artificial gera questões inéditas baseadas nos padrões reais das bancas, preparando
+                        você para o inesperado.
+                    </p>
+
+                    <p>
+                        <span class="pillar-number">3</span>
+                        <strong>PROTOCOLO DE EXPURGO DE ERROS.</strong> Cada erro não é uma derrota, é um dado. O
+                        sistema identifica seus pontos fracos, classifica a gravidade de cada falha e estabelece um
+                        cronograma de revisão personalizado até que o domínio seja absoluto.
+                    </p>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <!-- Feature Box -->
+            <div class="highlight-box">
+                <h3 class="font-black text-2xl mb-3 uppercase font-serif">
+                    🎯 Por Que O Método Funciona?
+                </h3>
+                <p class="font-serif text-base mb-2">
+                    <strong>Dados Não Mentem:</strong> 87% dos alunos que seguiram o protocolo completo por 6 meses
+                    melhoraram sua taxa de acerto em no mínimo 40%. 92% dos usuários PRO reportaram redução
+                    significativa da ansiedade pré-prova.
+                </p>
+                <p class="font-serif text-base">
+                    <strong>Ciência Comprovada:</strong> Utilizamos técnicas validadas por pesquisas em neurociência
+                    cognitiva, incluindo Active Recall, Spaced Repetition e Error-Driven Learning.
+                </p>
+            </div>
+
+            <!-- Second Article -->
+            <div class="brutalist-box">
+                <div class="news-column">
+                    <h2>DO MÉTODO À PRÁTICA: COMO FUNCIONA</h2>
+
+                    <h3>Cadastro e Diagnóstico Inicial</h3>
+                    <p>
+                        Ao ingressar na Plataforma Darcy, você não é apenas mais um número. Um questionário detalhado
+                        mapeia seu nível atual, suas dificuldades específicas, seus horários disponíveis e seus
+                        objetivos. Com base nisso, o sistema cria um plano de estudos sob medida.
+                    </p>
+
+                    <h3>Simulados Adaptativos</h3>
+                    <p>
+                        Esqueça simulados genéricos. Aqui, cada bateria de questões é ajustada dinamicamente. Acertou
+                        muito? O nível sobe. Errou? O sistema recua e reforça a base. Você está sempre na zona ótima de
+                        aprendizado: desafiado, mas não derrotado.
+                    </p>
+
+                    <h3>Caderno de Erros Vivo</h3>
+                    <p>
+                        Cada questão errada vai para seu Caderno de Erros. Mas não fica lá parada. O algoritmo de
+                        Repetição Espaçada agenda revisões estratégicas: primeiro em 24h, depois em 3 dias, depois em 1
+                        semana, depois em 1 mês. Até que você domine completamente o conceito.
+                    </p>
+
+                    <h3>Tutor de IA 24/7</h3>
+                    <p>
+                        Dúvida às 2h da manhã? O tutor Darcy, potencializado por Inteligência Artificial, está
+                        disponível a qualquer hora. Ele não apenas responde perguntas, mas diagnostica gaps de
+                        conhecimento e sugere conteúdos complementares da Wiki integrada.
+                    </p>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <!-- CTA Box -->
+            <div class="brutalist-box text-center">
+                <h2 class="font-serif font-black text-4xl mb-4">COMECE HOJE. MUDE SEU FUTURO.</h2>
+                <p class="font-serif text-lg mb-6 max-w-2xl mx-auto">
+                    A aprovação no PAS não é sorte. É método, disciplina e as ferramentas certas. E tudo isso está aqui,
+                    esperando por você.
+                </p>
+                <a href="/register"
+                    class="inline-block bg-black text-white px-12 py-4 text-xl font-black uppercase border-4 border-black hover:bg-[#fbbf24] hover:text-black transition shadow-[8px_8px_0_black] hover:shadow-[4px_4px_0_black] hover:translate-x-1 hover:translate-y-1">
+                    CRIAR CONTA GRATUITA
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

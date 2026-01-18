@@ -28,17 +28,33 @@ public class PlanosController {
     public String paginaPlanos(@AuthenticationPrincipal Usuario usuario, Model model) {
         model.addAttribute("usuario", usuario);
         model.addAttribute("planoInfo", subscriptionService.getPlanoInfo(usuario));
-        model.addAttribute("precoNormal", SubscriptionService.PRECO_PRO_NORMAL);
-        model.addAttribute("precoPromo", SubscriptionService.PRECO_PRO_PROMO);
+
+        // Preços ESTUDANTE
+        model.addAttribute("precoEstudanteNormal", SubscriptionService.PRECO_ESTUDANTE_NORMAL);
+        model.addAttribute("precoEstudantePromo", SubscriptionService.PRECO_ESTUDANTE_PROMO);
+
+        // Preços PREMIUM
+        model.addAttribute("precoProNormal", SubscriptionService.PRECO_PRO_NORMAL);
+        model.addAttribute("precoProPromo", SubscriptionService.PRECO_PRO_PROMO);
+
         return "pagamento/planos";
     }
 
     /**
-     * Inicia assinatura PRO.
+     * Inicia assinatura ESTUDANTE.
      */
-    @PostMapping("/assinar")
-    public String iniciarAssinatura(@AuthenticationPrincipal Usuario usuario) {
-        EfiService.CobrancaPix cobranca = subscriptionService.iniciarAssinatura(usuario);
+    @PostMapping("/assinar-estudante")
+    public String iniciarAssinaturaEstudante(@AuthenticationPrincipal Usuario usuario) {
+        EfiService.CobrancaPix cobranca = subscriptionService.iniciarAssinaturaEstudante(usuario);
+        return "redirect:/planos/checkout/" + cobranca.txid;
+    }
+
+    /**
+     * Inicia assinatura PRO/PREMIUM.
+     */
+    @PostMapping("/assinar-pro")
+    public String iniciarAssinaturaPro(@AuthenticationPrincipal Usuario usuario) {
+        EfiService.CobrancaPix cobranca = subscriptionService.iniciarAssinaturaPro(usuario);
         return "redirect:/planos/checkout/" + cobranca.txid;
     }
 
@@ -71,10 +87,23 @@ public class PlanosController {
      * Simula pagamento para testes (remover em produção).
      */
     @PostMapping("/simular/{txid}")
-    public String simularPagamento(@PathVariable String txid) {
+    public String simularPagamento(@PathVariable String txid,
+            jakarta.servlet.http.HttpServletRequest request,
+            jakarta.servlet.http.HttpServletResponse response) {
         efiService.simularPagamento(txid);
         subscriptionService.processarPagamento(txid);
-        return "redirect:/planos/sucesso";
+
+        // IMPORTANTE: Força logout para recarregar permissões Spring Security
+        // Após ativar PRO, o usuário precisa fazer login novamente para que
+        // o Spring Security carregue a nova ROLE_PRO
+        try {
+            new org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler()
+                    .logout(request, response, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/login?planoAtivado=true";
     }
 
     /**

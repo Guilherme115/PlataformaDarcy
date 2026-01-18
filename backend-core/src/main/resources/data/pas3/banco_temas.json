@@ -1,0 +1,483 @@
+[
+    {
+        "id": "bio_bioquimica",
+        "disciplina": "BIOLOGIA",
+        "topico": "Bioquímica - Carboidratos, Lipídios e Proteínas",
+        "prompt_tecnico": "Elabore questão sobre a estrutura e função de biomoléculas: carboidratos (mono, di e polissacarídeos), lipídios (triglicerídeos, fosfolipídios, esteroides) e proteínas (estrutura primária a quaternária, enzimas). Relacione com metabolismo celular.",
+        "tags": [
+            "BIOLOGIA",
+            "BIOQUIMICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "bio_citologia",
+        "disciplina": "BIOLOGIA",
+        "topico": "Citologia - Organelas e Divisão Celular",
+        "prompt_tecnico": "Crie questão sobre estrutura e função das organelas celulares, diferenças entre células procariontes e eucariontes, e processos de divisão celular (mitose e meiose). Inclua ciclo celular e controle da divisão.",
+        "tags": [
+            "BIOLOGIA",
+            "CITOLOGIA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "bio_genetica",
+        "disciplina": "BIOLOGIA",
+        "topico": "Genética - DNA, RNA e Expressão Gênica",
+        "prompt_tecnico": "Desenvolva questão sobre estrutura do DNA e RNA, replicação, transcrição e tradução. Inclua código genético, mutações, regulação gênica e aplicações na biotecnologia.",
+        "tags": [
+            "BIOLOGIA",
+            "GENETICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "bio_biotecnologia",
+        "disciplina": "BIOLOGIA",
+        "topico": "Biotecnologia e Engenharia Genética",
+        "prompt_tecnico": "Elabore questão sobre técnicas de biotecnologia: PCR, eletroforese, transgênicos, clonagem, CRISPR e terapia gênica. Aborde questões éticas e aplicações na medicina, agricultura e indústria.",
+        "tags": [
+            "BIOLOGIA",
+            "BIOTECNOLOGIA",
+            "GENETICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "bio_evolucao",
+        "disciplina": "BIOLOGIA",
+        "topico": "Origem da Vida e Evolução",
+        "prompt_tecnico": "Crie questão sobre teorias da origem da vida, evidências da evolução, mecanismos evolutivos (seleção natural, deriva genética, mutação, migração) e especiação. Inclua conceitos de Darwin e genética de populações.",
+        "tags": [
+            "BIOLOGIA",
+            "EVOLUCAO",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "bio_histologia",
+        "disciplina": "BIOLOGIA",
+        "topico": "Histologia Animal",
+        "prompt_tecnico": "Desenvolva questão sobre os quatro tipos básicos de tecidos (epitelial, conjuntivo, muscular, nervoso), suas características, funções e localizações. Relacione com fisiologia humana.",
+        "tags": [
+            "BIOLOGIA",
+            "HISTOLOGIA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "bio_fisiologia",
+        "disciplina": "BIOLOGIA",
+        "topico": "Fisiologia Humana",
+        "prompt_tecnico": "Elabore questão integrando sistemas do corpo humano: digestório, respiratório, circulatório, excretor, nervoso e endócrino. Foque em homeostase, integração entre sistemas e mecanismos de regulação.",
+        "tags": [
+            "BIOLOGIA",
+            "FISIOLOGIA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "mat_geometria_analitica",
+        "disciplina": "MATEMATICA",
+        "topico": "Geometria Analítica",
+        "prompt_tecnico": "Crie problema sobre distância entre pontos, ponto médio, equação da reta, posições relativas de retas, distância de ponto a reta, equação da circunferência e cônicas (elipse, hipérbole, parábola).",
+        "tags": [
+            "MATEMATICA",
+            "GEOMETRIA_ANALITICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "mat_complexos",
+        "disciplina": "MATEMATICA",
+        "topico": "Números Complexos",
+        "prompt_tecnico": "Desenvolva questão sobre representação algébrica e trigonométrica de números complexos, operações, módulo, argumento, forma polar, potenciação e radiciação. Inclua representação no plano de Argand-Gauss.",
+        "tags": [
+            "MATEMATICA",
+            "COMPLEXOS",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "mat_polinomios",
+        "disciplina": "MATEMATICA",
+        "topico": "Polinômios e Equações Polinomiais",
+        "prompt_tecnico": "Elabore questão sobre operações com polinômios, divisão (Briot-Ruffini), teorema do resto, dispositivo prático, relações de Girard e pesquisa de raízes racionais.",
+        "tags": [
+            "MATEMATICA",
+            "POLINOMIOS",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "mat_matrizes",
+        "disciplina": "MATEMATICA",
+        "topico": "Matrizes e Determinantes",
+        "prompt_tecnico": "Crie problema sobre operações com matrizes, matriz inversa, determinantes (Sarrus, Laplace), propriedades dos determinantes e matriz adjunta. Inclua aplicações práticas.",
+        "tags": [
+            "MATEMATICA",
+            "MATRIZES",
+            "DETERMINANTES",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "mat_sistemas",
+        "disciplina": "MATEMATICA",
+        "topico": "Sistemas Lineares",
+        "prompt_tecnico": "Desenvolva questão sobre resolução de sistemas lineares (escalonamento, regra de Cramer), classificação de sistemas (SPD, SPI, SI), discussão de sistemas e aplicações em problemas contextualizados.",
+        "tags": [
+            "MATEMATICA",
+            "SISTEMAS",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "fis_eletrostatica",
+        "disciplina": "FISICA",
+        "topico": "Eletrostática",
+        "prompt_tecnico": "Elabore questão sobre carga elétrica, processos de eletrização, Lei de Coulomb, campo elétrico, potencial elétrico e energia potencial. Inclua condutores em equilíbrio e blindagem eletrostática.",
+        "tags": [
+            "FISICA",
+            "ELETROSTATICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "fis_eletrodinamica",
+        "disciplina": "FISICA",
+        "topico": "Eletrodinâmica - Circuitos Elétricos",
+        "prompt_tecnico": "Crie questão sobre corrente elétrica, resistência, Lei de Ohm, associação de resistores, geradores, receptores, potência elétrica e Leis de Kirchhoff. Contextualize com situações práticas.",
+        "tags": [
+            "FISICA",
+            "ELETRODINAMICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "fis_eletromagnetismo",
+        "disciplina": "FISICA",
+        "topico": "Eletromagnetismo",
+        "prompt_tecnico": "Desenvolva questão sobre campo magnético, força magnética, Lei de Biot-Savart, Lei de Ampère, indução eletromagnética (Lei de Faraday-Lenz) e ondas eletromagnéticas. Relacione com aplicações tecnológicas.",
+        "tags": [
+            "FISICA",
+            "ELETROMAGNETISMO",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "fis_moderna",
+        "disciplina": "FISICA",
+        "topico": "Física Moderna",
+        "prompt_tecnico": "Elabore questão sobre relatividade restrita (dilatação temporal, contração do espaço, E=mc²), efeito fotoelétrico, dualidade onda-partícula, modelo atômico de Bohr e introdução à mecânica quântica.",
+        "tags": [
+            "FISICA",
+            "MODERNA",
+            "RELATIVIDADE",
+            "QUANTICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "qui_organica",
+        "disciplina": "QUIMICA",
+        "topico": "Química Orgânica - Funções e Reações",
+        "prompt_tecnico": "Crie questão sobre nomenclatura de compostos orgânicos, funções orgânicas (hidrocarbonetos, álcoois, aldeídos, cetonas, ácidos, ésteres, aminas, amidas), isomeria e reações orgânicas principais.",
+        "tags": [
+            "QUIMICA",
+            "ORGANICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "qui_termoquimica_avancada",
+        "disciplina": "QUIMICA",
+        "topico": "Termoquímica Avançada",
+        "prompt_tecnico": "Desenvolva questão aprofundada sobre entalpia, entropia, energia livre de Gibbs e espontaneidade de reações. Relacione conceitos termodinâmicos com aplicações industriais e biológicas.",
+        "tags": [
+            "QUIMICA",
+            "TERMOQUIMICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "qui_cinetica",
+        "disciplina": "QUIMICA",
+        "topico": "Cinética Química",
+        "prompt_tecnico": "Elabore questão sobre velocidade de reação, fatores que afetam a velocidade, lei de velocidade, ordem de reação, energia de ativação e catalisadores. Inclua gráficos e interpretação de dados.",
+        "tags": [
+            "QUIMICA",
+            "CINETICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "qui_equilibrio",
+        "disciplina": "QUIMICA",
+        "topico": "Equilíbrio Químico",
+        "prompt_tecnico": "Crie questão sobre constante de equilíbrio (Kc, Kp), deslocamento de equilíbrio (Le Chatelier), equilíbrio iônico, pH, pOH, hidrólise de sais, solução tampão e produto de solubilidade.",
+        "tags": [
+            "QUIMICA",
+            "EQUILIBRIO",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "qui_eletroquimica",
+        "disciplina": "QUIMICA",
+        "topico": "Eletroquímica",
+        "prompt_tecnico": "Desenvolva questão sobre pilhas e baterias, potencial de eletrodo, equação de Nernst, eletrólise, leis de Faraday e aplicações industriais (refino de metais, produção de cloro e soda).",
+        "tags": [
+            "QUIMICA",
+            "ELETROQUIMICA",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "qui_radioatividade",
+        "disciplina": "QUIMICA",
+        "topico": "Radioatividade",
+        "prompt_tecnico": "Elabore questão sobre emissões radioativas (alfa, beta, gama), meia-vida, séries radioativas, fissão e fusão nuclear. Inclua aplicações (medicina, energia) e problemas ambientais (lixo nuclear).",
+        "tags": [
+            "QUIMICA",
+            "RADIOATIVIDADE",
+            "NATUREZA_AVANCADA"
+        ]
+    },
+    {
+        "id": "geo_ordens_mundiais",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Ordens Mundiais",
+        "prompt_tecnico": "Crie questão sobre a evolução das ordens mundiais: bipolaridade (Guerra Fria), multipolaridade e nova ordem mundial. Aborde o papel das potências, organizações internacionais e conflitos contemporâneos.",
+        "tags": [
+            "GEOGRAFIA",
+            "GEOPOLITICA",
+            "GLOBALIZACAO"
+        ]
+    },
+    {
+        "id": "geo_capitalismo_globalizacao",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Capitalismo e Globalização",
+        "prompt_tecnico": "Desenvolva questão sobre a globalização econômica, financeira e cultural, fluxos de capital, empresas transnacionais, divisão internacional do trabalho e desigualdades globais.",
+        "tags": [
+            "GEOGRAFIA",
+            "ECONOMIA",
+            "GLOBALIZACAO"
+        ]
+    },
+    {
+        "id": "geo_blocos_economicos",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Blocos Econômicos",
+        "prompt_tecnico": "Elabore questão sobre os principais blocos econômicos (União Europeia, Mercosul, NAFTA/USMCA, BRICS), seus níveis de integração, objetivos e desafios contemporâneos.",
+        "tags": [
+            "GEOGRAFIA",
+            "ECONOMIA",
+            "BLOCOS"
+        ]
+    },
+    {
+        "id": "geo_geopolitica",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Geopolítica Contemporânea",
+        "prompt_tecnico": "Crie questão sobre conflitos contemporâneos, terrorismo, disputas territoriais, recursos estratégicos, ascensão da China e tensões entre grandes potências no século XXI.",
+        "tags": [
+            "GEOGRAFIA",
+            "GEOPOLITICA",
+            "CONFLITOS"
+        ]
+    },
+    {
+        "id": "his_guerra_mundial_1",
+        "disciplina": "HISTORIA",
+        "topico": "1ª Guerra Mundial",
+        "prompt_tecnico": "Desenvolva questão sobre causas (imperialismo, nacionalismo, alianças, corrida armamentista), desenvolvimento e consequências da Primeira Guerra Mundial, incluindo o Tratado de Versalhes.",
+        "tags": [
+            "HISTORIA",
+            "GUERRA",
+            "EUROPA",
+            "GEOPOLITICA"
+        ]
+    },
+    {
+        "id": "his_totalitarismo",
+        "disciplina": "HISTORIA",
+        "topico": "Totalitarismo: Nazismo, Fascismo e Franquismo",
+        "prompt_tecnico": "Elabore questão sobre as características dos regimes totalitários, suas origens no entreguerras, ideologias, métodos de controle social e o papel da propaganda. Compare nazismo, fascismo e franquismo.",
+        "tags": [
+            "HISTORIA",
+            "POLITICA",
+            "EUROPA",
+            "IDEOLOGIA"
+        ]
+    },
+    {
+        "id": "his_crise_1929",
+        "disciplina": "HISTORIA",
+        "topico": "Crise de 1929",
+        "prompt_tecnico": "Crie questão sobre as causas da crise de 1929, seus efeitos globais, o New Deal nos EUA e as consequências políticas (ascensão do totalitarismo). Relacione com economia e sociedade.",
+        "tags": [
+            "HISTORIA",
+            "ECONOMIA",
+            "CRISE",
+            "EUA"
+        ]
+    },
+    {
+        "id": "his_guerra_mundial_2",
+        "disciplina": "HISTORIA",
+        "topico": "2ª Guerra Mundial",
+        "prompt_tecnico": "Desenvolva questão sobre causas, fases principais, grandes batalhas, Holocausto, participação brasileira (FEB) e consequências da Segunda Guerra Mundial, incluindo a formação da ONU e o início da Guerra Fria.",
+        "tags": [
+            "HISTORIA",
+            "GUERRA",
+            "EUROPA",
+            "BRASIL"
+        ]
+    },
+    {
+        "id": "his_guerra_fria",
+        "disciplina": "HISTORIA",
+        "topico": "Guerra Fria",
+        "prompt_tecnico": "Elabore questão sobre a bipolarização mundial, corrida armamentista e espacial, conflitos indiretos (Coreia, Vietnã, Cuba), détente e fim da Guerra Fria (queda do muro de Berlim, dissolução da URSS).",
+        "tags": [
+            "HISTORIA",
+            "GEOPOLITICA",
+            "GUERRA_FRIA"
+        ]
+    },
+    {
+        "id": "his_brasil_republica_velha",
+        "disciplina": "HISTORIA",
+        "topico": "Brasil: República Velha (1889-1930)",
+        "prompt_tecnico": "Crie questão sobre a política do café-com-leite, coronelismo, revoltas (Canudos, Contestado, Revolta da Vacina, Cangaço), economia cafeeira e os movimentos que levaram à Revolução de 1930.",
+        "tags": [
+            "HISTORIA",
+            "BRASIL",
+            "REPUBLICA"
+        ]
+    },
+    {
+        "id": "his_era_vargas",
+        "disciplina": "HISTORIA",
+        "topico": "Brasil: Era Vargas (1930-1945)",
+        "prompt_tecnico": "Desenvolva questão sobre os governos de Getúlio Vargas: Governo Provisório, Estado Novo, trabalhismo, industrialização, legislação trabalhista e a participação brasileira na Segunda Guerra.",
+        "tags": [
+            "HISTORIA",
+            "BRASIL",
+            "VARGAS"
+        ]
+    },
+    {
+        "id": "his_brasil_populista",
+        "disciplina": "HISTORIA",
+        "topico": "Brasil: República Populista (1945-1964)",
+        "prompt_tecnico": "Elabore questão sobre o período democrático, governos de Dutra, Vargas, JK (desenvolvimentismo, Brasília), Jânio e Jango, as tensões políticas e o golpe de 1964.",
+        "tags": [
+            "HISTORIA",
+            "BRASIL",
+            "DEMOCRACIA"
+        ]
+    },
+    {
+        "id": "his_ditadura_militar",
+        "disciplina": "HISTORIA",
+        "topico": "Brasil: Ditadura Militar (1964-1985)",
+        "prompt_tecnico": "Crie questão sobre os governos militares, Atos Institucionais, repressão, milagre econômico, movimentos de resistência, abertura política e redemocratização.",
+        "tags": [
+            "HISTORIA",
+            "BRASIL",
+            "DITADURA"
+        ]
+    },
+    {
+        "id": "port_sintaxe_avancada",
+        "disciplina": "PORTUGUES",
+        "topico": "Análise Sintática Avançada",
+        "prompt_tecnico": "Desenvolva questão sobre orações subordinadas (substantivas, adjetivas, adverbiais), funções sintáticas complexas, regência verbal e nominal, e concordância em casos especiais.",
+        "tags": [
+            "PORTUGUES",
+            "SINTAXE",
+            "GRAMATICA"
+        ]
+    },
+    {
+        "id": "port_pontuacao_avancada",
+        "disciplina": "PORTUGUES",
+        "topico": "Pontuação em Contextos Complexos",
+        "prompt_tecnico": "Elabore questão sobre uso de pontuação em orações intercaladas, explicativas, subordinadas, e casos especiais de vírgula, ponto e vírgula e dois-pontos que alteram o sentido.",
+        "tags": [
+            "PORTUGUES",
+            "PONTUACAO",
+            "GRAMATICA"
+        ]
+    },
+    {
+        "id": "port_semantica_avancada",
+        "disciplina": "PORTUGUES",
+        "topico": "Semântica e Estilística",
+        "prompt_tecnico": "Crie questão sobre recursos expressivos da linguagem (ironia, sarcasmo, eufemismo, hipérbole), intertextualidade, implícitos (pressupostos e subentendidos) e argumentação.",
+        "tags": [
+            "PORTUGUES",
+            "SEMANTICA",
+            "ESTILISTICA"
+        ]
+    },
+    {
+        "id": "port_tipologias",
+        "disciplina": "PORTUGUES",
+        "topico": "Tipologias e Gêneros Textuais",
+        "prompt_tecnico": "Desenvolva questão sobre gêneros textuais contemporâneos (editoriais, artigos de opinião, ensaios, resenhas críticas), seus propósitos comunicativos e estratégias argumentativas.",
+        "tags": [
+            "PORTUGUES",
+            "GENEROS",
+            "ARGUMENTACAO"
+        ]
+    },
+    {
+        "id": "lit_vanguardas",
+        "disciplina": "LITERATURA",
+        "topico": "Vanguardas Europeias",
+        "prompt_tecnico": "Elabore questão sobre os movimentos de vanguarda do início do século XX: Futurismo, Expressionismo, Cubismo, Dadaísmo e Surrealismo. Analise características, manifestos e influência no Modernismo brasileiro.",
+        "tags": [
+            "LITERATURA",
+            "VANGUARDAS",
+            "MODERNISMO"
+        ]
+    },
+    {
+        "id": "lit_modernismo_fases",
+        "disciplina": "LITERATURA",
+        "topico": "Fases do Modernismo Brasileiro",
+        "prompt_tecnico": "Crie questão comparando as três fases do Modernismo brasileiro: 1ª geração (Semana de 22, antropofagia), 2ª geração (regionalismo, poesia intimista) e 3ª geração (experimentação formal). Use autores específicos.",
+        "tags": [
+            "LITERATURA",
+            "MODERNISMO",
+            "BRASIL"
+        ]
+    },
+    {
+        "id": "lit_contemporanea",
+        "disciplina": "LITERATURA",
+        "topico": "Literatura Contemporânea",
+        "prompt_tecnico": "Desenvolva questão sobre a literatura brasileira contemporânea: vozes periféricas, literatura afro-brasileira, escrevivência, poesia marginal e novas narrativas. Inclua autores como Conceição Evaristo, Paulo Lins e Ferréz.",
+        "tags": [
+            "LITERATURA",
+            "CONTEMPORANEA",
+            "BRASIL"
+        ]
+    },
+    {
+        "id": "port_interpretacao_avancada",
+        "disciplina": "PORTUGUES",
+        "topico": "Interpretação de Textos Complexos",
+        "prompt_tecnico": "Elabore questão de interpretação envolvendo textos filosóficos, científicos ou literários complexos. Exija identificação de teses, argumentos, pressupostos e relações intertextuais.",
+        "tags": [
+            "PORTUGUES",
+            "INTERPRETACAO",
+            "FILOSOFIA"
+        ]
+    }
+]

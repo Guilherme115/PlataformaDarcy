@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif p-8 bg-[#e5e5e5]'">
+
+<head>
+    <title>Central de PDFs - Admin</title>
+    <th:block layout:fragment="head-extras">
+        <style>
+            .pdf-card {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 6px 6px 0px 0px black;
+                transition: all 0.2s;
+            }
+
+            .pdf-card:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 10px 10px 0px 0px black;
+            }
+
+            .dropzone {
+                border: 3px dashed #a3a3a3;
+                background: repeating-linear-gradient(45deg,
+                        #fafafa,
+                        #fafafa 10px,
+                        #f0f0f0 10px,
+                        #f0f0f0 20px);
+                transition: all 0.3s;
+            }
+
+            .dropzone.dragover {
+                border-color: #fbbf24;
+                background: #fffbeb;
+            }
+
+            .status-badge {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 10px;
+                font-weight: bold;
+                text-transform: uppercase;
+                padding: 2px 8px;
+                border: 2px solid black;
+            }
+
+            /* Toast animation */
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+
+            .animate-slide-in {
+                animation: slideIn 0.3s ease-out;
+            }
+
+            .animate-slide-out {
+                animation: slideOut 0.3s ease-in forwards;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- Header -->
+        <header class="max-w-7xl mx-auto w-full mb-10 border-b-4 border-black pb-6 flex justify-between items-end">
+            <div>
+                <div
+                    class="bg-red-600 text-white px-2 py-1 text-[10px] font-mono font-bold inline-block mb-2 uppercase border border-black">
+                    Painel Administrativo
+                </div>
+                <h1 class="text-5xl font-black italic tracking-tighter leading-none mb-1">
+                    CENTRAL DE<br>PDFs.
+                </h1>
+                <p class="font-mono text-xs text-gray-500 mt-2">
+                    Gerencie os arquivos de provas do Intelligence Engine.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <!-- Status da API -->
+                <div th:if="${apiOnline}" class="status-badge bg-green-400">
+                    <i data-lucide="check-circle" class="w-3 h-3 inline"></i> API Online
+                </div>
+                <div th:unless="${apiOnline}" class="status-badge bg-red-400">
+                    <i data-lucide="alert-triangle" class="w-3 h-3 inline"></i> API Offline
+                </div>
+
+                <a href="/admin"
+                    class="text-xs font-mono font-bold uppercase hover:underline flex items-center gap-2 border-2 border-black px-3 py-2 bg-white hover:bg-black hover:text-white transition">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+                </a>
+            </div>
+        </header>
+
+        <!-- Alerta de erro da API -->
+        <div th:if="${!apiOnline}" class="max-w-7xl mx-auto mb-8 bg-red-100 border-2 border-red-600 p-4">
+            <p class="font-mono text-sm text-red-800">
+                <strong>⚠️ API Python offline:</strong> <span th:text="${apiError}">Erro</span>
+            </p>
+            <p class="font-mono text-xs text-red-600 mt-2">
+                Execute: <code class="bg-red-200 px-1">cd intelligence-engine && python src/pdf_api.py</code>
+            </p>
+        </div>
+
+        <!-- Toast de Sucesso (popup animado) -->
+        <div th:if="${param.success}" id="toast-success"
+            class="fixed top-6 right-6 z-50 bg-green-500 text-white px-6 py-4 border-4 border-black shadow-[6px_6px_0px_0px_black] animate-slide-in">
+            <div class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="w-6 h-6"></i>
+                <div>
+                    <p class="font-black uppercase text-sm">
+                        <span th:if="${param.success[0] == 'upload'}">Upload Concluído!</span>
+                        <span th:if="${param.success[0] == 'delete'}">Arquivo Excluído!</span>
+                    </p>
+                    <p th:if="${param.file != null}" class="font-mono text-xs opacity-90" th:text="${param.file[0]}">
+                        arquivo.pdf</p>
+                </div>
+                <button onclick="document.getElementById('toast-success').remove()" class="ml-4 hover:bg-green-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <main class="max-w-7xl mx-auto w-full">
+
+            <!-- Upload Zone -->
+            <div class="mb-12">
+                <h2 class="font-black uppercase text-lg mb-4 flex items-center gap-2">
+                    <i data-lucide="upload" class="w-5 h-5"></i> Upload de PDF
+                </h2>
+
+                <form id="upload-form" th:action="@{/admin/pdfs/upload}" method="post" enctype="multipart/form-data">
+                    <div id="dropzone" class="dropzone p-12 text-center cursor-pointer"
+                        onclick="document.getElementById('file-input').click()">
+                        <i data-lucide="file-plus" class="w-16 h-16 mx-auto mb-4 text-gray-400"></i>
+                        <p class="font-mono text-sm text-gray-600 font-bold uppercase">
+                            Arraste um PDF aqui ou clique para selecionar
+                        </p>
+                        <p class="font-mono text-xs text-gray-400 mt-2">
+                            Apenas arquivos .pdf são aceitos
+                        </p>
+                        <input type="file" id="file-input" name="file" accept=".pdf" class="hidden"
+                            onchange="this.form.submit()">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Lista de PDFs -->
+            <div>
+                <h2 class="font-black uppercase text-lg mb-6 flex items-center gap-2 border-b-2 border-black pb-2">
+                    <i data-lucide="folder-open" class="w-5 h-5"></i> PDFs Disponíveis
+                    <span class="ml-auto font-mono text-xs bg-black text-white px-2 py-1"
+                        th:text="${#lists.size(pdfs)} + ' arquivos'">0 arquivos</span>
+                </h2>
+
+                <!-- Estado vazio -->
+                <div th:if="${#lists.isEmpty(pdfs)}" class="text-center py-16 border-2 border-dashed border-gray-300">
+                    <i data-lucide="inbox" class="w-16 h-16 mx-auto mb-4 text-gray-300"></i>
+                    <p class="font-mono text-sm text-gray-500 font-bold uppercase">Nenhum PDF encontrado</p>
+                    <p class="font-mono text-xs text-gray-400 mt-2">Faça upload de um arquivo para começar.</p>
+                </div>
+
+                <!-- PDFs organizados por Etapa -->
+                <div th:unless="${#lists.isEmpty(pdfs)}" class="space-y-12">
+
+                    <!-- PAS 1 -->
+                    <div th:if="${pdfsPorEtapa != null and pdfsPorEtapa[1] != null and !pdfsPorEtapa[1].isEmpty()}">
+                        <div class="flex items-center gap-3 mb-4 border-b-2 border-blue-600 pb-2">
+                            <span
+                                class="bg-blue-600 text-white px-4 py-2 font-black text-xl border-2 border-black">1</span>
+                            <h3 class="font-black uppercase text-lg">PAS 1 - Primeira Etapa</h3>
+                            <span
+                                class="ml-auto font-mono text-xs bg-blue-100 text-blue-800 px-2 py-1 border border-blue-600"
+                                th:text="${#lists.size(pdfsPorEtapa[1])} + ' PDFs'">0 PDFs</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <th:block th:each="pdf : ${pdfsPorEtapa[1]}"
+                                th:insert="~{admin/pdf-central :: pdf-card(${pdf})}" />
+                        </div>
+                    </div>
+
+                    <!-- PAS 2 -->
+                    <div th:if="${pdfsPorEtapa != null and pdfsPorEtapa[2] != null and !pdfsPorEtapa[2].isEmpty()}">
+                        <div class="flex items-center gap-3 mb-4 border-b-2 border-green-600 pb-2">
+                            <span
+                                class="bg-green-600 text-white px-4 py-2 font-black text-xl border-2 border-black">2</span>
+                            <h3 class="font-black uppercase text-lg">PAS 2 - Segunda Etapa</h3>
+                            <span
+                                class="ml-auto font-mono text-xs bg-green-100 text-green-800 px-2 py-1 border border-green-600"
+                                th:text="${#lists.size(pdfsPorEtapa[2])} + ' PDFs'">0 PDFs</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <th:block th:each="pdf : ${pdfsPorEtapa[2]}"
+                                th:insert="~{admin/pdf-central :: pdf-card(${pdf})}" />
+                        </div>
+                    </div>
+
+                    <!-- PAS 3 -->
+                    <div th:if="${pdfsPorEtapa != null and pdfsPorEtapa[3] != null and !pdfsPorEtapa[3].isEmpty()}">
+                        <div class="flex items-center gap-3 mb-4 border-b-2 border-purple-600 pb-2">
+                            <span
+                                class="bg-purple-600 text-white px-4 py-2 font-black text-xl border-2 border-black">3</span>
+                            <h3 class="font-black uppercase text-lg">PAS 3 - Terceira Etapa</h3>
+                            <span
+                                class="ml-auto font-mono text-xs bg-purple-100 text-purple-800 px-2 py-1 border border-purple-600"
+                                th:text="${#lists.size(pdfsPorEtapa[3])} + ' PDFs'">0 PDFs</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <th:block th:each="pdf : ${pdfsPorEtapa[3]}"
+                                th:insert="~{admin/pdf-central :: pdf-card(${pdf})}" />
+                        </div>
+                    </div>
+
+                    <!-- Outros (não identificados) -->
+                    <div th:if="${pdfsPorEtapa != null and pdfsPorEtapa[0] != null and !pdfsPorEtapa[0].isEmpty()}">
+                        <div class="flex items-center gap-3 mb-4 border-b-2 border-gray-400 pb-2">
+                            <span
+                                class="bg-gray-500 text-white px-4 py-2 font-black text-xl border-2 border-black">?</span>
+                            <h3 class="font-black uppercase text-lg">Outros PDFs</h3>
+                            <span
+                                class="ml-auto font-mono text-xs bg-gray-100 text-gray-800 px-2 py-1 border border-gray-400"
+                                th:text="${#lists.size(pdfsPorEtapa[0])} + ' PDFs'">0 PDFs</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <th:block th:each="pdf : ${pdfsPorEtapa[0]}"
+                                th:insert="~{admin/pdf-central :: pdf-card(${pdf})}" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Fragment: Card de PDF -->
+    <th:block th:fragment="pdf-card(pdf)">
+        <div class="pdf-card p-6 relative group">
+            <!-- Badge de status -->
+            <div class="absolute top-3 right-3 flex gap-1">
+                <span th:if="${pdf.jaImportado}" class="status-badge bg-green-400">
+                    <i data-lucide="check" class="w-3 h-3 inline"></i> IMPORTADO
+                </span>
+                <span th:if="${pdf.page_count == -1}" class="status-badge bg-red-400">ERRO</span>
+            </div>
+
+            <!-- Ano (se disponível) -->
+            <div th:if="${pdf.ano != null}" class="absolute top-3 left-3">
+                <span class="font-mono text-xs bg-black text-white px-2 py-1" th:text="${pdf.ano}">2024</span>
+            </div>
+
+            <!-- Ícone -->
+            <div
+                class="w-14 h-14 bg-red-600 text-white flex items-center justify-center mb-4 border-2 border-black mt-6">
+                <i data-lucide="file-text" class="w-7 h-7"></i>
+            </div>
+
+            <!-- Info -->
+            <h3 class="font-black text-lg uppercase truncate mb-2" th:text="${pdf.filename}">arquivo.pdf</h3>
+
+            <div class="flex gap-4 font-mono text-xs text-gray-500 mb-4">
+                <span th:if="${pdf.page_count != -1}">
+                    <i data-lucide="file" class="w-3 h-3 inline"></i>
+                    <span th:text="${pdf.page_count}">0</span> páginas
+                </span>
+                <span>
+                    <i data-lucide="hard-drive" class="w-3 h-3 inline"></i>
+                    <span th:text="${#numbers.formatDecimal(pdf.size_bytes / 1024.0 / 1024.0, 1, 2)}">0</span> MB
+                </span>
+            </div>
+
+            <!-- Ações -->
+            <div class="flex gap-2 pt-4 border-t-2 border-gray-200">
+                <a th:href="@{'/admin/pdfs/' + ${pdf.filename}}"
+                    class="flex-1 bg-black text-white py-2 text-center font-bold text-xs uppercase hover:bg-darcy-yellow hover:text-black transition">
+                    <i data-lucide="edit" class="w-4 h-4 inline mr-1"></i> Editar
+                </a>
+
+                <form th:action="@{'/admin/pdfs/' + ${pdf.filename} + '/delete'}" method="post"
+                    onsubmit="return confirm('Tem certeza que deseja excluir este PDF?');">
+                    <button type="submit"
+                        class="bg-red-600 text-white px-4 py-2 font-bold text-xs uppercase hover:bg-red-800 transition">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </th:block>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            // Drag and drop
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('file-input');
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    dropzone.classList.add('dragover');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    dropzone.classList.remove('dragover');
+                });
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type === 'application/pdf') {
+                    fileInput.files = files;
+                    document.getElementById('upload-form').submit();
+                }
+            });
+
+            // Auto-hide toast após 5 segundos
+            const toast = document.getElementById('toast-success');
+            if (toast) {
+                setTimeout(() => {
+                    toast.classList.add('animate-slide-out');
+                    setTimeout(() => toast.remove(), 300);
+                }, 5000);
+            }
+        </script>
+    </th:block>
+
+</body>
+
+</html>

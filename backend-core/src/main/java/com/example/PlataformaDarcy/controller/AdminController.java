@@ -11,8 +11,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     @Autowired
@@ -29,6 +32,12 @@ public class AdminController {
     private ComunicadoRepository comunicadoRepo;
     @Autowired
     private UsuarioRepository usuarioRepo;
+
+    // Redirect /admin to /admin/dashboard
+    @GetMapping
+    public String redirectToDashboard() {
+        return "redirect:/admin/dashboard";
+    }
 
     // ==================== DASHBOARD ====================
     @GetMapping("/dashboard")
@@ -169,6 +178,12 @@ public class AdminController {
     }
 
     // ==================== BUGS ====================
+    @GetMapping("/bugs")
+    public String paginaBugs(Model model) {
+        model.addAttribute("bugs", bugRepo.findByResolvidoFalseOrderByDataReportDesc());
+        return "admin/admin-bugs";
+    }
+
     @PostMapping("/bug/resolver/{id}")
     @ResponseBody
     public String resolverBug(@PathVariable Long id) {
@@ -201,5 +216,221 @@ public class AdminController {
         model.addAttribute("prova", prova);
         model.addAttribute("questoes", questoes);
         return "fragments/modais-report :: modal-prova-admin";
+    }
+
+    // ==================== EDITORA DE LIVROS ====================
+
+    @Autowired
+    private com.example.PlataformaDarcy.service.EditoraService editoraService;
+
+    @GetMapping("/editora")
+    public String paginaEditora(Model model) {
+        model.addAttribute("colecoes", editoraService.listarColecoes());
+        return "admin/editora/dashboard";
+    }
+
+    @GetMapping("/editora/colecoes")
+    public String listarColecoes(Model model) {
+        model.addAttribute("colecoes", editoraService.listarColecoes());
+        return "admin/editora/colecoes";
+    }
+
+    @PostMapping("/editora/colecoes/salvar")
+    public String salvarColecao(@RequestParam String nome,
+            @RequestParam String descricao,
+            @RequestParam(required = false) String imagemCapa,
+            @org.springframework.security.core.annotation.AuthenticationPrincipal Usuario usuario,
+            RedirectAttributes ra) {
+        editoraService.criarColecao(nome, descricao, usuario);
+        ra.addFlashAttribute("sucesso", "Coleção criada com sucesso!");
+        return "redirect:/admin/editora/colecoes";
+    }
+
+    @GetMapping("/editora/colecao/{id}/livros")
+    public String listarLivros(@PathVariable Long id, Model model) {
+        model.addAttribute("colecao", editoraService.buscarColecaoPorId(id).orElseThrow());
+        model.addAttribute("livros", editoraService.listarLivrosPorColecao(id));
+        return "admin/editora/livros";
+    }
+
+    @PostMapping("/editora/livros/salvar")
+    public String salvarLivro(@RequestParam Long colecaoId,
+            @RequestParam String titulo,
+            @RequestParam(required = false) String subtitulo,
+            RedirectAttributes ra) {
+        editoraService.criarLivro(colecaoId, titulo, subtitulo);
+        ra.addFlashAttribute("sucesso", "Livro criado com sucesso!");
+        return "redirect:/admin/editora/colecao/" + colecaoId + "/livros";
+    }
+
+    @GetMapping("/editora/livro/{id}/volumes")
+    public String listarVolumes(@PathVariable Long id, Model model) {
+        model.addAttribute("livro", editoraService.buscarLivroPorId(id).orElseThrow());
+        model.addAttribute("volumes", editoraService.listarVolumesPorLivro(id));
+        return "admin/editora/volumes";
+    }
+
+    @PostMapping("/editora/volumes/salvar")
+    public String salvarVolume(@RequestParam Long livroId,
+            @RequestParam Integer numero,
+            @RequestParam String titulo,
+            @RequestParam(required = false) String descricao,
+            RedirectAttributes ra) {
+        editoraService.criarVolume(livroId, numero, titulo, descricao);
+        ra.addFlashAttribute("sucesso", "Volume criado com sucesso!");
+        return "redirect:/admin/editora/livro/" + livroId + "/volumes";
+    }
+
+    // ==================== CENTRAL DE SIMULADOS OFICIAIS ====================
+
+    @Autowired
+    private com.example.PlataformaDarcy.service.SimuladoGeradorService simuladoGeradorService;
+
+    @GetMapping("/simulados-oficiais")
+    public String centralSimuladosOficiais(Model model) {
+        List<Prova> simulados = provaRepo.findByOrigemOrderByIdDesc("IA_OFICIAL");
+
+        // Estatísticas gerais
+        long totalSimulados = simulados.size();
+        long simuladosAtivos = simulados.stream().filter(p -> Boolean.TRUE.equals(p.getAtivo())).count();
+        long totalAcessos = simulados.stream()
+                .mapToLong(p -> p.getContadorAcessos() != null ? p.getContadorAcessos() : 0)
+                .sum();
+
+        model.addAttribute("simulados", simulados);
+        model.addAttribute("totalSimulados", totalSimulados);
+        model.addAttribute("simuladosAtivos", simuladosAtivos);
+        model.addAttribute("totalAcessos", totalAcessos);
+
+        return "admin/simulados-oficiais";
+    }
+
+    @PostMapping("/simulados-oficiais/gerar")
+    public String gerarNovoSimulado(@RequestParam String senha,
+            @RequestParam Integer etapa,
+            RedirectAttributes ra) {
+        if (!"2711".equals(senha)) {
+            ra.addFlashAttribute("erro", "Acesso Negado: Senha incorreta.");
+            return "redirect:/admin/simulados-oficiais";
+        }
+
+        try {
+            simuladoGeradorService.gerarSimuladoOficial(etapa);
+            ra.addFlashAttribute("sucesso", "Novo Simulado Oficial (PAS " + etapa + ") gerado com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ra.addFlashAttribute("erro", "Erro ao gerar simulado: " + e.getMessage());
+        }
+
+        return "redirect:/admin/simulados-oficiais";
+    }
+
+    @PostMapping("/simulados-oficiais/{id}/toggle-status")
+    public String toggleStatusSimulado(@PathVariable Long id, RedirectAttributes ra) {
+        Prova prova = provaRepo.findById(id).orElseThrow();
+        prova.setAtivo(!Boolean.TRUE.equals(prova.getAtivo()));
+        provaRepo.save(prova);
+
+        String status = Boolean.TRUE.equals(prova.getAtivo()) ? "ativado" : "desativado";
+        ra.addFlashAttribute("sucesso", "Simulado " + status + " com sucesso!");
+
+        return "redirect:/admin/simulados-oficiais";
+    }
+
+    @PostMapping("/simulados-oficiais/{id}/excluir")
+    public String excluirSimulado(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            provaRepo.deleteById(id);
+            ra.addFlashAttribute("sucesso", "Simulado excluído com sucesso!");
+        } catch (Exception e) {
+            ra.addFlashAttribute("erro", "Erro ao excluir: " + e.getMessage());
+        }
+        return "redirect:/admin/simulados-oficiais";
+    }
+
+    // ==================== GESTÃO DE TAXONOMIA ====================
+
+    @Autowired
+    private com.example.PlataformaDarcy.service.TaxonomiaService taxonomiaService;
+
+    @GetMapping("/taxonomia")
+    public String paginaTaxonomia(Model model) {
+        // Carrega taxonomias existentes por etapa
+        model.addAttribute("conteudosPas1", taxonomiaService.listarPorEtapa(1));
+        model.addAttribute("conteudosPas2", taxonomiaService.listarPorEtapa(2));
+        model.addAttribute("conteudosPas3", taxonomiaService.listarPorEtapa(3));
+
+        // Estatísticas
+        model.addAttribute("totalPas1", taxonomiaService.contarPorEtapa(1));
+        model.addAttribute("totalPas2", taxonomiaService.contarPorEtapa(2));
+        model.addAttribute("totalPas3", taxonomiaService.contarPorEtapa(3));
+
+        return "admin/taxonomia";
+    }
+
+    @PostMapping("/taxonomia/parse")
+    public String parseTaxonomia(@RequestParam String texto,
+            @RequestParam Integer etapa,
+            @RequestParam(defaultValue = "false") boolean substituir,
+            RedirectAttributes ra) {
+        try {
+            List<com.example.PlataformaDarcy.model.ConteudoProgramatico> parsed = taxonomiaService
+                    .parseTextToTaxonomia(texto);
+
+            // Validação: verifica se todas as etapas do texto batem com a selecionada
+            boolean temErro = parsed.stream().anyMatch(cp -> !cp.getEtapa().equals(etapa));
+            if (temErro) {
+                ra.addFlashAttribute("erro",
+                        "Erro: O texto contém conteúdos de etapas diferentes da selecionada (PAS " + etapa + ")!");
+                ra.addFlashAttribute("textoAntigo", texto);
+                return "redirect:/admin/taxonomia";
+            }
+
+            // Salva todos
+            taxonomiaService.salvarTodos(parsed, substituir);
+
+            String msg = parsed.size() + " tópicos importados com sucesso para PAS " + etapa + "!";
+            if (substituir) {
+                msg += " (conteúdos anteriores foram substituídos)";
+            }
+            ra.addFlashAttribute("sucesso", msg);
+
+        } catch (IllegalArgumentException e) {
+            ra.addFlashAttribute("erro", "Erro no parsing: " + e.getMessage());
+            ra.addFlashAttribute("textoAntigo", texto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ra.addFlashAttribute("erro", "Erro inesperado: " + e.getMessage());
+            ra.addFlashAttribute("textoAntigo", texto);
+        }
+
+        return "redirect:/admin/taxonomia";
+    }
+
+    @PostMapping("/taxonomia/{id}/editar")
+    @ResponseBody
+    public String editarTopico(@PathVariable Long id,
+            @RequestParam String topico,
+            @RequestParam(required = false) String observacoes) {
+        try {
+            com.example.PlataformaDarcy.model.ConteudoProgramatico cp = taxonomiaService.buscarPorId(id);
+            cp.setTopico(topico);
+            cp.setObservacoes(observacoes);
+            taxonomiaService.salvar(cp);
+            return "{\"status\":\"OK\"}";
+        } catch (Exception e) {
+            return "{\"status\":\"ERROR\",\"message\":\"" + e.getMessage() + "\"}";
+        }
+    }
+
+    @PostMapping("/taxonomia/{id}/excluir")
+    public String excluirTopico(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            taxonomiaService.excluir(id);
+            ra.addFlashAttribute("sucesso", "Tópico excluído com sucesso!");
+        } catch (Exception e) {
+            ra.addFlashAttribute("erro", "Erro ao excluir: " + e.getMessage());
+        }
+        return "redirect:/admin/taxonomia";
     }
 }

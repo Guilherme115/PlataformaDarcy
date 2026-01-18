@@ -1,0 +1,388 @@
+[
+    {
+        "id": "bio_taxonomia",
+        "disciplina": "BIOLOGIA",
+        "topico": "Taxonomia e Classificação dos Seres Vivos",
+        "prompt_tecnico": "Elabore uma questão sobre os critérios de classificação biológica, níveis taxonômicos (Reino, Filo, Classe, Ordem, Família, Gênero, Espécie) e nomenclatura binomial de Lineu. Inclua comparação entre sistemas de classificação e filogenia.",
+        "tags": [
+            "BIOLOGIA",
+            "TAXONOMIA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "bio_zoologia",
+        "disciplina": "BIOLOGIA",
+        "topico": "Zoologia - Filos do Reino Animal",
+        "prompt_tecnico": "Crie uma questão comparando características dos principais filos animais (Poríferos, Cnidários, Platelmintos, Nematódeos, Anelídeos, Moluscos, Artrópodes, Equinodermos, Cordados). Foque em sistemas digestório, respiratório e reprodutivo.",
+        "tags": [
+            "BIOLOGIA",
+            "ZOOLOGIA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "bio_microbiologia",
+        "disciplina": "BIOLOGIA",
+        "topico": "Microbiologia - Vírus, Bactérias e Protozoários",
+        "prompt_tecnico": "Desenvolva questão sobre estrutura e reprodução de microrganismos. Aborde a diferença entre vírus e seres vivos, doenças causadas por bactérias e protozoários, e mecanismos de transmissão e prevenção.",
+        "tags": [
+            "BIOLOGIA",
+            "MICROBIOLOGIA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "bio_botanica",
+        "disciplina": "BIOLOGIA",
+        "topico": "Botânica - Morfologia e Fisiologia Vegetal",
+        "prompt_tecnico": "Elabore questão sobre grupos vegetais (Briófitas, Pteridófitas, Gimnospermas, Angiospermas), ciclos reprodutivos e fisiologia vegetal (fotossíntese, transpiração, condução de seiva). Relacione com adaptações ao ambiente.",
+        "tags": [
+            "BIOLOGIA",
+            "BOTANICA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "qui_inorganica",
+        "disciplina": "QUIMICA",
+        "topico": "Química Inorgânica - Funções e Reações",
+        "prompt_tecnico": "Crie questão sobre funções inorgânicas (ácidos, bases, sais, óxidos), nomenclatura e reações químicas características. Inclua aplicações práticas como chuva ácida, neutralização e processos industriais.",
+        "tags": [
+            "QUIMICA",
+            "INORGANICA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "qui_solucoes",
+        "disciplina": "QUIMICA",
+        "topico": "Soluções e Concentração",
+        "prompt_tecnico": "Desenvolva problema sobre concentração de soluções (g/L, mol/L, % massa, ppm), diluição e mistura de soluções. Contextualize com situações práticas como preparo de medicamentos ou análises de água.",
+        "tags": [
+            "QUIMICA",
+            "SOLUCOES",
+            "MATEMATICA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "qui_termoquimica",
+        "disciplina": "QUIMICA",
+        "topico": "Termoquímica - Calor nas Reações",
+        "prompt_tecnico": "Elabore questão sobre entalpia, Lei de Hess, energia de ligação e variação de entalpia em reações exotérmicas e endotérmicas. Relacione com combustíveis, alimentos e processos industriais.",
+        "tags": [
+            "QUIMICA",
+            "TERMOQUIMICA",
+            "FISICA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "fis_termologia",
+        "disciplina": "FISICA",
+        "topico": "Termologia - Calor e Temperatura",
+        "prompt_tecnico": "Crie questão sobre conceitos de temperatura, escalas termométricas, dilatação térmica e propagação de calor (condução, convecção, radiação). Inclua cálculos de quantidade de calor e mudanças de estado.",
+        "tags": [
+            "FISICA",
+            "TERMOLOGIA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "fis_optica",
+        "disciplina": "FISICA",
+        "topico": "Óptica Geométrica e Física",
+        "prompt_tecnico": "Desenvolva questão sobre reflexão, refração, espelhos e lentes. Aborde formação de imagens, defeitos da visão e instrumentos ópticos (lupas, microscópios, telescópios). Inclua fenômenos como dispersão da luz.",
+        "tags": [
+            "FISICA",
+            "OPTICA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "fis_ondulatoria",
+        "disciplina": "FISICA",
+        "topico": "Ondulatória - Ondas Mecânicas e Sonoras",
+        "prompt_tecnico": "Elabore questão sobre características das ondas (frequência, período, comprimento, velocidade), classificação (mecânicas/eletromagnéticas, transversais/longitudinais) e fenômenos ondulatórios (reflexão, refração, difração, interferência).",
+        "tags": [
+            "FISICA",
+            "ONDULATORIA",
+            "NATUREZA_GERAL"
+        ]
+    },
+    {
+        "id": "mat_trigonometria",
+        "disciplina": "MATEMATICA",
+        "topico": "Função Trigonométrica",
+        "prompt_tecnico": "Crie problema envolvendo funções seno, cosseno e tangente. Aborde características dos gráficos (período, amplitude, fase), equações trigonométricas e aplicações em fenômenos periódicos (ondas, marés).",
+        "tags": [
+            "MATEMATICA",
+            "TRIGONOMETRIA",
+            "FUNCOES"
+        ]
+    },
+    {
+        "id": "mat_geometria_espacial",
+        "disciplina": "MATEMATICA",
+        "topico": "Geometria Espacial - Sólidos Geométricos",
+        "prompt_tecnico": "Desenvolva questão sobre cálculo de áreas e volumes de sólidos (prismas, pirâmides, cilindros, cones, esferas). Inclua relações entre elementos e inscrição/circunscrição de sólidos.",
+        "tags": [
+            "MATEMATICA",
+            "GEOMETRIA",
+            "ESPACIAL"
+        ]
+    },
+    {
+        "id": "mat_combinatoria",
+        "disciplina": "MATEMATICA",
+        "topico": "Análise Combinatória",
+        "prompt_tecnico": "Elabore problema sobre princípio fundamental da contagem, permutações, arranjos e combinações. Contextualize com situações práticas como senhas, equipes ou sequências ordenadas.",
+        "tags": [
+            "MATEMATICA",
+            "COMBINATORIA",
+            "PROBABILIDADE"
+        ]
+    },
+    {
+        "id": "mat_probabilidade",
+        "disciplina": "MATEMATICA",
+        "topico": "Probabilidade",
+        "prompt_tecnico": "Crie questão sobre conceitos de probabilidade, eventos independentes e dependentes, probabilidade condicional e a regra do produto. Relacione com Análise Combinatória quando apropriado.",
+        "tags": [
+            "MATEMATICA",
+            "PROBABILIDADE",
+            "ESTATISTICA"
+        ]
+    },
+    {
+        "id": "mat_estatistica",
+        "disciplina": "MATEMATICA",
+        "topico": "Estatística Descritiva",
+        "prompt_tecnico": "Desenvolva problema envolvendo análise de dados: medidas de tendência central (média, mediana, moda), medidas de dispersão (variância, desvio padrão) e interpretação de gráficos e tabelas.",
+        "tags": [
+            "MATEMATICA",
+            "ESTATISTICA",
+            "GRAFICOS"
+        ]
+    },
+    {
+        "id": "his_brasil_imperio",
+        "disciplina": "HISTORIA",
+        "topico": "Brasil Império (1822-1889)",
+        "prompt_tecnico": "Elabore questão sobre o período imperial brasileiro: Primeiro Reinado, Período Regencial, Segundo Reinado, política do café, escravidão e abolição, Guerra do Paraguai e crise do Império. Relacione economia, política e sociedade.",
+        "tags": [
+            "HISTORIA",
+            "BRASIL",
+            "IMPERIO",
+            "ECONOMIA"
+        ]
+    },
+    {
+        "id": "his_revolucao_industrial",
+        "disciplina": "HISTORIA",
+        "topico": "Revolução Industrial",
+        "prompt_tecnico": "Crie questão sobre as fases da Revolução Industrial, transformações tecnológicas, sociais e econômicas. Aborde o surgimento do proletariado, urbanização, ludismo, cartismo e as origens do socialismo.",
+        "tags": [
+            "HISTORIA",
+            "EUROPA",
+            "ECONOMIA",
+            "INDUSTRIA"
+        ]
+    },
+    {
+        "id": "his_revolucao_francesa",
+        "disciplina": "HISTORIA",
+        "topico": "Revolução Francesa",
+        "prompt_tecnico": "Desenvolva questão sobre causas, fases e consequências da Revolução Francesa. Aborde os ideais iluministas, a Queda da Bastilha, o Terror, e o legado para os movimentos liberais do século XIX.",
+        "tags": [
+            "HISTORIA",
+            "EUROPA",
+            "POLITICA",
+            "ILUMINISMO"
+        ]
+    },
+    {
+        "id": "his_napoleao",
+        "disciplina": "HISTORIA",
+        "topico": "Período Napoleônico",
+        "prompt_tecnico": "Elabore questão sobre a ascensão de Napoleão, o Consulado, o Império, as guerras napoleônicas, o Bloqueio Continental e a queda de Napoleão. Relacione com a vinda da família real ao Brasil.",
+        "tags": [
+            "HISTORIA",
+            "EUROPA",
+            "POLITICA",
+            "BRASIL"
+        ]
+    },
+    {
+        "id": "his_europa_xix",
+        "disciplina": "HISTORIA",
+        "topico": "Europa no Século XIX",
+        "prompt_tecnico": "Crie questão sobre os movimentos liberais e nacionalistas do século XIX: Congresso de Viena, Primavera dos Povos, unificações italiana e alemã. Aborde as ideologias políticas do período.",
+        "tags": [
+            "HISTORIA",
+            "EUROPA",
+            "POLITICA",
+            "NACIONALISMO"
+        ]
+    },
+    {
+        "id": "his_america_xix",
+        "disciplina": "HISTORIA",
+        "topico": "América no Século XIX",
+        "prompt_tecnico": "Desenvolva questão sobre os processos de independência na América Latina, a Doutrina Monroe, a expansão territorial dos EUA, a Guerra Civil Americana e o imperialismo estadunidense.",
+        "tags": [
+            "HISTORIA",
+            "AMERICA",
+            "POLITICA",
+            "INDEPENDENCIA"
+        ]
+    },
+    {
+        "id": "his_neocolonialismo",
+        "disciplina": "HISTORIA",
+        "topico": "Neocolonialismo e Imperialismo",
+        "prompt_tecnico": "Elabore questão sobre a partilha da África e Ásia no século XIX, as justificativas ideológicas (darwinismo social, missão civilizadora), a Conferência de Berlim e os impactos nas regiões colonizadas.",
+        "tags": [
+            "HISTORIA",
+            "EUROPA",
+            "AFRICA",
+            "IMPERIALISMO"
+        ]
+    },
+    {
+        "id": "geo_capitalismo",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Fases do Capitalismo",
+        "prompt_tecnico": "Crie questão sobre as fases do capitalismo (comercial, industrial, financeiro/monopolista) e suas características. Relacione com transformações no espaço geográfico, divisão internacional do trabalho e globalização.",
+        "tags": [
+            "GEOGRAFIA",
+            "ECONOMIA",
+            "INDUSTRIA"
+        ]
+    },
+    {
+        "id": "geo_industrializacao",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Industrialização e Estruturas Produtivas",
+        "prompt_tecnico": "Desenvolva questão sobre modelos de produção (fordismo, toyotismo), tipos de indústria, localização industrial e industrialização brasileira. Aborde a desconcentração industrial e os tecnopolos.",
+        "tags": [
+            "GEOGRAFIA",
+            "ECONOMIA",
+            "INDUSTRIA",
+            "BRASIL"
+        ]
+    },
+    {
+        "id": "geo_urbana",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Regionalização e Geografia Urbana",
+        "prompt_tecnico": "Elabore questão sobre hierarquia urbana, redes de cidades, metropolização, conurbação e problemas urbanos brasileiros. Inclua conceitos de segregação socioespacial e planejamento urbano.",
+        "tags": [
+            "GEOGRAFIA",
+            "URBANIZACAO",
+            "BRASIL",
+            "CIDADE"
+        ]
+    },
+    {
+        "id": "geo_agraria",
+        "disciplina": "GEOGRAFIA",
+        "topico": "Geografia Agrária e Espaço Rural",
+        "prompt_tecnico": "Crie questão sobre estrutura fundiária brasileira, modernização agrícola, agronegócio versus agricultura familiar, reforma agrária e conflitos no campo. Relacione com impactos ambientais.",
+        "tags": [
+            "GEOGRAFIA",
+            "AGRARIA",
+            "BRASIL",
+            "MEIO_AMBIENTE"
+        ]
+    },
+    {
+        "id": "port_morfossintaxe",
+        "disciplina": "PORTUGUES",
+        "topico": "Morfossintaxe do Período Simples e Composto",
+        "prompt_tecnico": "Desenvolva questão sobre análise sintática: termos essenciais, integrantes e acessórios da oração. Aborde orações coordenadas e subordinadas, conectivos e relações de sentido entre orações.",
+        "tags": [
+            "PORTUGUES",
+            "GRAMATICA",
+            "SINTAXE"
+        ]
+    },
+    {
+        "id": "port_pontuacao",
+        "disciplina": "PORTUGUES",
+        "topico": "Pontuação",
+        "prompt_tecnico": "Elabore questão sobre uso de vírgula, ponto e vírgula, dois-pontos, travessão e aspas. Relacione a pontuação com a estrutura sintática e os efeitos de sentido no texto.",
+        "tags": [
+            "PORTUGUES",
+            "GRAMATICA",
+            "PONTUACAO"
+        ]
+    },
+    {
+        "id": "port_semantica",
+        "disciplina": "PORTUGUES",
+        "topico": "Semântica",
+        "prompt_tecnico": "Crie questão sobre relações de sentido: sinonímia, antonímia, polissemia, homonímia, paronímia, ambiguidade. Inclua análise de sentido conotativo e denotativo em textos.",
+        "tags": [
+            "PORTUGUES",
+            "SEMANTICA",
+            "INTERPRETACAO"
+        ]
+    },
+    {
+        "id": "port_generos",
+        "disciplina": "PORTUGUES",
+        "topico": "Tipos e Gêneros Textuais",
+        "prompt_tecnico": "Desenvolva questão sobre tipologia textual (narração, descrição, dissertação, injunção) e gêneros textuais diversos. Peça identificação de características e propósitos comunicativos.",
+        "tags": [
+            "PORTUGUES",
+            "GENEROS",
+            "TEXTO"
+        ]
+    },
+    {
+        "id": "lit_romantismo",
+        "disciplina": "LITERATURA",
+        "topico": "Romantismo Brasileiro",
+        "prompt_tecnico": "Elabore questão comparando as três gerações do Romantismo brasileiro: Indianismo (Gonçalves Dias), Ultrarromantismo (Álvares de Azevedo) e Condoreirismo (Castro Alves). Analise características temáticas e estilísticas.",
+        "tags": [
+            "LITERATURA",
+            "ROMANTISMO",
+            "POESIA"
+        ]
+    },
+    {
+        "id": "lit_realismo_naturalismo",
+        "disciplina": "LITERATURA",
+        "topico": "Realismo e Naturalismo",
+        "prompt_tecnico": "Crie questão sobre as diferenças entre Realismo e Naturalismo, analisando obras de Machado de Assis (Realismo) e Aluísio Azevedo (Naturalismo). Foque em técnicas narrativas e visões de mundo.",
+        "tags": [
+            "LITERATURA",
+            "REALISMO",
+            "NATURALISMO"
+        ]
+    },
+    {
+        "id": "lit_parnasianismo_simbolismo",
+        "disciplina": "LITERATURA",
+        "topico": "Parnasianismo e Simbolismo",
+        "prompt_tecnico": "Desenvolva questão comparando Parnasianismo (Olavo Bilac, Raimundo Correia) e Simbolismo (Cruz e Sousa, Alphonsus de Guimaraens). Analise a busca pela forma perfeita versus a expressão do subjetivo.",
+        "tags": [
+            "LITERATURA",
+            "PARNASIANISMO",
+            "SIMBOLISMO"
+        ]
+    },
+    {
+        "id": "port_interpretacao",
+        "disciplina": "PORTUGUES",
+        "topico": "Interpretação de Texto",
+        "prompt_tecnico": "Elabore questão de interpretação textual envolvendo inferência, identificação de tese, argumentos, recursos persuasivos e intencionalidade do autor. Use texto de opinião ou artigo jornalístico.",
+        "tags": [
+            "PORTUGUES",
+            "INTERPRETACAO",
+            "ARGUMENTACAO"
+        ]
+    }
+]

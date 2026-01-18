@@ -44,8 +44,13 @@ public class AdminService {
         data.put("kpi_revenue", String.format("R$ %.2f", totalUsers * 29.90)); // Mock de Receita (MRR Potencial)
         data.put("kpi_uptime", "99.98%"); // Mock de Infra
 
+        // REAL: Simulados iniciados hoje (desde meia-noite)
+        long simuladosHoje = simuladoRepo.countByDataInicioAfter(java.time.LocalDate.now().atStartOfDay());
+        data.put("kpi_simulados_hoje", simuladosHoje);
+
         // 2. TENDÊNCIA DE CRESCIMENTO (GRÁFICO PRINCIPAL)
-        // Simulando dados dos últimos 7 dias para o gráfico
+        // Simulando dados dos últimos 7 dias para o gráfico (Mantido Mock para gráfico
+        // por enquanto)
         List<String> labels = new ArrayList<>();
         List<Integer> seriesUsers = new ArrayList<>();
         List<Integer> seriesSimulados = new ArrayList<>();

@@ -55,6 +55,29 @@ public class Usuario implements UserDetails {
 
     private java.time.LocalDateTime dataExpiracaoPlano;
 
+    // === QUOTAS DE USO (PROTEÇÃO DE CUSTO) ===
+
+    /**
+     * Quantidade de mensagens IA usadas hoje.
+     * Reseta automaticamente todo dia às 00:00.
+     */
+    @Column(nullable = false)
+    private Integer quotaIaMensagensHoje = 0;
+
+    /**
+     * Quantidade de podcasts gerados este mês.
+     * Reseta automaticamente todo dia 1.
+     */
+    @Column(nullable = false)
+    private Integer quotaPodcastsMes = 0;
+
+    /**
+     * Data da última vez que usou IA (para resetar quota diária).
+     */
+    private java.time.LocalDate dataUltimoUsoIA;
+
+    // === MÉTODOS DE VERIFICAÇÃO DE PLANO ===
+
     /**
      * Verifica se o usuário tem plano PRO ativo.
      */
@@ -66,9 +89,58 @@ public class Usuario implements UserDetails {
         return dataExpiracaoPlano.isAfter(java.time.LocalDateTime.now());
     }
 
+    /**
+     * Verifica se tem algum plano pago (ESTUDANTE ou PRO).
+     */
+    public boolean isEstudanteOuPro() {
+        return plano == TipoPlano.ESTUDANTE || plano == TipoPlano.PRO;
+    }
+
+    /**
+     * Retorna limite diário de mensagens IA baseado no plano.
+     */
+    public int getLimiteMensagensIA() {
+        return switch (plano) {
+            case FREE -> 0; // Sem acesso à IA
+            case ESTUDANTE -> 100; // 100 mensagens/dia
+            case PRO -> 999999; // "Ilimitado" (número grande)
+        };
+    }
+
+    /**
+     * Retorna limite mensal de podcasts baseado no plano.
+     */
+    public int getLimitePodcastsMes() {
+        return switch (plano) {
+            case FREE -> 0; // Sem acesso a podcasts
+            case ESTUDANTE -> 5; // 5 podcasts/mês
+            case PRO -> 999999; // "Ilimitado"
+        };
+    }
+
+    /**
+     * Verifica se usuário pode usar IA agora (respeitando quotas).
+     */
+    public boolean podeUsarIA() {
+        if (!isEstudanteOuPro())
+            return false;
+        return quotaIaMensagensHoje < getLimiteMensagensIA();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + perfil));
+        List<GrantedAuthority> authorities = new java.util.ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + perfil));
+
+        // Adiciona roles baseado no plano
+        if (plano == TipoPlano.ESTUDANTE) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ESTUDANTE"));
+        }
+        if (isPro()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_PRO"));
+        }
+
+        return authorities;
     }
 
     @Override

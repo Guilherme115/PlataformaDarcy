@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#f5f5f5]', showNav=false">
+
+<head>
+    <title>Gestão de Taxonomia - Darcy</title>
+
+    <th:block layout:fragment="head-extras">
+        <style>
+            /* STRICT NEO BRUTALIST THEME - Same as Dashboard */
+            .admin-sidebar {
+                background: white;
+                border-right: 3px solid black;
+            }
+
+            .admin-nav-item {
+                padding: 12px 16px;
+                margin: 4px 12px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: #666;
+                border: 2px solid transparent;
+                transition: all 0.1s;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .admin-nav-item:hover {
+                background: #f0f0f0;
+                color: black;
+                border: 2px solid black;
+                box-shadow: 2px 2px 0 black;
+                transform: translate(-1px, -1px);
+            }
+
+            .admin-nav-item.active {
+                background: #fbbf24;
+                color: black;
+                border: 2px solid black;
+                box-shadow: 2px 2px 0 black;
+                transform: translate(-1px, -1px);
+            }
+
+            .admin-card {
+                background: white;
+                border: 3px solid black;
+                box-shadow: 4px 4px 0 black;
+            }
+
+            .tab-button {
+                border: 3px solid black;
+                background: white;
+                padding: 12px 24px;
+                font-weight: 800;
+                text-transform: uppercase;
+                transition: all 0.15s;
+                cursor: pointer;
+            }
+
+            .tab-button:hover {
+                background: #f0f0f0;
+            }
+
+            .tab-button.active {
+                background: #fbbf24;
+                box-shadow: 3px 3px 0 black;
+                transform: translate(-2px, -2px);
+            }
+
+            textarea {
+                border: 3px solid black !important;
+                background: white !important;
+                font-family: 'JetBrains Mono', monospace !important;
+                font-size: 13px !important;
+            }
+
+            textarea:focus {
+                background: #fffbeb !important;
+
+                outline: none !important;
+            }
+
+            .topic-item {
+                border: 2px solid black;
+                background: white;
+                padding: 12px;
+                margin-bottom: 8px;
+                box-shadow: 2px 2px 0 #ccc;
+                transition: all 0.15s;
+            }
+
+            .topic-item:hover {
+                box-shadow: 4px 4px 0 #ccc;
+                transform: translate(-1px, -1px);
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+
+    <div layout:fragment="content" class="flex min-h-screen">
+
+        <!-- SIDEBAR (Same as Dashboard) -->
+        <aside class="admin-sidebar w-64 flex flex-col shrink-0">
+
+            <!-- Logo Area -->
+            <div class="p-6 border-b-3 border-black bg-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-[#fbbf24] flex items-center justify-center border-3 border-black">
+                        <span class="font-serif font-black text-2xl text-black italic">D.</span>
+                    </div>
+                    <div>
+                        <div class="text-black font-black text-lg tracking-tight">DARCY</div>
+                        <div class="text-[10px] font-mono text-red-600 uppercase font-bold">Admin Panel</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 py-4 overflow-y-auto">
+                <div class="px-5 py-2 text-[10px] font-mono text-[#888] uppercase tracking-wider font-bold">Principal
+                </div>
+                <a href="/admin" class="admin-nav-item">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                </a>
+                <a href="/admin/usuarios" class="admin-nav-item">
+                    <i data-lucide="users" class="w-4 h-4"></i> Usuários
+                </a>
+                <a href="/admin/pdfs" class="admin-nav-item">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> Central PDFs
+                </a>
+
+                <div class="px-5 py-2 mt-4 text-[10px] font-mono text-[#888] uppercase tracking-wider font-bold">
+                    Conteúdo</div>
+                <a href="/cms" class="admin-nav-item">
+                    <i data-lucide="layers" class="w-4 h-4"></i> CMS / Provas
+                </a>
+                <a href="/admin/simulados-oficiais" class="admin-nav-item">
+                    <i data-lucide="cpu" class="w-4 h-4"></i> Simulados Oficiais
+                </a>
+                <a href="/admin/editora" class="admin-nav-item">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> Editora
+                </a>
+                <a href="/admin/transmissoes" class="admin-nav-item">
+                    <i data-lucide="radio" class="w-4 h-4"></i> Transmissões
+                </a>
+                <a href="/admin/taxonomia" class="admin-nav-item active">
+                    <i data-lucide="tags" class="w-4 h-4"></i> Taxonomia / Tags
+                </a>
+
+                <div class="px-5 py-2 mt-4 text-[10px] font-mono text-[#888] uppercase tracking-wider font-bold">Sistema
+                </div>
+                <a href="/admin/bugs" class="admin-nav-item">
+                    <i data-lucide="bug" class="w-4 h-4"></i> Bug Tracker
+                </a>
+                <a href="#" class="admin-nav-item">
+                    <i data-lucide="settings" class="w-4 h-4"></i> Configurações
+                </a>
+            </nav>
+
+            <!-- Footer User -->
+            <div class="p-4 border-t-3 border-black bg-white">
+                <a href="/"
+                    class="flex items-center gap-2 text-xs font-bold text-black uppercase hover:underline px-2 mb-2">
+                    <i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar ao Site
+                </a>
+                <form th:action="@{/logout}" method="post">
+                    <button
+                        class="w-full text-left flex items-center gap-2 text-xs font-bold text-red-600 uppercase hover:underline px-2">
+                        <i data-lucide="log-out" class="w-3 h-3"></i> Sair
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 p-8 overflow-y-auto">
+
+            <!-- Header -->
+            <header class="flex justify-between items-end mb-8 pb-4 border-b-3 border-black">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <i data-lucide="tags" class="w-6 h-6"></i>
+                        <span class="text-[11px] font-mono text-black uppercase font-bold tracking-wider">Gestão de
+                            Taxonomia</span>
+                    </div>
+                    <h1 class="text-5xl font-black text-black tracking-tighter">TAGS & CONTEÚDO PROGRAMÁTICO</h1>
+                </div>
+                <div class="text-right">
+                    <div class="text-[32px] font-black text-[#fbb 24] leading-none"
+                        style="-webkit-text-stroke: 1px black;">
+                        PAS 1/2/3
+                    </div>
+                </div>
+            </header>
+
+            <!-- Flash Messages -->
+            <div th:if="${sucesso}" class="admin-card bg-green-100 border-green-600 p-4 mb-6">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-800"></i>
+                    <span class="font-bold text-green-800" th:text="${sucesso}"></span>
+                </div>
+            </div>
+
+            <div th:if="${erro}" class="admin-card bg-red-100 border-red-600 p-4 mb-6">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-red-800"></i>
+                    <span class="font-bold text-red-800" th:text="${erro}"></span>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="admin-card p-6">
+                    <div class="text-[10px] font-mono text-[#666] uppercase font-bold mb-2">PAS 1 Tópicos</div>
+                    <div class="text-4xl font-black text-black" th:text="${totalPas1}">0</div>
+                </div>
+                <div class="admin-card p-6">
+                    <div class="text-[10px] font-mono text-[#666] uppercase font-bold mb-2">PAS 2 Tópicos</div>
+                    <div class="text-4xl font-black text-black" th:text="${totalPas2}">0</div>
+                </div>
+                <div class="admin-card p-6">
+                    <div class="text-[10px] font-mono text-[#666] uppercase font-bold mb-2">PAS 3 Tópicos</div>
+                    <div class="text-4xl font-black text-black" th:text="${totalPas3}">0</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-0 mb-6">
+                <button onclick="selectTab(1)" id="tab-1" class="tab-button active">PAS 1</button>
+                <button onclick="selectTab(2)" id=" tab-2" class="tab-button">PAS 2</button>
+                <button onclick="selectTab(3)" id="tab-3" class="tab-button">PAS 3</button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="grid grid-cols-2 gap-6">
+
+                <!-- LEFT: Parser -->
+                <div>
+                    <div class="bg-black text-white p-3 border-3 border-black border-b-0">
+                        <h3 class="font-black text-sm uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-4 h-4 text-[#fbbf24]"></i> Importar Texto
+                        </h3>
+                    </div>
+                    <div class="admin-card p-6">
+                        <p class="text-[10px] font-mono text-[#666] mb-4 leading-tight">
+                            Cole o texto formatado abaixo. Use o padrão:<br>
+                            <code class="bg-gray-100 px-1">*MATÉRIA no PAS [1/2/3]</code><br>
+                            seguido pelos tópicos (um por linha)
+                        </p>
+
+                        <form th:action="@{/admin/taxonomia/parse}" method="post">
+                            <input type="hidden" name="etapa" id="input-etapa" value="1">
+
+                            <textarea name="texto" id="textarea-input" rows="15" required class="w-full p-3 mb-4"
+                                placeholder="*QUÍMICA no PAS 1&#10;Química Geral&#10;Leis Ponderais&#10;Tabela Periódica&#10;&#10;*FÍSICA no PAS 1&#10;Cinemática&#10;Dinâmica"></textarea>
+
+                            <div class="mb-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" name="substituir" value="true"
+                                        class="w-4 h-4 border-2 border-black">
+                                    <span class="text-xs font-bold uppercase">Substituir conteúdos existentes</span>
+                                </label>
+                                <p class="text-[9px] font-mono text-red-600 mt-1">⚠️ Cuidado: isso apaga tudo da etapa
+                                    selecionada!</p>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full bg-black text-white py-4 font-black uppercase border-3 border-black hover:bg-[#fbbf24] hover:text-black transition shadow-[4px_4px_0px_0px_#333] active:translate-y-1 active:shadow-none flex items-center justify-center gap-2">
+                                <i data-lucide="zap" class="w-5 h-5"></i> PROCESSAR TEXTO
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Existing Topics -->
+                <div>
+                    <div class="bg-black text-white p-3 border-3 border-black border-b-0">
+                        <h3 class="font-black text-sm uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="list" class="w-4 h-4 text-[#fbbf24]"></i> Tópicos Existentes
+                        </h3>
+                    </div>
+                    <div class="admin-card p-6 overflow-y-auto max-h-[600px]" id="topics-container">
+                        <!-- Topics will be loaded here via HTMX or page reload -->
+                        <div th:if="${#lists.isEmpty(conteudosPas1)}" class="text-center py-10 opacity-50">
+                            <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2"></i>
+                            <p class="font-mono text-xs uppercase">Nenhum tópico cadastrado ainda</p>
+                        </div>
+
+                        <!-- PAS 1 Topics -->
+                        <div id="topics-pas1" th:unless="${#lists.isEmpty(conteudosPas1)}">
+                            <div th:each="cp : ${conteudosPas1}" class="topic-item">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-bold text-xs bg-black text-white px-2 py-1"
+                                        th:text="${cp.materia}">MATÉRIA</span>
+                                    <form th:action="@{'/admin/taxonomia/' + ${cp.id} + '/excluir'}" method="post"
+                                        class="inline" onsubmit="return confirm('Confirma exclusão?')">
+                                        <button type="submit" class="text-red-600 hover:underline text-xs font-bold">
+                                            <i data-lucide="trash-2" class="w-3 h-3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="text-sm font-bold" th:text="${cp.topico}">Tópico</div>
+                                <div th:if="${cp.observacoes}" class="text-[10px] font-mono text-gray-600 mt-1"
+                                    th:text="'(' + ${cp.observacoes} + ')'"></div>
+                            </div>
+                        </div>
+
+                        <!-- PAS 2 Topics -->
+                        <div id="topics-pas2" style="display:none" th:unless="${#lists.isEmpty(conteudosPas2)}">
+                            <div th:each="cp : ${conteudosPas2}" class="topic-item">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-bold text-xs bg-black text-white px-2 py-1"
+                                        th:text="${cp.materia}">MATÉRIA</span>
+                                    <form th:action="@{'/admin/taxonomia/' + ${cp.id} + '/excluir'}" method="post"
+                                        class="inline" onsubmit="return confirm('Confirma exclusão?')">
+                                        <button type="submit" class="text-red-600 hover:underline text-xs font-bold">
+                                            <i data-lucide="trash-2" class="w-3 h-3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="text-sm font-bold" th:text="${cp.topico}">Tópico</div>
+                                <div th:if="${cp.observacoes}" class="text-[10px] font-mono text-gray-600 mt-1"
+                                    th:text="'(' + ${cp.observacoes} + ')'"></div>
+                            </div>
+                        </div>
+
+                        <!-- PAS 3 Topics -->
+                        <div id="topics-pas3" style="display:none" th:unless="${#lists.isEmpty(conteudosPas3)}">
+                            <div th:each="cp : ${conteudosPas3}" class="topic-item">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-bold text-xs bg-black text-white px-2 py-1"
+                                        th:text="${cp.materia}">MATÉRIA</span>
+                                    <form th:action="@{'/admin/taxonomia/' + ${cp.id} + '/excluir'}" method="post"
+                                        class="inline" onsubmit="return confirm('Confirma exclusão?')">
+                                        <button type="submit" class="text-red-600 hover:underline text-xs font-bold">
+                                            <i data-lucide="trash-2" class="w-3 h-3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="text-sm font-bold" th:text="${cp.topico}">Tópico</div>
+                                <div th:if="${cp.observacoes}" class="text-[10px] font-mono text-gray-600 mt-1"
+                                    th:text="'(' + ${cp.observacoes} + ')'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <th:block layout:fragment="page-scripts">
+        <script>
+            function selectTab(etapa) {
+                // Update tabs
+                ['tab-1', 'tab-2', 'tab-3'].forEach(id => {
+                    document.getElementById(id).classList.remove('active');
+                });
+                document.getElementById('tab-' + etapa).classList.add('active');
+
+                // Update hidden input
+                document.getElementById('input-etapa').value = etapa;
+
+                // Show/hide topics
+                ['topics-pas1', 'topics-pas2', 'topics-pas3'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                const selectedTopics = document.getElementById('topics-pas' + etapa);
+                if (selectedTopics) selectedTopics.style.display = 'block';
+            }
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', () => {
+                lucide.createIcons();
+            });
+        </script>
+    </th:block>
+
+</body>
+
+</html>

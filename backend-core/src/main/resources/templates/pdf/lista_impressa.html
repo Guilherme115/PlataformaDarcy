@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Lista de Questões - PAS</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
+            color: #000;
+            font-size: 10pt;
+            line-height: 1.3;
+        }
+
+        .header {
+            border: 3px solid #000;
+            padding: 8px;
+            margin-bottom: 10px;
+            background: #fff;
+            box-shadow: 4px 4px 0 #000;
+            page-break-after: avoid;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 6px;
+            margin-bottom: 6px;
+        }
+
+        .logo {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #000;
+            background: #fbbf24;
+            flex-shrink: 0;
+        }
+
+        .brand h1 {
+            font-size: 14pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-family: 'Arial Black', sans-serif;
+            line-height: 1.1;
+        }
+
+        .brand p {
+            font-size: 7pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        .header-info {
+            background: #f5f5f5;
+            border: 2px solid #000;
+            padding: 6px;
+            box-shadow: 2px 2px 0 #999;
+        }
+
+        .header-info h2 {
+            font-size: 11pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .info-grid {
+            display: flex;
+            gap: 12px;
+            font-size: 7pt;
+            font-weight: bold;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .instrucoes {
+            border: 2px solid #000;
+            padding: 6px;
+            margin-bottom: 8px;
+            background: #fffbeb;
+            page-break-after: avoid;
+        }
+
+        .instrucoes h3 {
+            font-size: 8pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            background: #000;
+            color: #fff;
+            padding: 2px 6px;
+            display: inline-block;
+        }
+
+        .instrucoes ul {
+            margin-left: 15px;
+            font-size: 7pt;
+            line-height: 1.3;
+        }
+
+        .instrucoes li {
+            margin-bottom: 1px;
+        }
+
+        .questao {
+            border: 2px solid #000;
+            padding: 8px;
+            margin-bottom: 8px;
+            page-break-inside: avoid;
+            background: #fff;
+            box-shadow: 2px 2px 0 #ccc;
+        }
+
+        .questao-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #000;
+        }
+
+        .questao-numero {
+            font-size: 12pt;
+            font-weight: 900;
+            background: #000;
+            color: #fff;
+            padding: 2px 8px;
+            display: inline-block;
+            box-shadow: 2px 2px 0 #666;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .questao-tags {
+            font-size: 6pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border: 1px solid #000;
+        }
+
+        .enunciado {
+            font-size: 9pt;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        .alternativas {
+            margin-top: 4px;
+        }
+
+        .alternativa {
+            display: flex;
+            gap: 6px;
+            padding: 3px;
+            margin-bottom: 2px;
+            border: 1px solid #e5e5e5;
+            background: #fafafa;
+        }
+
+        .alternativa-letra {
+            font-weight: 900;
+            font-size: 9pt;
+            min-width: 20px;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .alternativa-texto {
+            font-size: 9pt;
+            line-height: 1.3;
+        }
+
+        .espaco-resposta {
+            margin-top: 6px;
+            padding: 4px;
+            border: 1px dashed #999;
+            background: #f9f9f9;
+            min-height: 20px;
+        }
+
+        .espaco-resposta-label {
+            font-size: 7pt;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .folha-respostas {
+            page-break-before: always;
+            border: 3px solid #000;
+            padding: 10px;
+            background: #fff;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .folha-header {
+            text-align: center;
+            border-bottom: 2px dashed #999;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .folha-header h2 {
+            font-size: 14pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .folha-header p {
+            font-size: 7pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        .gabarito-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .gabarito-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px;
+            border: 2px solid #000;
+            background: #f5f5f5;
+        }
+
+        .gabarito-numero {
+            font-size: 10pt;
+            font-weight: 900;
+            min-width: 25px;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .gabarito-opcoes {
+            display: flex;
+            gap: 4px;
+        }
+
+        .opcao-bubble {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7pt;
+            font-weight: bold;
+        }
+
+        .info-aluno {
+            border: 2px solid #000;
+            padding: 8px;
+            margin-top: 10px;
+            background: #fffbeb;
+        }
+
+        .info-aluno-campo {
+            margin-bottom: 6px;
+        }
+
+        .info-aluno-label {
+            font-size: 7pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .info-aluno-linha {
+            border-bottom: 1px solid #000;
+            height: 18px;
+        }
+
+        .footer {
+            margin-top: 10px;
+            padding-top: 6px;
+            border-top: 1px solid #000;
+            text-align: center;
+            font-size: 7pt;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="header-top">
+            <div class="logo"></div>
+            <div class="brand">
+                <h1>PLATAFORMA DARCY</h1>
+                <p>Preparatório PAS/UnB</p>
+            </div>
+        </div>
+        <div class="header-info">
+            <h2 th:text="'LISTA DE QUESTÕES - PAS ' + ${etapa}">LISTA DE QUESTÕES - PAS 1</h2>
+            <div class="info-grid">
+                <div class="info-item"><span class="info-label">Data:</span> <span th:text="${data}">16/01/2026</span>
+                </div>
+                <div class="info-item"><span class="info-label">Questões:</span> <span th:text="${quantidade}">20</span>
+                </div>
+                <div class="info-item"><span class="info-label">Tempo:</span> <span
+                        th:text="${tempoSugerido} + ' min'">60 min</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="instrucoes">
+        <h3>✦ Instruções</h3>
+        <ul>
+            <li>Leia cada questão atentamente | Marque respostas na folha ao final | Tempo ~3min/questão</li>
+        </ul>
+    </div>
+
+    <div th:each="q, iterStat : ${questoes}" class="questao">
+        <div class="questao-header">
+            <div class="questao-numero" th:text="'Q. ' + (iterStat.index + 1)">Q. 01</div>
+            <div class="questao-tags" th:if="${q.tags != null}" th:text="${q.tags}">BIOLOGIA - GENÉTICA</div>
+        </div>
+
+        <div class="enunciado" th:utext="${q.enunciado}">Texto da questão...</div>
+
+        <div class="alternativas" th:if="${q.tipo.name() == 'C'}">
+            <div class="alternativa">
+                <div class="alternativa-letra">A)</div>
+                <div class="alternativa-texto" th:text="${q.getAltTexto('A')}">Alt A</div>
+            </div>
+            <div class="alternativa">
+                <div class="alternativa-letra">B)</div>
+                <div class="alternativa-texto" th:text="${q.getAltTexto('B')}">Alt B</div>
+            </div>
+            <div class="alternativa">
+                <div class="alternativa-letra">C)</div>
+                <div class="alternativa-texto" th:text="${q.getAltTexto('C')}">Alt C</div>
+            </div>
+            <div class="alternativa">
+                <div class="alternativa-letra">D)</div>
+                <div class="alternativa-texto" th:text="${q.getAltTexto('D')}">Alt D</div>
+            </div>
+        </div>
+
+        <div class="espaco-resposta" th:if="${q.tipo.name() != 'C'}">
+            <div class="espaco-resposta-label">
+                Resposta <span th:if="${q.tipo.name() == 'A'}">(C/E)</span>
+                <span th:if="${q.tipo.name() == 'B' or q.tipo.name() == 'D'}">(Numérica)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="folha-respostas">
+        <div class="folha-header">
+            <h2>✂ FOLHA DE RESPOSTAS</h2>
+            <p>Destaque e preencha</p>
+        </div>
+
+        <div class="gabarito-grid">
+            <div th:each="q, iterStat : ${questoes}" th:if="${q.tipo.name() == 'C'}" class="gabarito-item">
+                <div class="gabarito-numero" th:text="(iterStat.index + 1)">01</div>
+                <div class="gabarito-opcoes">
+                    <div class="opcao-bubble">A</div>
+                    <div class="opcao-bubble">B</div>
+                    <div class="opcao-bubble">C</div>
+                    <div class="opcao-bubble">D</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-aluno">
+            <div class="info-aluno-campo">
+                <div class="info-aluno-label">Nome:</div>
+                <div class="info-aluno-linha"></div>
+            </div>
+            <div class="info-aluno-campo">
+                <div class="info-aluno-label">Data:</div>
+                <div class="info-aluno-linha" style="max-width: 150px;"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>PLATAFORMA DARCY</strong> | @plataformadarcy | (61) 99999-9999</p>
+        </div>
+    </div>
+
+    <!-- GABARITO OFICIAL (DESTACÁVEL) -->
+    <div class="folha-respostas" style="page-break-before: always; background: #fffbeb; border-color: #f59e0b;">
+        <div class="folha-header" style="border-color: #f59e0b;">
+            <h2 style="color: #b45309;">✂ GABARITO OFICIAL - DESTACAR</h2>
+            <p style="color: #b45309;">Guarde para conferir suas respostas depois</p>
+        </div>
+
+        <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 8px; margin-bottom: 10px;">
+            <div th:each="q, iterStat : ${questoes}"
+                style="display: flex; gap: 15px; padding: 4px; margin-bottom: 3px; border-bottom: 1px dashed #fbbf24;">
+                <div style="font-size: 9pt; font-weight: 900; min-width: 30px; font-family: 'Arial Black', sans-serif;">
+                    Q.<span th:text="(iterStat.index + 1)">01</span>
+                </div>
+                <div style="font-size: 9pt; font-weight: 900; min-width: 25px; color: #b45309;">
+                    <span th:if="${q.tipo.name() == 'C'}" th:text="${q.gabarito}">B</span>
+                    <span th:if="${q.tipo.name() == 'A'}" th:text="${q.gabarito}">C</span>
+                    <span th:if="${q.tipo.name() == 'B' or q.tipo.name() == 'D'}" th:text="${q.gabarito}">42</span>
+                </div>
+                <div style="font-size: 7pt; color: #92400e; flex: 1;" th:if="${q.tags != null}" th:text="${q.tags}">
+                    BIOLOGIA - GENÉTICA
+                </div>
+            </div>
+        </div>
+
+        <div style="border: 2px solid #f59e0b; background: #fff; padding: 8px; margin-top: 10px;">
+            <div
+                style="font-size: 8pt; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; color: #b45309;">
+                📊 Legenda dos Tipos:
+            </div>
+            <div style="font-size: 7pt; line-height: 1.4;">
+                <strong>Tipo A:</strong> Certo/Errado (C/E)<br />
+                <strong>Tipo B/D:</strong> Resposta Numérica<br />
+                <strong>Tipo C:</strong> Múltipla Escolha (A, B, C, D)
+            </div>
+        </div>
+
+        <div class="footer" style="border-color: #f59e0b; color: #b45309;">
+            <p><strong>⚠️ DICA:</strong> Destaque esta página ANTES de fazer a prova!</p>
+        </div>
+    </div>
+
+</body>
+
+</html>

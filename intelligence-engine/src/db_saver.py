@@ -33,15 +33,29 @@ class DatabaseSaver:
             cursor = conexao.cursor(dictionary=True)
 
             try:
-                # 1. CRIAR OU RECUPERAR A PROVA
-                # O uk_prova (ano, etapa) garante que não duplicamos a prova
+                # 0. VERIFICAR E DELETAR PROVA EXISTENTE (evita duplicatas ao reprocessar)
+                cursor.execute("SELECT id FROM provas WHERE ano = %s AND etapa = %s", (ano, etapa))
+                prova_existente = cursor.fetchone()
+                
+                if prova_existente:
+                    prova_id_antiga = prova_existente['id']
+                    print(f"   ⚠️ Prova existente encontrada (ID: {prova_id_antiga}). Deletando dados antigos...")
+                    
+                    # Deleta em cascata: imagens -> questões -> blocos -> prova
+                    cursor.execute("DELETE FROM imagens_questoes WHERE questao_id IN (SELECT id FROM questoes WHERE prova_id = %s)", (prova_id_antiga,))
+                    cursor.execute("DELETE FROM questoes WHERE prova_id = %s", (prova_id_antiga,))
+                    cursor.execute("DELETE FROM blocos WHERE prova_id = %s", (prova_id_antiga,))
+                    cursor.execute("DELETE FROM provas WHERE id = %s", (prova_id_antiga,))
+                    conexao.commit()
+                    print(f"   ✅ Dados antigos removidos com sucesso!")
+
+                # 1. CRIAR A PROVA
                 sql_prova = """
                             INSERT INTO provas (ano, etapa, nome_arquivo_pdf, titulo, origem)
-                            VALUES (%s, %s, %s, %s, 'PDF_INGESTAO') ON DUPLICATE KEY \
-                            UPDATE id=LAST_INSERT_ID(id), nome_arquivo_pdf=%s \
+                            VALUES (%s, %s, %s, %s, 'PDF_INGESTAO')
                             """
                 titulo_prova = f"PAS {etapa} - {ano}"
-                cursor.execute(sql_prova, (ano, etapa, nome_pdf, titulo_prova, nome_pdf))
+                cursor.execute(sql_prova, (ano, etapa, nome_pdf, titulo_prova))
                 prova_id = cursor.lastrowid
 
                 print(f"   -> Prova ID: {prova_id}")
@@ -63,17 +77,21 @@ class DatabaseSaver:
                         # Identificar Tipo: Se tem alternativas, é C (Múltipla Escolha). Se não, é A.
                         tipo_q = 'C' if (q['alternativas'] and len(q['alternativas']) > 0) else 'A'
                         alts_json = json.dumps(q['alternativas'], ensure_ascii=False)
+                        
+                        # Pré-popular tags com a disciplina do bloco
+                        tags_iniciais = disciplina if disciplina != "GERAL" else None
 
                         # Inserir Questão
                         sql_questao = """
-                                      INSERT INTO questoes (numero, enunciado, alternativas, status, tipo, bloco_id, prova_id)
-                                      VALUES (%s, %s, %s, 'PENDENTE', %s, %s, %s) \
+                                      INSERT INTO questoes (numero, enunciado, alternativas, status, tipo, tags, bloco_id, prova_id)
+                                      VALUES (%s, %s, %s, 'PENDENTE', %s, %s, %s, %s) \
                                       """
                         cursor.execute(sql_questao, (
                             q['numero'],
                             q['texto_enunciado'],
                             alts_json,
                             tipo_q,
+                            tags_iniciais,
                             bloco_id,
                             prova_id
                         ))

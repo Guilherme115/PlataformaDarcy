@@ -1,100 +1,134 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}"
-      th:with="bodyClass='h-screen flex overflow-hidden font-mono'">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}" th:with="bodyClass='h-screen flex overflow-hidden font-mono', showNav=false">
 
 <head>
     <title>Acesso - Plataforma Darcy</title>
     <th:block layout:fragment="head-extras">
-        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,900;1,300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,900;1,300&display=swap"
+            rel="stylesheet">
         <style>
-            .font-serif-quote { font-family: 'Merriweather', serif; }
-            .input-underline {
-                border: none; border-bottom: 3px solid black; background: transparent;
-                padding: 10px 0; outline: none; width: 100%; font-weight: bold; font-size: 1.1rem;
+            .font-serif-quote {
+                font-family: 'Merriweather', serif;
             }
-            .input-underline:focus { border-bottom-color: #fbbf24; }
+
+            .input-underline {
+                border: none;
+                border-bottom: 3px solid black;
+                background: transparent;
+                padding: 10px 0;
+                outline: none;
+                width: 100%;
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            .input-underline:focus {
+                border-bottom-color: #fbbf24;
+            }
         </style>
     </th:block>
 </head>
 
 <body>
-<div layout:fragment="content" class="flex w-full h-full p-0 m-0 max-w-none">
+    <div layout:fragment="content" class="flex w-full h-full p-0 m-0 max-w-none">
 
-    <div class="hidden lg:flex w-1/2 text-white flex-col justify-end p-20 relative bg-black"
-         style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.95)), url('/img/img.png');
+        <div class="hidden lg:flex w-1/2 text-white flex-col justify-end p-20 relative bg-black" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.95)), url('/img/img.png');
                     background-size: cover; background-position: center top;">
 
-        <div class="absolute top-10 left-10 w-20 h-1 bg-white"></div>
+            <div class="absolute top-10 left-10 w-20 h-1 bg-white"></div>
 
-        <div class="mb-10 relative z-10">
-            <h1 class="font-serif-quote text-5xl leading-tight mb-6 drop-shadow-lg">
-                “Só há duas opções nesta vida: se <span class="bg-white text-black px-1 italic">resignar</span> ou se <span class="border border-white px-1 italic">indignar</span>.
-            </h1>
-            <p class="font-serif-quote text-3xl italic opacity-90 mb-8 text-gray-200">
-                | E eu não vou me resignar nunca.”
-            </p>
-            <div class="flex items-center gap-4">
-                <div class="h-[2px] w-10 bg-white"></div>
-                <span class="uppercase tracking-widest text-sm font-bold shadow-black drop-shadow-md">Darcy Ribeiro</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center px-8 md:px-24 relative">
-
-        <div class="absolute top-10 right-10 border-2 border-black w-12 h-12 flex items-center justify-center font-bold text-xl">D.</div>
-
-        <div class="max-w-md w-full mx-auto">
-            <h2 class="text-4xl font-serif-quote font-black mb-2 text-black">Plataforma Darcy</h2>
-            <p class="text-xs font-bold tracking-[0.2em] uppercase text-gray-500 mb-12">Rede Social do Vestibulando UnB</p>
-
-            <div th:if="${param.error}" class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 text-xs font-bold" role="alert">
-                <p>ACESSO NEGADO. VERIFIQUE SUAS CREDENCIAIS.</p>
-            </div>
-
-            <form th:action="@{/login}" method="post" class="space-y-8">
-                <div class="group">
-                    <label class="block text-[10px] font-black uppercase tracking-widest mb-1">■ Matrícula / E-mail</label>
-                    <input type="text" name="username" placeholder="DIGITE SEU ACESSO" class="input-underline placeholder-gray-300 transition-colors">
-                </div>
-                <div class="group">
-                    <label class="block text-[10px] font-black uppercase tracking-widest mb-1">■ Senha de Segurança</label>
-                    <input type="password" name="password" placeholder="••••••••" class="input-underline placeholder-gray-300 transition-colors">
-                </div>
-                <button type="submit" class="w-full bg-black text-white py-4 text-xs font-black uppercase tracking-widest hover:bg-gray-800 transition-all shadow-hard hover:shadow-sm hover:translate-y-1 active:translate-y-2 active:shadow-none flex justify-between px-6 items-center">
-                    <span>Iniciar Aplicação</span>
-                    <span>→</span>
-                </button>
-            </form>
-
-            <div class="my-6 flex items-center gap-4">
-                <div class="h-px bg-gray-300 flex-1"></div>
-                <span class="text-[10px] font-bold text-gray-400 uppercase">Ou acesse com</span>
-                <div class="h-px bg-gray-300 flex-1"></div>
-            </div>
-
-            <a href="/oauth2/authorization/google" class="w-full bg-white border-2 border-black text-black py-4 text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all shadow-hard hover:shadow-sm hover:translate-y-1 active:translate-y-2 active:shadow-none flex justify-center items-center gap-3">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-                <span>Google</span>
-            </a>
-
-            <div class="mt-8 text-center border-t border-gray-200 pt-6">
-                <a href="/register" class="text-[10px] uppercase font-bold text-gray-400 hover:text-black transition">Primeiro acesso? Crie sua conta</a>
-                <span class="mx-2 text-gray-300">|</span>
-                <a href="/forgot-password" class="text-[10px] uppercase font-bold text-gray-400 hover:text-black transition">Esqueci a senha</a>
-            </div>
-
-            <div class="mt-12 text-[9px] text-gray-400 leading-relaxed font-mono">
-                <p class="mb-2"><span class="bg-black text-white px-1">AVISO DISCIPLINAR:</span> O compartilhamento de credenciais resultará no BANIMENTO PERMANENTE do IP.</p>
-                <div class="flex justify-between border-t border-gray-200 pt-2 mt-2">
-                    <span>STATUS: ONLINE</span>
-                    <span class="opacity-50">PROJETO INDEPENDENTE.</span>
+            <div class="mb-10 relative z-10">
+                <h1 class="font-serif-quote text-5xl leading-tight mb-6 drop-shadow-lg">
+                    “Só há duas opções nesta vida: se <span class="bg-white text-black px-1 italic">resignar</span> ou
+                    se <span class="border border-white px-1 italic">indignar</span>.
+                </h1>
+                <p class="font-serif-quote text-3xl italic opacity-90 mb-8 text-gray-200">
+                    | E eu não vou me resignar nunca.”
+                </p>
+                <div class="flex items-center gap-4">
+                    <div class="h-[2px] w-10 bg-white"></div>
+                    <span class="uppercase tracking-widest text-sm font-bold shadow-black drop-shadow-md">Darcy
+                        Ribeiro</span>
                 </div>
             </div>
         </div>
+
+        <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center px-8 md:px-24 relative">
+
+            <div
+                class="absolute top-10 right-10 border-2 border-black w-12 h-12 flex items-center justify-center font-bold text-xl">
+                D.</div>
+
+            <div class="max-w-md w-full mx-auto">
+                <h2 class="text-4xl font-serif-quote font-black mb-2 text-black">Plataforma Darcy</h2>
+                <p class="text-xs font-bold tracking-[0.2em] uppercase text-gray-500 mb-12">Rede Social do Vestibulando
+                    UnB</p>
+
+                <div th:if="${param.planoAtivado}"
+                    class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 text-xs font-bold"
+                    role="alert">
+                    <p>🎉 PLANO PRO ATIVADO COM SUCESSO! Faça login para acessar todos os recursos.</p>
+                </div>
+
+                <div th:if="${param.error}"
+                    class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 text-xs font-bold" role="alert">
+                    <p>ACESSO NEGADO. VERIFIQUE SUAS CREDENCIAIS.</p>
+                </div>
+
+                <form th:action="@{/login}" method="post" class="space-y-8">
+                    <div class="group">
+                        <label class="block text-[10px] font-black uppercase tracking-widest mb-1">■ Matrícula /
+                            E-mail</label>
+                        <input type="text" name="username" placeholder="DIGITE SEU ACESSO"
+                            class="input-underline placeholder-gray-300 transition-colors">
+                    </div>
+                    <div class="group">
+                        <label class="block text-[10px] font-black uppercase tracking-widest mb-1">■ Senha de
+                            Segurança</label>
+                        <input type="password" name="password" placeholder="••••••••"
+                            class="input-underline placeholder-gray-300 transition-colors">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-black text-white py-4 text-xs font-black uppercase tracking-widest hover:bg-gray-800 transition-all shadow-hard hover:shadow-sm hover:translate-y-1 active:translate-y-2 active:shadow-none flex justify-between px-6 items-center">
+                        <span>Iniciar Aplicação</span>
+                        <span>→</span>
+                    </button>
+                </form>
+
+                <div class="my-6 flex items-center gap-4">
+                    <div class="h-px bg-gray-300 flex-1"></div>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Ou acesse com</span>
+                    <div class="h-px bg-gray-300 flex-1"></div>
+                </div>
+
+                <a href="/oauth2/authorization/google"
+                    class="w-full bg-white border-2 border-black text-black py-4 text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all shadow-hard hover:shadow-sm hover:translate-y-1 active:translate-y-2 active:shadow-none flex justify-center items-center gap-3">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                    <span>Google</span>
+                </a>
+
+                <div class="mt-8 text-center border-t border-gray-200 pt-6">
+                    <a href="/register"
+                        class="text-[10px] uppercase font-bold text-gray-400 hover:text-black transition">Primeiro
+                        acesso? Crie sua conta</a>
+                    <span class="mx-2 text-gray-300">|</span>
+                    <a href="/forgot-password"
+                        class="text-[10px] uppercase font-bold text-gray-400 hover:text-black transition">Esqueci a
+                        senha</a>
+                </div>
+
+                <div class="mt-12 text-[9px] text-gray-400 leading-relaxed font-mono">
+                    <p class="mb-2"><span class="bg-black text-white px-1">AVISO DISCIPLINAR:</span> O compartilhamento
+                        de credenciais resultará no BANIMENTO PERMANENTE do IP.</p>
+                    <div class="flex justify-between border-t border-gray-200 pt-2 mt-2">
+                        <span>STATUS: ONLINE</span>
+                        <span class="opacity-50">PROJETO INDEPENDENTE.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </body>
+
 </html>

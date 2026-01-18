@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='bg-[#e5e5e5] text-black font-sans flex flex-col min-h-screen'">
+
+<head>
+    <title>Erro no Sistema - Darcy</title>
+</head>
+
+<body>
+    <div layout:fragment="content"
+        class="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+
+        <!-- Background Decoration -->
+        <div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center">
+            <span class="font-headline font-black text-[20rem] md:text-[30rem] italic text-darcy-red rotate-12">!</span>
+        </div>
+
+        <!-- Main Card -->
+        <div class="relative z-10 max-w-2xl w-full bg-white border-4 border-black shadow-hard p-8 md:p-12 text-center">
+
+            <!-- Warning Strip -->
+            <div
+                class="bg-darcy-red text-white border-2 border-black p-2 font-mono font-bold uppercase tracking-widest mb-8 shadow-sm transform -rotate-1">
+                ❌ Falha Crítica / Inesperada
+            </div>
+
+            <h1 class="font-headline font-black text-6xl md:text-8xl italic mb-4 text-darcy-black leading-none">
+                OPS!
+            </h1>
+
+            <h2
+                class="font-tech text-xl md:text-2xl font-bold uppercase mb-6 border-b-4 border-black pb-4 inline-block">
+                Erro de Processamento
+            </h2>
+
+            <div class="font-serif text-lg text-gray-700 mb-8 leading-relaxed px-4">
+                <p>O sistema encontrou uma instabilidade momentânea.</p>
+                <p class="text-sm mt-4 font-mono bg-gray-100 p-2 border border-gray-300 inline-block"
+                    th:if="${status} != null or ${error} != null">
+                    Código: <span th:text="${status}">500</span> // <span th:text="${error}">Internal Server
+                        Error</span>
+                </p>
+                <p class="text-xs text-gray-500 mt-2" th:if="${message}">
+                    Detalhe: <span th:text="${message}">...</span>
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="/"
+                    class="btn-action bg-black text-white px-8 py-4 font-tech font-bold uppercase border-2 border-black hover:bg-darcy-yellow hover:text-black transition shadow-hard-sm flex items-center justify-center gap-2">
+                    <i data-lucide="refresh-cw"></i> Reiniciar Sistema (Home)
+                </a>
+
+                <a href="https://wa.me/suporte" target="_blank"
+                    class="btn-action bg-white text-black px-8 py-4 font-tech font-bold uppercase border-2 border-black hover:bg-green-100 transition shadow-hard-sm flex items-center justify-center gap-2">
+                    <i data-lucide="life-buoy"></i> Suporte
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Footer decoration -->
+        <div class="mt-8 font-mono text-xs text-gray-500 uppercase tracking-widest">
+            Sistema Darcy // Fatal Exception Handler
+        </div>
+
+    </div>
+</body>
+
+</html>

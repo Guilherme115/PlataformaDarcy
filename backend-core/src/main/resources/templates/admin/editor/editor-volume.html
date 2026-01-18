@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/base}"
+    th:with="bodyClass='flex flex-col min-h-screen text-black font-serif bg-[#111]', showNav=false">
+
+<head>
+    <title>Editor de Livros - Darcy Studio</title>
+
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+
+    <th:block layout:fragment="head-extras">
+        <style>
+            /* Editor de 3 Colunas - Neo Brutalist Dark Theme */
+            .editor-container {
+                display: grid;
+                grid-template-columns: 250px 1fr 50%;
+                height: calc(100vh - 60px);
+                background: #111;
+            }
+
+            /* SIDEBAR - Lista de Páginas */
+            .sidebar-pages {
+                background: #1a1a1a;
+                border-right: 3px solid #333;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .page-card {
+                padding: 12px;
+                margin: 4px 8px;
+                background: #222;
+                border: 2px solid #333;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .page-card:hover {
+                border-color: #666;
+                transform: translateX(2px);
+            }
+
+            .page-card.active {
+                background: #fbbf24;
+                color: black;
+                border-color: #fbbf24;
+                font-weight: bold;
+                box-shadow: 2px 2px 0px 0px white;
+            }
+
+            /* EDITOR CENTRAL */
+            .editor-panel {
+                background: #0d0d0d;
+                border-right: 3px solid #333;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .editor-toolbar {
+                background: #1a1a1a;
+                border-bottom: 3px solid #333;
+                padding: 16px;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+            }
+
+            .editor-field label {
+                display: block;
+                font-size: 9px;
+                text-transform: uppercase;
+                font-weight: bold;
+                color: #888;
+                margin-bottom: 4px;
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .editor-field input,
+            .editor-field select {
+                width: 100%;
+                background: transparent;
+                border: none;
+                border-bottom: 2px solid #444;
+                color: white;
+                padding: 6px 0;
+                font-size: 14px;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+
+            .editor-field input:focus,
+            .editor-field select:focus {
+                border-bottom-color: #fbbf24;
+            }
+
+            .CodeMirror {
+                height: 100% !important;
+                font-size: 14px;
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            /* PREVIEW A4 */
+            .preview-panel {
+                background: #222;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                overflow: auto;
+                padding: 40px 20px;
+            }
+
+            .preview-controls {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                background: rgba(0, 0, 0, 0.8);
+                padding: 8px;
+                border-radius: 999px;
+                display: flex;
+                gap: 8px;
+                backdrop-filter: blur(10px);
+                z-index: 50;
+            }
+
+            .preview-controls button {
+                color: white;
+                padding: 6px;
+                border-radius: 4px;
+                transition: all 0.2s;
+            }
+
+            .preview-controls button:hover {
+                color: #fbbf24;
+            }
+
+            /* Página A4 */
+            .page-a4 {
+                width: 210mm;
+                height: 297mm;
+                background: white;
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+                position: relative;
+                color: black;
+                transition: transform 0.3s;
+            }
+
+            /* Crop Marks */
+            .crop-mark {
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                border-color: black;
+            }
+
+            .crop-mark.tl {
+                top: 0;
+                left: 0;
+                border-right: 2px solid;
+                border-bottom: 2px solid;
+            }
+
+            .crop-mark.tr {
+                top: 0;
+                right: 0;
+                border-left: 2px solid;
+                border-bottom: 2px solid;
+            }
+
+            .crop-mark.bl {
+                bottom: 0;
+                left: 0;
+                border-right: 2px solid;
+                border-top: 2px solid;
+            }
+
+            .crop-mark.br {
+                bottom: 0;
+                right: 0;
+                border-left: 2px solid;
+                border-top: 2px solid;
+            }
+
+            /* Layouts */
+            .layout-standard {
+                display: grid;
+                grid-template-columns: 1fr 60mm;
+                gap: 10mm;
+                padding: 25mm 20mm 20mm 20mm;
+            }
+
+            .layout-cover {
+                padding: 15mm;
+            }
+
+            .layout-toc {
+                padding: 25mm 20mm 20mm 20mm;
+            }
+
+            /* Botões de Ação */
+            .btn-primary {
+                background: white;
+                color: black;
+                padding: 10px 20px;
+                border: 2px solid black;
+                font-weight: bold;
+                font-size: 12px;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: all 0.2s;
+                box-shadow: 2px 2px 0px black;
+            }
+
+            .btn-primary:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 4px 4px 0px black;
+            }
+
+            .btn-danger {
+                background: transparent;
+                color: #ef4444;
+                border: 2px solid #ef4444;
+            }
+
+            .btn-danger:hover {
+                background: #ef4444;
+                color: white;
+            }
+
+            /* Grid background para preview */
+            .bg-grid-pattern {
+                background-image:
+                    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+                background-size: 20px 20px;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- HEADER -->
+        <header class="h-[60px] bg-[#1a1a1a] border-b-3 border-[#333] flex items-center justify-between px-6">
+            <div class="flex items-center gap-4">
+                <a href="/admin/editora" class="text-white hover:text-[#fbbf24] transition">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </a>
+                <div>
+                    <h1 class="text-[#fbbf24] font-black text-xl tracking-tighter">DARCY STUDIO</h1>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest">Editor de Livros</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="text-white font-mono text-sm"
+                    th:text="${volume.livro.titulo + ' - Vol ' + volume.numero}">Livro - Vol 1</span>
+
+                <button hx-get="@{/admin/editor/volume/{id}/exportar-pdf(id=${volume.id})}"
+                    class="btn-primary flex items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    Exportar PDF
+                </button>
+            </div>
+        </header>
+
+        <!-- EDITOR DE 3 COLUNAS -->
+        <div class="editor-container">
+
+            <!-- COLUNA 1: SIDEBAR - Lista de Páginas -->
+            <div class="sidebar-pages">
+                <div class="p-4 border-b-3 border-[#333]">
+                    <h2 class="text-white font-bold text-sm mb-3">Páginas</h2>
+
+                    <button hx-post="@{/admin/editor/volume/{id}/nova-pagina(id=${volume.id})}"
+                        hx-target="#lista-paginas" hx-swap="outerHTML"
+                        class="w-full bg-white text-black py-2 rounded text-xs font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        NOVA PÁGINA
+                    </button>
+                </div>
+
+                <div id="lista-paginas" class="flex-1 overflow-y-auto p-2">
+                    <div th:each="p : ${paginas}" th:classappend="${p.id == paginaAtiva?.id} ? 'active' : ''"
+                        class="page-card" hx-get="@{/admin/editor/pagina/{id}(id=${p.id})}" hx-target="#editor-area"
+                        hx-swap="outerHTML">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] uppercase tracking-widest opacity-70"
+                                th:text="${p.layout}">STANDARD</span>
+                            <span class="text-[10px] bg-black/20 px-1 rounded">Pág <span
+                                    th:text="${p.numeroPagina}">1</span></span>
+                        </div>
+                        <div class="truncate text-sm" th:text="${p.titulo}">Título da Página</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUNA 2: EDITOR HTML -->
+            <div class="editor-panel">
+                <div class="editor-toolbar">
+                    <div class="editor-field">
+                        <label>Título da Página</label>
+                        <input type="text" id="input-titulo" th:value="${paginaAtiva?.titulo}" placeholder="Título...">
+                    </div>
+
+                    <div class="editor-field">
+                        <label>Módulo / Cabeçalho</label>
+                        <input type="text" id="input-modulo" th:value="${paginaAtiva?.modulo}" placeholder="Módulo 01">
+                    </div>
+
+                    <div class="editor-field">
+                        <label>Layout</label>
+                        <select id="input-layout">
+                            <option value="STANDARD" th:selected="${paginaAtiva?.layout?.name() == 'STANDARD'}">Padrão
+                                (Texto + Lateral)</option>
+                            <option value="COVER" th:selected="${paginaAtiva?.layout?.name() == 'COVER'}">Capa (Full)
+                            </option>
+                            <option value="TOC" th:selected="${paginaAtiva?.layout?.name() == 'TOC'}">Sumário</option>
+                        </select>
+                    </div>
+
+                    <div class="editor-field">
+                        <label>Nº Página</label>
+                        <input type="number" id="input-numero" th:value="${paginaAtiva?.numeroPagina}" min="1">
+                    </div>
+                </div>
+
+                <div id="editor-area" class="flex-1 relative bg-[#0d0d0d]">
+                    <span
+                        class="absolute top-0 right-4 bg-[#fbbf24] text-black text-[9px] font-bold px-2 py-1 rounded-b z-10">HTML
+                        EDIT</span>
+                    <textarea id="html-editor" th:text="${paginaAtiva?.htmlContent}"></textarea>
+                </div>
+
+                <div class="p-4 border-t-3 border-[#333] bg-[#1a1a1a] flex gap-3">
+                    <button id="btn-salvar" class="btn-primary flex-1 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        SALVAR
+                    </button>
+
+                    <button hx-post="@{/admin/editor/pagina/{id}/duplicar(id=${paginaAtiva?.id})}"
+                        hx-target="#lista-paginas" hx-swap="outerHTML"
+                        class="btn-primary flex items-center justify-center gap-2 px-4">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        DUPLICAR
+                    </button>
+
+                    <button hx-delete="@{/admin/editor/pagina/{id}(id=${paginaAtiva?.id})}"
+                        hx-confirm="Tem certeza que deseja deletar esta página?"
+                        class="btn-danger flex items-center justify-center gap-2 px-4">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        DELETAR
+                    </button>
+                </div>
+            </div>
+
+            <!-- COLUNA 3: PREVIEW A4 -->
+            <div class="preview-panel bg-grid-pattern relative">
+                <div class="preview-controls">
+                    <button onclick="zoomOut()">
+                        <i data-lucide="zoom-out" class="w-4 h-4"></i>
+                    </button>
+                    <span id="zoom-level" class="text-xs font-mono text-white pt-1">75%</span>
+                    <button onclick="zoomIn()">
+                        <i data-lucide="zoom-in" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div id="preview-container" class="overflow-auto w-full h-full flex items-center justify-center p-10">
+                    <!-- Preview será carregado aqui via HTMX -->
+                    <div th:replace="~{admin/editor/fragments/preview-pagina :: preview-pagina}"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script>
+        // Inicializar CodeMirror
+        let editor;
+        let currentScale = 0.75;
+        let currentPageId = [[${ paginaAtiva?.id }]];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const textarea = document.getElementById('html-editor');
+            if (textarea) {
+                editor = CodeMirror.fromTextArea(textarea, {
+                    mode: 'htmlmixed',
+                    theme: 'monokai',
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    autoCloseTags: true,
+                    matchBrackets: true,
+                    indentUnit: 2,
+                    tabSize: 2
+                });
+
+                // Auto-preview a cada 2 segundos
+                let previewTimeout;
+                editor.on('change', function () {
+                    clearTimeout(previewTimeout);
+                    previewTimeout = setTimeout(updatePreview, 2000);
+                });
+            }
+
+            lucide.createIcons();
+        });
+
+        // Atualizar preview em tempo real
+        function updatePreview() {
+            const htmlContent = editor.getValue();
+            const titulo = document.getElementById('input-titulo').value;
+            const modulo = document.getElementById('input-modulo').value;
+            const layout = document.getElementById('input-layout').value;
+            const numero = document.getElementById('input-numero').value;
+
+            htmx.ajax('POST', '/admin/editor/preview', {
+                target: '#preview-container',
+                swap: 'innerHTML',
+                values: {
+                    htmlContent: htmlContent,
+                    titulo: titulo,
+                    modulo: modulo,
+                    layout: layout,
+                    numeroPagina: numero
+                }
+            }).then(() => {
+                applyZoom();
+            });
+        }
+
+        // Salvar página
+        document.getElementById('btn-salvar').addEventListener('click', function () {
+            const htmlContent = editor.getValue();
+            const titulo = document.getElementById('input-titulo').value;
+            const modulo = document.getElementById('input-modulo').value;
+            const layout = document.getElementById('input-layout').value;
+
+            htmx.ajax('POST', `/admin/editor/pagina/${currentPageId}/salvar`, {
+                values: {
+                    htmlContent: htmlContent,
+                    titulo: titulo,
+                    modulo: modulo,
+                    layout: layout
+                }
+            }).then(() => {
+                // Feedback visual
+                this.textContent = '✓ SALVO!';
+                setTimeout(() => {
+                    this.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> SALVAR';
+                    lucide.createIcons();
+                }, 2000);
+            });
+        });
+
+        // Zoom controls
+        function zoomIn() {
+            currentScale = Math.min(1.2, currentScale + 0.1);
+            applyZoom();
+        }
+
+        function zoomOut() {
+            currentScale = Math.max(0.3, currentScale - 0.1);
+            applyZoom();
+        }
+
+        function applyZoom() {
+            const page = document.querySelector('.page-a4');
+            if (page) {
+                page.style.transform = `scale(${currentScale})`;
+            }
+            document.getElementById('zoom-level').textContent = Math.round(currentScale * 100) + '%';
+        }
+
+        // Aplicar zoom inicial
+        setTimeout(applyZoom, 100);
+    </script>
+
+</body>
+
+</html>

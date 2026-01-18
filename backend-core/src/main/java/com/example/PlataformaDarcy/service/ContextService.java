@@ -18,47 +18,90 @@ public class ContextService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private List<Map<String, Object>> acervoMemoria = new ArrayList<>();
 
-    // Carrega tudo para a memória RAM assim que o sistema sobe (Performance
-    // Extrema)
+    // Carrega obras de TODAS as etapas do PAS para a memória RAM
     @PostConstruct
     public void carregarAcervo() {
-        try {
-            ClassPathResource resource = new ClassPathResource("data/pas1/acervo_obras.json");
-            if (resource.exists()) {
-                this.acervoMemoria = objectMapper.readValue(resource.getInputStream(), new TypeReference<>() {
-                });
-                System.out.println("📚 ContextService: " + acervoMemoria.size() + " obras carregadas na memória.");
+        this.acervoMemoria = new ArrayList<>();
+        int[] etapas = { 1, 2, 3 };
+
+        for (int etapa : etapas) {
+            try {
+                String path = "data/pas" + etapa + "/acervo_obras.json";
+                ClassPathResource resource = new ClassPathResource(path);
+                if (resource.exists()) {
+                    List<Map<String, Object>> obrasEtapa = objectMapper.readValue(
+                            resource.getInputStream(), new TypeReference<>() {
+                            });
+                    // Adiciona a etapa como metadado em cada obra
+                    for (Map<String, Object> obra : obrasEtapa) {
+                        obra.put("etapa", etapa);
+                    }
+                    this.acervoMemoria.addAll(obrasEtapa);
+                    System.out.println(
+                            "📚 ContextService: PAS " + etapa + " - " + obrasEtapa.size() + " obras carregadas.");
+                }
+            } catch (IOException e) {
+                System.err.println("⚠️ Erro ao carregar acervo PAS " + etapa + ": " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.err.println("❌ Erro ao carregar acervo: " + e.getMessage());
         }
+        System.out.println("📚 ContextService: TOTAL de " + acervoMemoria.size() + " obras na memória.");
     }
 
     /**
      * Busca obras que tenham relação com a pergunta do aluno.
-     * Usa uma busca simples por palavras-chave nos títulos e tags.
+     * Prioriza obras da etapa do aluno, mas encontra obras de outras etapas se
+     * forem específicas.
      */
     public String recuperarContextoRelevante(String perguntaUsuario) {
+        return recuperarContextoRelevante(perguntaUsuario, null);
+    }
+
+    public String recuperarContextoRelevante(String perguntaUsuario, Integer etapaAlvo) {
         if (acervoMemoria.isEmpty())
             return "";
 
         String termo = normalizar(perguntaUsuario);
 
-        String contexto = acervoMemoria.stream()
-                .filter(obra -> {
+        // Classe auxiliar para ordenação
+        record Match(Map<String, Object> obra, int score) {
+        }
+
+        List<Match> matches = acervoMemoria.stream()
+                .map(obra -> {
+                    int score = 0;
                     String titulo = normalizar((String) obra.getOrDefault("titulo", ""));
                     String tags = normalizar(obra.getOrDefault("tags", "").toString());
-                    String texto = normalizar(obra.getOrDefault("texto_contexto", "").toString());
 
-                    // Verifica se palavras-chave da pergunta aparecem na obra
-                    return contemPalavraChave(termo, titulo) || contemPalavraChave(termo, tags);
+                    // Pontuação por palavra-chave (Peso maior)
+                    if (contemPalavraChave(termo, titulo))
+                        score += 20;
+                    else if (contemPalavraChave(termo, tags))
+                        score += 10;
+
+                    // Se não tem match de texto, score é 0 e será descartado
+                    if (score == 0)
+                        return null;
+
+                    // Pontuação por etapa (Desempate)
+                    Integer etapaObra = (Integer) obra.get("etapa");
+                    if (etapaAlvo != null && etapaObra != null && etapaObra.equals(etapaAlvo)) {
+                        score += 5;
+                    }
+
+                    return new Match(obra, score);
                 })
-                .limit(3) // Pega no máximo 3 obras para não confundir a IA
-                .map(obra -> String.format(
-                        "--- OBRA ENCONTRADA ---\nTITULO: %s\nRESUMO TÉCNICO: %s\nTAGS: %s\n",
-                        obra.get("titulo"),
-                        obra.get("texto_contexto"),
-                        obra.get("tags")))
+                .filter(Objects::nonNull)
+                .sorted((m1, m2) -> Integer.compare(m2.score, m1.score)) // Decrescente
+                .limit(3)
+                .collect(Collectors.toList());
+
+        String contexto = matches.stream()
+                .map(m -> String.format(
+                        "--- OBRA ENCONTRADA (PAS %d) ---\nTITULO: %s\nRESUMO TÉCNICO: %s\nTAGS: %s\n",
+                        m.obra.get("etapa"),
+                        m.obra.get("titulo"),
+                        m.obra.get("texto_contexto"),
+                        m.obra.get("tags")))
                 .collect(Collectors.joining("\n"));
 
         if (contexto.isEmpty()) {
